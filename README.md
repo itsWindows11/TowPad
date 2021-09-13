@@ -26,6 +26,8 @@ This app features a simple and easy to use interface other than ribbons
   
   • Undo/redo
   
+  • Fluid, fast
+  
 **Planned features:**
 
   • Replace selected text
