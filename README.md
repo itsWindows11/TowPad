@@ -1,5 +1,5 @@
 # Wordpad UWP
-Reminder: this app is still in development
+**Reminder:** this app is still in development
 
 A UWP version of... Wordpad!
 
