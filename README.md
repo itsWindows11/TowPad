@@ -8,9 +8,9 @@ This app features a simple and easy to use interface other than ribbons
 
 **Features:**
 
-  • **Bold**/*Italic*/<ins>Underline</ins>/~~Strikethough~~
+  • **Bold** / *Italic* / <ins>Underline</ins> /~~Strikethough~~
   
-  • <sup>Superscript</sup>/<sub>Subscript</sub>
+  • <sup>Superscript</sup> / <sub>Subscript</sub>
   
   • Change font size
   
@@ -18,9 +18,9 @@ This app features a simple and easy to use interface other than ribbons
   
   • Change font family
   
-  • Align to left/center/right
+  • Align to left / center / right
   
-  • Adding image/hyperlink
+  • Adding image / hyperlink
   
   • Find text
   
