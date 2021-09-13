@@ -1,4 +1,4 @@
-# WordpadUWP
+# Wordpad UWP
 A UWP version of... Wordpad!
 
 This app features a simple and easy to use interface other than ribbons
