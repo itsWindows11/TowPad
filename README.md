@@ -1,4 +1,6 @@
 # Wordpad UWP
+Reminder: this app is still in development
+
 A UWP version of... Wordpad!
 
 This app features a simple and easy to use interface other than ribbons
