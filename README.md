@@ -28,8 +28,10 @@ This app features a simple and easy to use interface other than ribbons
   
   • Fluid, fast
   
-**Planned features:**
+**Planned to be included:**
 
   • Replace selected text
   
   • Printing
+  
+  • Better app icon/file icons
