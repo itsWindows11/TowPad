@@ -8,9 +8,9 @@ This app features a simple and easy to use interface other than ribbons
 
 **Features:**
 
-  • Bold/Italic/Underline/Strikethough
+  • **Bold**/*Italic*/<ins>Underline</ins>/~~Strikethough~~
   
-  • Superscript/Subscript
+  • <sup>Superscript</sup>/<sub>Subscript</sub>
   
   • Change font size
   
