@@ -37,5 +37,7 @@ This app features a simple and easy to use interface other than ribbons.
   • Printing
   
   • Better app icon/file icons
+  
+  • ... and more!
 
 Licensed under the MIT license.
