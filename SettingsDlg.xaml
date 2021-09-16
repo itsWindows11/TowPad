@@ -25,7 +25,7 @@
                     <ColumnDefinition Width="80" />
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="Default font" Margin="0,8,0,0"  />
-                <ComboBox Grid.Column="2" x:Name="FontsCombo" ItemsSource="{x:Bind Fonts}" PlaceholderText="Font">
+                <ComboBox Grid.Column="2" x:Name="FontsCombo" SelectionChanged="FontsCombo_SelectionChanged" ItemsSource="{x:Bind Fonts}" PlaceholderText="Font">
                     <ComboBox.ItemTemplate>
                         <DataTemplate x:DataType="x:String">
                             <TextBlock FontFamily="{x:Bind}"
