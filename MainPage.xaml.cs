@@ -36,16 +36,27 @@ namespace Rich_Text_Editor
     public sealed partial class MainPage : Page
     {
         bool saved = true;
-        // app title
         string appTitleStr = "Wordpad UWP";
         string fileNameWithPath = "";
 
         public MainPage()
         {
-            this.InitializeComponent();
+            InitializeComponent();
             var coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
             coreTitleBar.ExtendViewIntoTitleBar = true;
-            SystemNavigationManagerPreview.GetForCurrentView().CloseRequested += this.OnCloseRequest;
+            SystemNavigationManagerPreview.GetForCurrentView().CloseRequested += OnCloseRequest;
+
+            ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
+            string fontSetting = localSettings.Values["FontFamily"] as string;
+            if (fontSetting != null)
+            {
+                FontsCombo.SelectedItem = fontSetting;
+                editor.FontFamily = new FontFamily(fontSetting);
+            } else
+            {
+                FontsCombo.SelectedItem = "Calibri";
+                editor.FontFamily = new FontFamily("Calibri");
+            }
         }
 
         private void OnCloseRequest(object sender, SystemNavigationCloseRequestedPreviewEventArgs e)
@@ -566,8 +577,13 @@ namespace Rich_Text_Editor
 
         private async void SettingsButton_Click(object sender, RoutedEventArgs e)
         {
-            SettingsDlg dlg = new SettingsDlg();
+            SettingsDlg dlg = new SettingsDlg(editor, FontsCombo);
             await dlg.ShowAsync();
+        }
+
+        private void RemoveHighlightButton_Click(object sender, RoutedEventArgs e)
+        {
+            FindBoxRemoveHighlights();
         }
     }
 }
