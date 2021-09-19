@@ -150,7 +150,13 @@
 
     <RelativePanel>
         <RelativePanel x:Name="containerPanel" Background="{StaticResource SystemAltLowColor}" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignLeftWithPanel="True">
-            <TextBlock Margin="15,10,0,0" Style="{StaticResource CaptionTextBlockStyle}" x:Name="AppTitle">Untitled - Wordpad UWP</TextBlock>
+            <Grid Height="32" x:Name="AppTitleBar">
+                <TextBlock Margin="12,0,0,0" 
+                           Style="{StaticResource CaptionTextBlockStyle}" 
+                           VerticalAlignment="Center" 
+                           HorizontalAlignment="Left" 
+                           x:Name="AppTitle">Untitled - Wordpad UWP</TextBlock>
+            </Grid>
             <StackPanel Orientation="Horizontal" x:Name="MenuPanel" VerticalAlignment="Center">
                 <muxc:MenuBar x:Name="menu" Margin="5,30,0,0">
                     <muxc:MenuBarItem Title="File">
