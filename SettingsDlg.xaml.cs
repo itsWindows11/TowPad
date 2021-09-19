@@ -21,15 +21,25 @@ namespace Rich_Text_Editor
     {
         RichEditBox targetEditor;
         ComboBox fontsCombo;
+        ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
+
         public SettingsDlg(RichEditBox targetEditor, ComboBox fontsCombo)
         {
-            this.InitializeComponent();
+            InitializeComponent();
             this.targetEditor = targetEditor;
             this.fontsCombo = fontsCombo;
 
             ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
             string fontSetting = localSettings.Values["FontFamily"] as string;
             if (fontSetting != null) FontsCombo.SelectedItem = fontSetting;
+            if ((string)localSettings.Values["TextWrapping"] == "enabled")
+            {
+                textWrappingSwitch.IsOn = true;
+            }
+            else
+            {
+                textWrappingSwitch.IsOn = true;
+            }
 
         }
 
@@ -49,8 +59,20 @@ namespace Rich_Text_Editor
         private void FontsCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             fontsCombo.SelectedItem = FontsCombo.SelectedValue.ToString();
-            ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
             localSettings.Values["FontFamily"] = FontsCombo.SelectedValue.ToString();
+        }
+
+        private void ToggleSwitchTextWrap_Toggled(object sender, RoutedEventArgs e)
+        {
+            ToggleSwitch aSwitch = (ToggleSwitch)sender;
+            if (aSwitch.IsOn)
+            {
+                localSettings.Values["TextWrapping"] = "enabled";
+            }
+            else
+            {
+                localSettings.Values["TextWrapping"] = "disabled";
+            }
         }
     }
 }

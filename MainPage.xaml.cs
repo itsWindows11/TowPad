@@ -44,6 +44,7 @@ namespace Rich_Text_Editor
             InitializeComponent();
 
             var appViewTitleBar = ApplicationView.GetForCurrentView().TitleBar;
+
             appViewTitleBar.ButtonBackgroundColor = Colors.Transparent;
             appViewTitleBar.ButtonInactiveBackgroundColor = Colors.Transparent;
 
@@ -69,6 +70,16 @@ namespace Rich_Text_Editor
             {
                 FontsCombo.SelectedItem = "Calibri";
                 editor.FontFamily = new FontFamily("Calibri");
+            }
+
+            string textWrapping = localSettings.Values["TextWrapping"] as string;
+            if (textWrapping == "enabled")
+            {
+                editor.TextWrapping = TextWrapping.Wrap;
+            }
+            else if (textWrapping == "disabled")
+            {
+                editor.TextWrapping = TextWrapping.NoWrap;
             }
         }
 

@@ -337,7 +337,7 @@
                     <x:String>48</x:String>
                     <x:String>72</x:String>
                 </ComboBox>
-                <ComboBox x:Name="FontsCombo" ItemsSource="{x:Bind Fonts}" PlaceholderText="Font" SelectionChanged="FontsCombo_SelectionChanged">
+                <ComboBox x:Name="FontsCombo" IsTextSearchEnabled="True" ItemsSource="{x:Bind Fonts}" PlaceholderText="Font" SelectionChanged="FontsCombo_SelectionChanged">
                     <ComboBox.ItemTemplate>
                         <DataTemplate x:DataType="x:String">
                             <TextBlock FontFamily="{x:Bind}"
