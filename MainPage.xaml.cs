@@ -105,7 +105,7 @@ namespace Rich_Text_Editor
             }
         }
 
-        private UpdateTitleBarLayout(CoreTitleBar coreTitleBar)
+        private void UpdateTitleBarLayout(CoreTitleBar coreTitleBar)
         {
             // Update title bar control size as needed to account for system size changes.
             AppTitleBar.Height = coreTitleBar.Height;
