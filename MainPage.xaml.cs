@@ -43,18 +43,18 @@ namespace Rich_Text_Editor
         {
             InitializeComponent();
 
-            var appViewTitleBar = ApplicationView.GetForCurrentView();
+            var appViewTitleBar = ApplicationView.GetForCurrentView().TitleBar;
             appViewTitleBar.ButtonBackgroundColor = Colors.Transparent;
             appViewTitleBar.ButtonInactiveBackgroundColor = Colors.Transparent;
 
             var coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
             coreTitleBar.ExtendViewIntoTitleBar = true;
-            UpdateTitleBarLayout(coreTitleBar)
+            UpdateTitleBarLayout(coreTitleBar);
 
             Window.Current.SetTitleBar(AppTitleBar);
 
             coreTitleBar.LayoutMetricsChanged += CoreTitleBar_LayoutMetricsChanged;
-            coreTitleBar.IsInvisibleChanged += CoreTitleBar_IsVisibleChanged;
+            coreTitleBar.IsVisibleChanged += CoreTitleBar_IsVisibleChanged;
             Window.Current.Activated += Current_Activated;
 
             SystemNavigationManagerPreview.GetForCurrentView().CloseRequested += OnCloseRequest;
@@ -105,7 +105,7 @@ namespace Rich_Text_Editor
             }
         }
 
-        private void UpdateTitleBarLayout(CoreTitleBar coreTitleBar)
+        private void UpdateTitleBarLayout(CoreApplicationViewTitleBar coreTitleBar)
         {
             // Update title bar control size as needed to account for system size changes.
             AppTitleBar.Height = coreTitleBar.Height;
