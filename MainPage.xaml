@@ -150,9 +150,15 @@
 
     <RelativePanel>
         <RelativePanel x:Name="containerPanel" Background="{StaticResource SystemAltLowColor}" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignLeftWithPanel="True">
-            <TextBlock Margin="15,10,0,0" Style="{StaticResource CaptionTextBlockStyle}" x:Name="AppTitle">Untitled - Wordpad UWP</TextBlock>
-            <StackPanel Orientation="Horizontal" x:Name="MenuPanel" VerticalAlignment="Center">
-                <muxc:MenuBar x:Name="menu" Margin="5,30,0,0">
+            <Grid Height="32" x:Name="AppTitleBar" IsHitTestVisible="True" VerticalAlignment="Top" Background="Transparent">
+                <TextBlock Margin="12,0,0,0" 
+                           Style="{StaticResource CaptionTextBlockStyle}" 
+                           VerticalAlignment="Center" 
+                           HorizontalAlignment="Left" 
+                           x:Name="AppTitle">Untitled - Wordpad UWP</TextBlock>
+            </Grid>
+            <StackPanel Orientation="Horizontal" x:Name="MenuPanel" VerticalAlignment="Center" RelativePanel.Below="AppTitleBar">
+                <muxc:MenuBar x:Name="menu" Margin="5,0,0,0" VerticalAlignment="Center">
                     <muxc:MenuBarItem Title="File">
                         <MenuFlyoutItem Text="New Document" Click="NewDoc_Click" />
                         <MenuFlyoutItem Text="Open..." Click="OpenButton_Click"/>
@@ -178,13 +184,13 @@
                   
                 </muxc:MenuBar>
 
-                <Button Click="UndoButton_Click" Background="Transparent" BorderBrush="Transparent" Margin="0,32,0,0" ToolTipService.ToolTip="Undo">
+                <Button Click="UndoButton_Click" Background="Transparent" BorderBrush="Transparent" VerticalAlignment="Center" ToolTipService.ToolTip="Undo">
                     <Viewbox MaxHeight="17" MaxWidth="17">
                         <SymbolIcon Symbol="Undo" />
                     </Viewbox>
                 </Button>
 
-                <Button Click="RedoButton_Click" Background="Transparent" BorderBrush="Transparent" Margin="0,32,0,0" ToolTipService.ToolTip="Redo">
+                <Button Click="RedoButton_Click" Background="Transparent" BorderBrush="Transparent" VerticalAlignment="Center" ToolTipService.ToolTip="Redo">
                     <Viewbox MaxHeight="17" MaxWidth="17">
                         <SymbolIcon Symbol="Redo" />
                     </Viewbox>
