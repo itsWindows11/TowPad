@@ -44,4 +44,16 @@ NOTE: if you set the system theme to Dark and opened the exported RTF files (by 
   
   • ... and more!
 
+### **Requirements to run the app**
+
+  • You must run at least Windows 10, version 1809
+  
+### **Prerequisites to compile the app**
+
+  • Have at least Windows SDK (UWP) version 1809
+  
+  • Visual Studio 2019
+  
+This file and project is still in development, things might change over time as Wordpad UWP takes shape ~~and ideas~~.
+
 Licensed under the MIT license.
