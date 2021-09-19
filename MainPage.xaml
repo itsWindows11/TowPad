@@ -150,7 +150,7 @@
 
     <RelativePanel>
         <RelativePanel x:Name="containerPanel" Background="{StaticResource SystemAltLowColor}" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignLeftWithPanel="True">
-            <Grid Height="32" x:Name="AppTitleBar">
+            <Grid Height="32" x:Name="AppTitleBar" IsHitTestVisible="True" VerticalAlignment="Top" Background="Transparent">
                 <TextBlock Margin="12,0,0,0" 
                            Style="{StaticResource CaptionTextBlockStyle}" 
                            VerticalAlignment="Center" 
