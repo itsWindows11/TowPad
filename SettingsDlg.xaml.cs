@@ -14,6 +14,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using MUXC = Microsoft.UI.Xaml.Controls;
 
 namespace Rich_Text_Editor
 {
@@ -22,12 +23,14 @@ namespace Rich_Text_Editor
         RichEditBox targetEditor;
         ComboBox fontsCombo;
         ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
+        Page main;
 
-        public SettingsDlg(RichEditBox targetEditor, ComboBox fontsCombo)
+        public SettingsDlg(RichEditBox targetEditor, ComboBox fontsCombo, Page mainPage)
         {
             InitializeComponent();
             this.targetEditor = targetEditor;
             this.fontsCombo = fontsCombo;
+            main = mainPage;
 
             ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
             string fontSetting = localSettings.Values["FontFamily"] as string;

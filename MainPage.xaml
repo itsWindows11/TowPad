@@ -154,7 +154,7 @@
                 <TextBlock Margin="12,0,0,0" 
                            Style="{StaticResource CaptionTextBlockStyle}" 
                            VerticalAlignment="Center" 
-                           HorizontalAlignment="Left" 
+                           HorizontalAlignment="Left"
                            x:Name="AppTitle">Untitled - Wordpad UWP</TextBlock>
             </Grid>
             <StackPanel Orientation="Horizontal" x:Name="MenuPanel" VerticalAlignment="Center" RelativePanel.Below="AppTitleBar">

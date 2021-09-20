@@ -43,6 +43,8 @@ namespace Rich_Text_Editor
         {
             InitializeComponent();
 
+            ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
+
             var appViewTitleBar = ApplicationView.GetForCurrentView().TitleBar;
 
             appViewTitleBar.ButtonBackgroundColor = Colors.Transparent;
@@ -60,7 +62,6 @@ namespace Rich_Text_Editor
 
             SystemNavigationManagerPreview.GetForCurrentView().CloseRequested += OnCloseRequest;
 
-            ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
             string fontSetting = localSettings.Values["FontFamily"] as string;
             if (fontSetting != null)
             {
@@ -81,6 +82,7 @@ namespace Rich_Text_Editor
             {
                 editor.TextWrapping = TextWrapping.NoWrap;
             }
+
         }
 
         private void CoreTitleBar_LayoutMetricsChanged(CoreApplicationViewTitleBar sender, object args)
@@ -101,12 +103,12 @@ namespace Rich_Text_Editor
         }
 
         // Update the TitleBar based on the inactive/active state of the app
-        private void Current_Activated(object sender, Windows.UI.Core.WindowActivatedEventArgs e)
+        private void Current_Activated(object sender, WindowActivatedEventArgs e)
         {
             SolidColorBrush defaultForegroundBrush = (SolidColorBrush)Application.Current.Resources["TextFillColorPrimaryBrush"];
             SolidColorBrush inactiveForegroundBrush = (SolidColorBrush)Application.Current.Resources["TextFillColorDisabledBrush"];
 
-            if (e.WindowActivationState == Windows.UI.Core.CoreWindowActivationState.Deactivated)
+            if (e.WindowActivationState == CoreWindowActivationState.Deactivated)
             {
                 AppTitle.Foreground = inactiveForegroundBrush;
             }
@@ -648,7 +650,7 @@ namespace Rich_Text_Editor
 
         private async void SettingsButton_Click(object sender, RoutedEventArgs e)
         {
-            SettingsDlg dlg = new SettingsDlg(editor, FontsCombo);
+            SettingsDlg dlg = new SettingsDlg(editor, FontsCombo, this);
             await dlg.ShowAsync();
         }
 

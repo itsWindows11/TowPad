@@ -62,11 +62,6 @@
                                 Minimum="2"
                                 Maximum="30" />
                 </Grid>
-                <muxc:RadioButtons Header="App theme:" x:Name="appThemeRadioBtns" RelativePanel.Below="three" Margin="0,8,0,0">
-                    <RadioButton Content="Light" />
-                    <RadioButton Content="Dark" />
-                    <RadioButton Content="System default" IsChecked="True" />
-                </muxc:RadioButtons>
             </RelativePanel>
         </ScrollViewer>
         <TextBlock Margin="0,5,0,0" Text="NOTE: You might need to restart the app for some settings to fully take effect" />
