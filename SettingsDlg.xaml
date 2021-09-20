@@ -10,8 +10,8 @@
 
     <StackPanel Orientation="Vertical">
         <TextBlock Style="{StaticResource SubheaderTextBlockStyle}" FontSize="20" FontWeight="SemiBold" Text="Settings" Margin="0,0,0,7" />
-        <ScrollViewer MaxHeight="300">
-            <RelativePanel Height="300" Margin="0,0,0,7">
+        <ScrollViewer VerticalScrollBarVisibility="Auto" MaxHeight="300">
+            <RelativePanel Margin="0,0,0,7">
                 <Grid x:Name="one" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition />
@@ -62,11 +62,13 @@
                                 Minimum="2"
                                 Maximum="30" />
                 </Grid>
-                <muxc:RadioButtons Header="App theme:" Margin="0,8,0,0" RelativePanel.Below="three">
-                    <RadioButton Content="Light" />
-                    <RadioButton Content="Dark" />
-                    <RadioButton Content="System default" IsChecked="True" />
-                </muxc:RadioButtons>
+                <StackPanel x:Name="appThemeRadioBtns" RelativePanel.Below="three" Margin="0,8,0,0">
+                    <muxc:RadioButtons Header="App theme:">
+                        <RadioButton Content="Light" />
+                        <RadioButton Content="Dark" />
+                        <RadioButton Content="System default" IsChecked="True" />
+                    </muxc:RadioButtons>
+                </StackPanel>
             </RelativePanel>
         </ScrollViewer>
         <TextBlock Margin="0,5,0,0" Text="NOTE: You might need to restart the app for some settings to fully take effect" />
