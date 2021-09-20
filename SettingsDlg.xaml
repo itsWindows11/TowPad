@@ -22,10 +22,10 @@
             <Grid x:Name="two" RelativePanel.Below="one" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
-                    <ColumnDefinition Width="80" />
+                    <ColumnDefinition Width="120" />
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="Default font" Margin="0,8,0,0"  />
-                <ComboBox IsTextSearchEnabled="True" Grid.Column="2" x:Name="FontsCombo" SelectionChanged="FontsCombo_SelectionChanged" ItemsSource="{x:Bind Fonts}" PlaceholderText="Font">
+                <ComboBox HorizontalAlignment="Right" IsTextSearchEnabled="True" Grid.Column="2" x:Name="FontsCombo" SelectionChanged="FontsCombo_SelectionChanged" ItemsSource="{x:Bind Fonts}" PlaceholderText="Font">
                     <ComboBox.ItemTemplate>
                         <DataTemplate x:DataType="x:String">
                             <TextBlock FontFamily="{x:Bind}"
