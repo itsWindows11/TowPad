@@ -17,7 +17,7 @@
                     <ColumnDefinition Width="80" />
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="Text wrapping" Margin="0,8,0,0"  />
-                <ToggleSwitch x:Name="textWrappingSwitch" Grid.Column="2" IsOn="True" Toggled="ToggleSwitchTextWrap_Toggled" />
+                <ToggleSwitch x:Name="textWrappingSwitch" Grid.Column="2" Toggled="ToggleSwitchTextWrap_Toggled" />
             </Grid>
             <Grid x:Name="two" RelativePanel.Below="one" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True">
                 <Grid.ColumnDefinitions>
@@ -34,8 +34,27 @@
                     </ComboBox.ItemTemplate>
                 </ComboBox>
             </Grid>
+            <TextBlock Margin="0,15,0,0" x:Name="headerSettingThree" RelativePanel.Below="two" Style="{StaticResource CaptionTextBlockStyle}" Text="Theme" FontSize="15" FontWeight="SemiBold" />
+            <Grid x:Name="three" RelativePanel.Below="headerSettingThree" Margin="0,5,0,0" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="120" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="Document view padding" Margin="0,8,0,0"  />
+                <muxc:NumberBox x:Name="PaddingNumBox"
+                                Grid.Column="2"
+                                Value="2"
+                                SpinButtonPlacementMode="Compact"
+                                Minimum="2"
+                                Maximum="30" />
+            </Grid>
+            <muxc:RadioButtons Header="App theme:" Margin="0,8,0,0" RelativePanel.Below="three">
+                <RadioButton Content="Light" />
+                <RadioButton Content="Dark" />
+                <RadioButton Content="System default" IsChecked="True" />
+            </muxc:RadioButtons>
         </RelativePanel>
-        <TextBlock Text="NOTE: You may need to restart the app for some settings to fully take effect" />
+        <TextBlock Text="NOTE: You might need to restart the app for some settings to fully take effect" />
         <Button Content="OK" x:Name="okBtn11" Margin="0,10,0,0" Click="okBtn11_Click" HorizontalAlignment="Stretch" />
     </StackPanel>
 </ContentDialog>
