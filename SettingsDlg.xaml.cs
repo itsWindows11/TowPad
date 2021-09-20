@@ -38,7 +38,7 @@ namespace Rich_Text_Editor
             }
             else
             {
-                textWrappingSwitch.IsOn = true;
+                textWrappingSwitch.IsOn = false;
             }
 
         }
