@@ -10,51 +10,66 @@
 
     <StackPanel Orientation="Vertical">
         <TextBlock Style="{StaticResource SubheaderTextBlockStyle}" FontSize="20" FontWeight="SemiBold" Text="Settings" Margin="0,0,0,7" />
-        <RelativePanel Height="300" Margin="0,0,0,7">
-            <Grid x:Name="one" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
-                    <ColumnDefinition Width="80" />
-                </Grid.ColumnDefinitions>
-                <TextBlock Text="Text wrapping" Margin="0,8,0,0"  />
-                <ToggleSwitch x:Name="textWrappingSwitch" Grid.Column="2" Toggled="ToggleSwitchTextWrap_Toggled" />
-            </Grid>
-            <Grid x:Name="two" RelativePanel.Below="one" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
-                    <ColumnDefinition Width="120" />
-                </Grid.ColumnDefinitions>
-                <TextBlock Text="Default font" Margin="0,8,0,0"  />
-                <ComboBox HorizontalAlignment="Right" IsTextSearchEnabled="True" Grid.Column="2" x:Name="FontsCombo" SelectionChanged="FontsCombo_SelectionChanged" ItemsSource="{x:Bind Fonts}" PlaceholderText="Font">
-                    <ComboBox.ItemTemplate>
-                        <DataTemplate x:DataType="x:String">
-                            <TextBlock FontFamily="{x:Bind}"
+        <ScrollViewer MaxHeight="300">
+            <RelativePanel Height="300" Margin="0,0,0,7">
+                <Grid x:Name="one" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="80" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Text wrapping" Margin="0,8,0,0"  />
+                    <ToggleSwitch x:Name="textWrappingSwitch" Grid.Column="2" Toggled="ToggleSwitchTextWrap_Toggled" />
+                </Grid>
+                <Grid x:Name="two" RelativePanel.Below="one" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="120" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Default font" Margin="0,8,0,0"  />
+                    <ComboBox HorizontalAlignment="Right" IsTextSearchEnabled="True" Grid.Column="2" x:Name="FontsCombo" SelectionChanged="FontsCombo_SelectionChanged" ItemsSource="{x:Bind Fonts}" PlaceholderText="Font">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate x:DataType="x:String">
+                                <TextBlock FontFamily="{x:Bind}"
                     Text="{x:Bind}" />
-                        </DataTemplate>
-                    </ComboBox.ItemTemplate>
-                </ComboBox>
-            </Grid>
-            <TextBlock Margin="0,15,0,0" x:Name="headerSettingThree" RelativePanel.Below="two" Style="{StaticResource CaptionTextBlockStyle}" Text="Theme" FontSize="15" FontWeight="SemiBold" />
-            <Grid x:Name="three" RelativePanel.Below="headerSettingThree" Margin="0,5,0,0" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
-                    <ColumnDefinition Width="120" />
-                </Grid.ColumnDefinitions>
-                <TextBlock Text="Document view padding" Margin="0,8,0,0"  />
-                <muxc:NumberBox x:Name="PaddingNumBox"
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                </Grid>
+                <Grid x:Name="four" Margin="0,8,0,0" RelativePanel.Below="two" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="120" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Default font size" Margin="0,8,0,0"  />
+                    <muxc:NumberBox x:Name="DefFontSizeNumBox"
+                                Grid.Column="2"
+                                Value="11"
+                                SpinButtonPlacementMode="Compact"
+                                Minimum="8"
+                                Maximum="150" />
+                </Grid>
+                <TextBlock Margin="0,15,0,0" x:Name="headerSettingThree" RelativePanel.Below="four" Style="{StaticResource CaptionTextBlockStyle}" Text="Theme" FontSize="15" FontWeight="SemiBold" />
+                <Grid x:Name="three" RelativePanel.Below="headerSettingThree" Margin="0,5,0,0" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="120" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Document view padding" Margin="0,8,0,0"  />
+                    <muxc:NumberBox x:Name="PaddingNumBox"
                                 Grid.Column="2"
                                 Value="2"
                                 SpinButtonPlacementMode="Compact"
                                 Minimum="2"
                                 Maximum="30" />
-            </Grid>
-            <muxc:RadioButtons Header="App theme:" Margin="0,8,0,0" RelativePanel.Below="three">
-                <RadioButton Content="Light" />
-                <RadioButton Content="Dark" />
-                <RadioButton Content="System default" IsChecked="True" />
-            </muxc:RadioButtons>
-        </RelativePanel>
-        <TextBlock Text="NOTE: You might need to restart the app for some settings to fully take effect" />
+                </Grid>
+                <muxc:RadioButtons Header="App theme:" Margin="0,8,0,0" RelativePanel.Below="three">
+                    <RadioButton Content="Light" />
+                    <RadioButton Content="Dark" />
+                    <RadioButton Content="System default" IsChecked="True" />
+                </muxc:RadioButtons>
+            </RelativePanel>
+        </ScrollViewer>
+        <TextBlock Margin="0,5,0,0" Text="NOTE: You might need to restart the app for some settings to fully take effect" />
         <Button Content="OK" x:Name="okBtn11" Margin="0,10,0,0" Click="okBtn11_Click" HorizontalAlignment="Stretch" />
     </StackPanel>
 </ContentDialog>

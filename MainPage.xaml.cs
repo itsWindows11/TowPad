@@ -332,20 +332,24 @@ namespace Rich_Text_Editor
                 ITextRange searchRange = editor.Document.GetRange(0, 0);
                 while (searchRange.FindText(textToFind, TextConstants.MaxUnitCount, FindOptions.None) > 0)
                 {
-                    searchRange.CharacterFormat.BackgroundColor = highlightBackgroundColor;
-                    searchRange.CharacterFormat.ForegroundColor = highlightForegroundColor;
+                    /*searchRange.CharacterFormat.BackgroundColor = highlightBackgroundColor;
+                    searchRange.CharacterFormat.ForegroundColor = highlightForegroundColor;*/
+                    editor.Focus(FocusState.Keyboard);
+                    editor.Document.Selection.SetRange(searchRange.StartPosition, searchRange.EndPosition);
                 }
             }
         }
 
         private void FindBoxRemoveHighlights()
         {
-            ITextRange documentRange = editor.Document.GetRange(0, TextConstants.MaxUnitCount);
+            /*ITextRange documentRange = editor.Document.GetRange(0, TextConstants.MaxUnitCount);
             SolidColorBrush defaultBackground = editor.Background as SolidColorBrush;
             SolidColorBrush defaultForeground = editor.Foreground as SolidColorBrush;
 
             documentRange.CharacterFormat.BackgroundColor = defaultBackground.Color;
-            documentRange.CharacterFormat.ForegroundColor = defaultForeground.Color;
+            documentRange.CharacterFormat.ForegroundColor = defaultForeground.Color;*/
+            editor.Focus(FocusState.Keyboard);
+            editor.Document.Selection.SetRange(editor.Document.Selection.EndPosition, editor.Document.Selection.EndPosition);
         }
 
 
@@ -651,6 +655,14 @@ namespace Rich_Text_Editor
         private void RemoveHighlightButton_Click(object sender, RoutedEventArgs e)
         {
             FindBoxRemoveHighlights();
+        }
+
+        private void ReplaceSelected_Click(object sender, RoutedEventArgs e)
+        {
+            if (editor.Document.Selection != null)
+            {
+                editor.Document.Selection.SetText(TextSetOptions.None, replaceBox.Text);
+            }
         }
     }
 }

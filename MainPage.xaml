@@ -350,10 +350,18 @@
                     <Button.Flyout>
                         <Flyout Placement="Bottom">
                             <StackPanel Orientation="Vertical">
+                                <TextBlock Margin="0,0,0,5" Text="Find" Style="{StaticResource CaptionTextBlockStyle}" FontWeight="SemiBold" FontSize="14" />
+
                                 <TextBox PlaceholderText="Text to look for" x:Name="findBox" Width="300"/>
                                 <StackPanel Orientation="Horizontal">
                                     <Button Margin="0,10,0,0" Click="FindButton_Click">Find</Button>
                                     <Button Margin="5,10,0,0" Click="RemoveHighlightButton_Click">Remove highlights</Button>
+                                </StackPanel>
+
+                                <TextBlock Margin="0,10,0,5" Text="Replace" Style="{StaticResource CaptionTextBlockStyle}" FontWeight="SemiBold" FontSize="14" />
+                                <TextBox PlaceholderText="Text that will replace the selected text" x:Name="replaceBox" Width="300"/>
+                                <StackPanel Orientation="Horizontal">
+                                    <Button Margin="0,10,0,0" Click="ReplaceSelected_Click">Replace selected text</Button>
                                 </StackPanel>
                             </StackPanel>
                         </Flyout>
