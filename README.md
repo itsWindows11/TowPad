@@ -32,7 +32,7 @@ NOTE: if you set the system theme to Dark and opened the exported RTF files (by 
   
   - Undo/redo
   
-  • Fluid, fast
+  - Fluid, fast
   
 ### **Planned to be included:**
 
