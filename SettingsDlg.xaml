@@ -35,20 +35,7 @@
                         </ComboBox.ItemTemplate>
                     </ComboBox>
                 </Grid>
-                <Grid x:Name="four" Margin="0,8,0,0" RelativePanel.Below="two" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition />
-                        <ColumnDefinition Width="120" />
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Text="Default font size" Margin="0,8,0,0"  />
-                    <muxc:NumberBox x:Name="DefFontSizeNumBox"
-                                Grid.Column="2"
-                                Value="11"
-                                SpinButtonPlacementMode="Compact"
-                                Minimum="8"
-                                Maximum="150" />
-                </Grid>
-                <TextBlock Margin="0,15,0,0" x:Name="headerSettingThree" RelativePanel.Below="four" Style="{StaticResource CaptionTextBlockStyle}" Text="Theme" FontSize="15" FontWeight="SemiBold" />
+                <TextBlock Margin="0,15,0,0" x:Name="headerSettingThree" RelativePanel.Below="two" Style="{StaticResource CaptionTextBlockStyle}" Text="Theme" FontSize="15" FontWeight="SemiBold" />
                 <Grid x:Name="three" RelativePanel.Below="headerSettingThree" Margin="0,5,0,0" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition />

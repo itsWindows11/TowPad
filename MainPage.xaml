@@ -319,24 +319,7 @@
                         </Flyout>
                     </muxc:DropDownButton.Flyout>
                 </muxc:DropDownButton>
-                <ComboBox PlaceholderText="Font size" SelectionChanged="SetFontSize">
-                    <x:String>8</x:String>
-                    <x:String>9</x:String>
-                    <x:String>10</x:String>
-                    <x:String>11</x:String>
-                    <x:String>12</x:String>
-                    <x:String>14</x:String>
-                    <x:String>16</x:String>
-                    <x:String>18</x:String>
-                    <x:String>20</x:String>
-                    <x:String>22</x:String>
-                    <x:String>24</x:String>
-                    <x:String>26</x:String>
-                    <x:String>28</x:String>
-                    <x:String>36</x:String>
-                    <x:String>48</x:String>
-                    <x:String>72</x:String>
-                </ComboBox>
+                <muxc:NumberBox PlaceholderText="Font size" Value="11" x:Name="FontSizeBox" ValueChanged="FontSizeBox_ValueChanged" MinWidth="120" Minimum="8" Maximum="150" SpinButtonPlacementMode="Compact" />
                 <ComboBox x:Name="FontsCombo" IsTextSearchEnabled="True" ItemsSource="{x:Bind Fonts}" PlaceholderText="Font" SelectionChanged="FontsCombo_SelectionChanged">
                     <ComboBox.ItemTemplate>
                         <DataTemplate x:DataType="x:String">

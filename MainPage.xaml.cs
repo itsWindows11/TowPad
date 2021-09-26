@@ -666,5 +666,13 @@ namespace Rich_Text_Editor
                 editor.Document.Selection.SetText(TextSetOptions.None, replaceBox.Text);
             }
         }
+
+        private void FontSizeBox_ValueChanged(Microsoft.UI.Xaml.Controls.NumberBox sender, Microsoft.UI.Xaml.Controls.NumberBoxValueChangedEventArgs args)
+        {
+            Windows.UI.Text.ITextSelection selectedText = editor.Document.Selection;
+            Windows.UI.Text.ITextCharacterFormat charFormatting = selectedText.CharacterFormat;
+            charFormatting.Size = (float)sender.Value;
+            selectedText.CharacterFormat = charFormatting;
+        }
     }
 }
