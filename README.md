@@ -14,45 +14,45 @@ NOTE: if you set the system theme to Dark and opened the exported RTF files (by 
 
 ### **Features:**
 
-  • **Bold** / *Italic* / <ins>Underline</ins> / ~~Strikethough~~
+  - **Bold** / *Italic* / <ins>Underline</ins> / ~~Strikethough~~
   
-  • <sup>Superscript</sup> / <sub>Subscript</sub>
+  - <sup>Superscript</sup> / <sub>Subscript</sub>
   
-  • Change font size
+  - Change font size
   
-  • Change font color
+  - Change font color
   
-  • Change font family
+  - Change font family
   
-  • Align to left/center/right
+  - Align to left/center/right
   
-  • Adding image/hyperlink
+  - Adding image/hyperlink
   
-  • Find text
+  - Find text
   
-  • Undo/redo
+  - Undo/redo
   
-  • Fluid, fast
+  - Fluid, fast
   
 ### **Planned to be included:**
 
-  • Replace selected text
+  - Replace selected text
   
-  • Printing
+  - Printing
   
-  • Better app icon/file icons
+  - Better app icon/file icons
   
-  • ... and more!
+  - ... and more!
 
 ### **Requirements to run the app**
 
-  • You must run at least Windows 10, version 1809
+  - You must run at least Windows 10, version 1809
   
 ### **Prerequisites to compile the app**
 
-  • Have at least Windows SDK (UWP) version 1809
+  - Have at least Windows SDK (UWP) version 1809
   
-  • Visual Studio 2019
+  - Visual Studio 2019
   
 This file and project is still in development, things might change over time as Wordpad UWP takes shape ~~and ideas~~.
 
