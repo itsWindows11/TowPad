@@ -238,27 +238,27 @@ namespace Rich_Text_Editor
 
         private async void NewDoc_Click(object sender, RoutedEventArgs e)
         {
-            if (saved == false)
-            {
-                ContentDialog newDocConfirm = new ContentDialog
-                {
-                    Title = "Are you sure you want to create a new document?",
-                    Content = "You might lose changes in your currently opened document",
-                    CloseButtonText = "Cancel",
-                    PrimaryButtonText = "Create new document",
-                };
+            ApplicationView currentAV = ApplicationView.GetForCurrentView();
+            CoreApplicationView newAV = CoreApplication.CreateNewView();
+            await newAV.Dispatcher.RunAsync(
+                            CoreDispatcherPriority.Normal,
+                            async () =>
+                            {
+                                var newWindow = Window.Current;
+                                var newAppView = ApplicationView.GetForCurrentView();
+                                newAppView.Title = "Untitled - Wordpad UWP";
 
-                ContentDialogResult result = await newDocConfirm.ShowAsync();
+                                var frame = new Frame();
+                                frame.Navigate(typeof(MainPage), null);
+                                newWindow.Content = frame;
+                                newWindow.Activate();
 
-                if (result == ContentDialogResult.Primary)
-                {
-                    editor.Document.SetText(TextSetOptions.None, "");
-                }
-            }
-            else
-            {
-                editor.Document.SetText(TextSetOptions.None, "");
-            }
+                                await ApplicationViewSwitcher.TryShowAsStandaloneAsync(
+                                    newAppView.Id,
+                                    ViewSizePreference.UseMinimum,
+                                    currentAV.Id,
+                                    ViewSizePreference.UseMinimum);
+                            });
         }
 
         private void StrikethoughButton_Click(object sender, RoutedEventArgs e)
@@ -669,10 +669,13 @@ namespace Rich_Text_Editor
 
         private void FontSizeBox_ValueChanged(Microsoft.UI.Xaml.Controls.NumberBox sender, Microsoft.UI.Xaml.Controls.NumberBoxValueChangedEventArgs args)
         {
-            Windows.UI.Text.ITextSelection selectedText = editor.Document.Selection;
-            Windows.UI.Text.ITextCharacterFormat charFormatting = selectedText.CharacterFormat;
-            charFormatting.Size = (float)sender.Value;
-            selectedText.CharacterFormat = charFormatting;
+            if (editor != null && editor.Document.Selection != null)
+            {
+                ITextSelection selectedText = editor.Document.Selection;
+                ITextCharacterFormat charFormatting = selectedText.CharacterFormat;
+                charFormatting.Size = (float)sender.Value;
+                selectedText.CharacterFormat = charFormatting;
+            }
         }
     }
 }
