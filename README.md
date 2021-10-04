@@ -1,4 +1,4 @@
-# Wordpad UWP
+# Wordpad UW
 **Reminder:** this app is still in development
 
 A UWP version of... Wordpad!
