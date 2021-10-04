@@ -61,4 +61,6 @@ NOTE: if you set the system theme to Dark and opened the exported RTF files (by 
   
 This file and project is still in development, things might change over time as Wordpad UWP takes shape ~~and ideas~~.
 
+[Discord server](https://discord.gg/KBRdf2J4xR)
+
 Licensed under the MIT license.
