@@ -3,12 +3,19 @@
 
 A UWP version of... Wordpad!
 
+[Discord server](https://discord.gg/KBRdf2J4xR)
+
 This app features a simple and easy to use interface other than ribbons.
 
 NOTE: if you set the system theme to Dark and opened the exported RTF files (by Wordpad UWP) in a light-themed editor, you may notice that the text has a gray background, that's intended
 
 ![Wordpad UWP](https://user-images.githubusercontent.com/81253203/134414755-894fcb4c-cac1-4edb-af92-4be47a342177.png)
 
+### Windows 11
+![image](https://user-images.githubusercontent.com/81253203/135627983-c9b242ba-ad76-4134-8ed6-a57e3b477390.png)
+![image](https://user-images.githubusercontent.com/81253203/135628613-bc40ed7d-bc5d-4c30-811a-57578f2a18d3.png)
+
+### Windows 10
 ![image](https://user-images.githubusercontent.com/81253203/133136254-4df31e72-2f6e-4a3c-8d29-5d0806003bd5.png)
 ![image](https://user-images.githubusercontent.com/81253203/133136586-65c15c90-9469-485e-b845-9579472aaced.png)
 
