@@ -150,19 +150,35 @@
 
     <RelativePanel>
         <RelativePanel x:Name="containerPanel" Background="{StaticResource SystemAltLowColor}" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignLeftWithPanel="True">
-            <Grid Height="32" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" x:Name="AppTitleBar" IsHitTestVisible="True" VerticalAlignment="Top" Background="Transparent">
-                <TextBlock Margin="12,0,0,0" 
-                           Style="{StaticResource CaptionTextBlockStyle}" 
-                           VerticalAlignment="Center" 
-                           HorizontalAlignment="Left"
-                           x:Name="AppTitle">Untitled - Wordpad UWP</TextBlock>
-            </Grid>
+            
+            <Border x:Name="AppTitleBar"
+                IsHitTestVisible="True"
+                VerticalAlignment="Top"
+                Background="Transparent"
+                Height="40"
+                Canvas.ZIndex="1" 
+                Margin="12,2,0,0">
+                <StackPanel Orientation="Horizontal">
+                    <Image x:Name="AppFontIcon"
+                         HorizontalAlignment="Left" 
+                         VerticalAlignment="Center"
+                         Source="Assets/Square44x44Logo.png" 
+                         Width="16" 
+                         Height="16"/>
+                    <TextBlock x:Name="AppTitle"
+                               Text="Untitled - Wordpad UWP"
+                               VerticalAlignment="Center"
+                               Margin="12,2,0,0"
+                    Style="{StaticResource CaptionTextBlockStyle}" />
+                </StackPanel>
+            </Border>
             <StackPanel Orientation="Horizontal" x:Name="MenuPanel" VerticalAlignment="Center" RelativePanel.Below="AppTitleBar">
                 <muxc:MenuBar x:Name="menu" Margin="5,0,0,0" VerticalAlignment="Center">
                     <muxc:MenuBarItem Title="File">
                         <MenuFlyoutItem Text="New Document" Click="NewDoc_Click" />
                         <MenuFlyoutItem Text="Open..." Click="OpenButton_Click"/>
-                        <MenuFlyoutItem Text="Save" Click="SaveAsButton_Click"/>
+                        <MenuFlyoutItem Text="Save" Click="SaveButton_Click"/>
+                        <MenuFlyoutItem Text="Save as Copy" Click="SaveAsButton_Click"/>
                         <MenuFlyoutItem Text="Print" Click="Print_Click"/>
                         <MenuFlyoutSeparator />
                         <MenuFlyoutItem Text="Exit" Click="Exit_Click"/>

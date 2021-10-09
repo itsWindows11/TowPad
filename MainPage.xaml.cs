@@ -135,11 +135,18 @@ namespace Rich_Text_Editor
 
         private void SaveAsButton_Click(object sender, RoutedEventArgs e)
         {
-            SaveFile();
+            SaveFile(true);
         }
 
-        private async void SaveFile()
+        private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
+            SaveFile(false);
+        }
+
+        private async void SaveFile(bool isCopy)
+        {
+            if (isCopy)
+            {
                 FileSavePicker savePicker = new FileSavePicker();
                 savePicker.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
 
@@ -159,21 +166,21 @@ namespace Rich_Text_Editor
                     // write to file
                     using (Windows.Storage.Streams.IRandomAccessStream randAccStream =
                         await file.OpenAsync(Windows.Storage.FileAccessMode.ReadWrite))
-                    switch (file.Name.EndsWith(".txt"))
-                    {
-                        case false:
-                            // RTF file, format for it
-                            {
-                                editor.Document.SaveToStream(Windows.UI.Text.TextGetOptions.FormatRtf, randAccStream);
-                            }
-                            break;
-                        case true:
-                            // TXT File, disable RTF formatting so that this is plain text
-                            {
-                                editor.Document.SaveToStream(Windows.UI.Text.TextGetOptions.None, randAccStream);
-                            }
-                            break;
-                    }
+                        switch (file.Name.EndsWith(".txt"))
+                        {
+                            case false:
+                                // RTF file, format for it
+                                {
+                                    editor.Document.SaveToStream(Windows.UI.Text.TextGetOptions.FormatRtf, randAccStream);
+                                }
+                                break;
+                            case true:
+                                // TXT File, disable RTF formatting so that this is plain text
+                                {
+                                    editor.Document.SaveToStream(Windows.UI.Text.TextGetOptions.None, randAccStream);
+                                }
+                                break;
+                        }
 
 
                     // Let Windows know that we're finished changing the file so the
@@ -185,9 +192,78 @@ namespace Rich_Text_Editor
                             new Windows.UI.Popups.MessageDialog("File " + file.Name + " couldn't be saved.");
                         await errorBox.ShowAsync();
                     }
-                saved = true;
-                AppTitle.Text = file.Name + " - " + appTitleStr;
-                fileNameWithPath = file.Path + "\\" + file.Name;
+                    saved = true;
+                    fileNameWithPath = file.Path;
+                    AppTitle.Text = file.Name + " - " + appTitleStr;
+                }
+            }
+            else
+            {
+                string fileName = AppTitle.Text.Replace(" - " + appTitleStr, "");
+                string path = fileNameWithPath.Replace("\\" + fileName, "");
+                try
+                {
+                    StorageFolder folder = await StorageFolder.GetFolderFromPathAsync(path);
+                    StorageFile file1 = await folder.CreateFileAsync(fileName, CreationCollisionOption.OpenIfExists);
+                    StorageFile file = await folder.GetFileAsync(fileName);
+                    if (file != null)
+                    {
+                        // Prevent updates to the remote version of the file until we
+                        // finish making changes and call CompleteUpdatesAsync.
+                        CachedFileManager.DeferUpdates(file);
+                        // write to file
+                        using (Windows.Storage.Streams.IRandomAccessStream randAccStream =
+                            await file.OpenAsync(Windows.Storage.FileAccessMode.ReadWrite))
+                            switch (file.Name.EndsWith(".txt"))
+                            {
+                                case false:
+                                    // RTF file, format for it
+                                    {
+                                        editor.Document.SaveToStream(Windows.UI.Text.TextGetOptions.FormatRtf, randAccStream);
+                                    }
+                                    break;
+                                case true:
+                                    // TXT File, disable RTF formatting so that this is plain text
+                                    {
+                                        editor.Document.SaveToStream(Windows.UI.Text.TextGetOptions.None, randAccStream);
+                                    }
+                                    break;
+                            }
+
+
+                        // Let Windows know that we're finished changing the file so the
+                        // other app can update the remote version of the file.
+                        FileUpdateStatus status = await CachedFileManager.CompleteUpdatesAsync(file);
+                        if (status != FileUpdateStatus.Complete)
+                        {
+                            Windows.UI.Popups.MessageDialog errorBox =
+                                new Windows.UI.Popups.MessageDialog("File " + file.Name + " couldn't be saved.");
+                            await errorBox.ShowAsync();
+                        }
+                        saved = true;
+                        AppTitle.Text = file.Name + " - " + appTitleStr;
+                    }
+                } 
+                catch (Exception e)
+                {
+                    string content = e.GetType() == typeof(UnauthorizedAccessException)
+                        ? appTitleStr + " does not have the required permissions to access the filesystem. But you can fix that."
+                        : "Something weird happened and we could not explain it.";
+                    ContentDialog aboutDialog = new ContentDialog
+                    {
+                        Title = "An error occured during saving this file.",
+                        Content = content,
+                        CloseButtonText = "Cancel",
+                        PrimaryButtonText = "Go to Settings",
+                    };
+
+                    ContentDialogResult result = await aboutDialog.ShowAsync();
+
+                    if (result == ContentDialogResult.Primary)
+                    {
+                        await Windows.System.Launcher.LaunchUriAsync(new Uri("ms-settings:privacy-broadfilesystemaccess"));
+                    }
+                }
             }
         }
 
@@ -334,24 +410,20 @@ namespace Rich_Text_Editor
                 ITextRange searchRange = editor.Document.GetRange(0, 0);
                 while (searchRange.FindText(textToFind, TextConstants.MaxUnitCount, FindOptions.None) > 0)
                 {
-                    /*searchRange.CharacterFormat.BackgroundColor = highlightBackgroundColor;
-                    searchRange.CharacterFormat.ForegroundColor = highlightForegroundColor;*/
-                    editor.Focus(FocusState.Keyboard);
-                    editor.Document.Selection.SetRange(searchRange.StartPosition, searchRange.EndPosition);
+                    searchRange.CharacterFormat.BackgroundColor = highlightBackgroundColor;
+                    searchRange.CharacterFormat.ForegroundColor = highlightForegroundColor;
                 }
             }
         }
 
         private void FindBoxRemoveHighlights()
         {
-            /*ITextRange documentRange = editor.Document.GetRange(0, TextConstants.MaxUnitCount);
+            ITextRange documentRange = editor.Document.GetRange(0, TextConstants.MaxUnitCount);
             SolidColorBrush defaultBackground = editor.Background as SolidColorBrush;
             SolidColorBrush defaultForeground = editor.Foreground as SolidColorBrush;
 
             documentRange.CharacterFormat.BackgroundColor = defaultBackground.Color;
-            documentRange.CharacterFormat.ForegroundColor = defaultForeground.Color;*/
-            editor.Focus(FocusState.Keyboard);
-            editor.Document.Selection.SetRange(editor.Document.Selection.EndPosition, editor.Document.Selection.EndPosition);
+            documentRange.CharacterFormat.ForegroundColor = defaultForeground.Color;
         }
 
 
@@ -421,6 +493,7 @@ namespace Rich_Text_Editor
                     // Load the file into the Document property of the RichEditBox.
                     editor.Document.SetText(Windows.UI.Text.TextSetOptions.FormatRtf, text);
                     AppTitle.Text = file.Name + " - " + appTitleStr;
+                    fileNameWithPath = file.Path;
                 }
                 saved = true;
             }
@@ -530,7 +603,7 @@ namespace Rich_Text_Editor
             ContentDialogResult result = await aboutDialog.ShowAsync();
             if (result == ContentDialogResult.Primary)
             {
-                SaveFile();
+                SaveFile(true);
             }
             else if (result == ContentDialogResult.Secondary)
             {
@@ -577,14 +650,25 @@ namespace Rich_Text_Editor
 
         private void editor_TextChanged(object sender, RoutedEventArgs e)
         {
-            saved = false;
+            string textStart;
+            editor.Document.GetText(TextGetOptions.UseObjectText, out textStart);
+
+            if (textStart == "")
+            {
+                saved = true;
+            }
+            else
+            {
+                saved = false;
+            }
+
             SolidColorBrush highlightBackgroundColor = (SolidColorBrush)App.Current.Resources["TextControlBackgroundFocused"];
             editor.Document.Selection.CharacterFormat.BackgroundColor = highlightBackgroundColor.Color;
         }
 
         private async void Exit_Click(object sender, RoutedEventArgs e)
         {
-            if (saved == true)
+            if (saved)
             {
                 await ApplicationView.GetForCurrentView().TryConsolidateAsync();
             }
@@ -636,6 +720,8 @@ namespace Rich_Text_Editor
                     // Load the file into the Document property of the RichEditBox.
                     editor.Document.SetText(Windows.UI.Text.TextSetOptions.FormatRtf, text);
                     AppTitle.Text = file.Name + " - Wordpad UWP";
+                    saved = true;
+                    fileNameWithPath = file.Path;
                 }
             }
         }
