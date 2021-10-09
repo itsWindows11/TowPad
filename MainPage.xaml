@@ -157,7 +157,8 @@
                 Background="Transparent"
                 Height="40"
                 Canvas.ZIndex="1" 
-                Margin="12,2,0,0">
+                Margin="12,2,0,0"
+                RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignLeftWithPanel="True">
                 <StackPanel Orientation="Horizontal">
                     <Image x:Name="AppFontIcon"
                          HorizontalAlignment="Left" 
@@ -169,7 +170,7 @@
                                Text="Untitled - Wordpad UWP"
                                VerticalAlignment="Center"
                                Margin="12,2,0,0"
-                    Style="{StaticResource CaptionTextBlockStyle}" />
+                               Style="{StaticResource CaptionTextBlockStyle}" />
                 </StackPanel>
             </Border>
             <StackPanel Orientation="Horizontal" x:Name="MenuPanel" VerticalAlignment="Center" RelativePanel.Below="AppTitleBar">
