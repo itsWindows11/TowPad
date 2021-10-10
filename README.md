@@ -1,9 +1,7 @@
 # Wordpad UWP
 **Reminder:** this app is still in development
 
-A UWP version of... Wordpad!
-
-[Discord server](https://discord.gg/KBRdf2J4xR)
+A UWP version of... WordPad!
 
 This app features a simple and easy to use interface other than ribbons.
 
