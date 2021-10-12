@@ -152,7 +152,7 @@ namespace Rich_Text_Editor
 
                 // Dropdown of file types the user can save the file as
                 savePicker.FileTypeChoices.Add("Rich Text", new List<string>() { ".rtf" });
-                savePicker.FileTypeChoices.Add("Normal Text", new List<string>() { ".txt" });
+                savePicker.FileTypeChoices.Add("Plain Text", new List<string>() { ".txt" });
 
                 // Default file name if the user does not type one in or select a file to replace
                 savePicker.SuggestedFileName = "New Document";
@@ -172,12 +172,14 @@ namespace Rich_Text_Editor
                                 // RTF file, format for it
                                 {
                                     editor.Document.SaveToStream(Windows.UI.Text.TextGetOptions.FormatRtf, randAccStream);
+                                    randAccStream.Dispose();
                                 }
                                 break;
                             case true:
                                 // TXT File, disable RTF formatting so that this is plain text
                                 {
                                     editor.Document.SaveToStream(Windows.UI.Text.TextGetOptions.None, randAccStream);
+                                    randAccStream.Dispose();
                                 }
                                 break;
                         }
@@ -220,12 +222,14 @@ namespace Rich_Text_Editor
                                     // RTF file, format for it
                                     {
                                         editor.Document.SaveToStream(Windows.UI.Text.TextGetOptions.FormatRtf, randAccStream);
+                                        randAccStream.Dispose();
                                     }
                                     break;
                                 case true:
                                     // TXT File, disable RTF formatting so that this is plain text
                                     {
                                         editor.Document.SaveToStream(Windows.UI.Text.TextGetOptions.None, randAccStream);
+                                        randAccStream.Dispose();
                                     }
                                     break;
                             }
@@ -484,14 +488,15 @@ namespace Rich_Text_Editor
             if (file != null)
             {
                 using (Windows.Storage.Streams.IRandomAccessStream randAccStream =
-                    await file.OpenAsync(FileAccessMode.Read))
+                    await file.OpenAsync(FileAccessMode.ReadWrite))
                 {
                     IBuffer buffer = await FileIO.ReadBufferAsync(file);
                     var reader = DataReader.FromBuffer(buffer);
                     reader.UnicodeEncoding = Windows.Storage.Streams.UnicodeEncoding.Utf8;
                     string text = reader.ReadString(buffer.Length);
                     // Load the file into the Document property of the RichEditBox.
-                    editor.Document.SetText(Windows.UI.Text.TextSetOptions.FormatRtf, text);
+                    editor.Document.LoadFromStream(TextSetOptions.FormatRtf, randAccStream);
+                    //editor.Document.SetText(Windows.UI.Text.TextSetOptions.FormatRtf, text);
                     AppTitle.Text = file.Name + " - " + appTitleStr;
                     fileNameWithPath = file.Path;
                 }
@@ -699,7 +704,7 @@ namespace Rich_Text_Editor
             string text = reader.ReadString(buffer.Length);
             // Load the file into the Document property of the RichEditBox.
             editor.Document.SetText(Windows.UI.Text.TextSetOptions.FormatRtf, text);
-            AppTitle.Text = file.Name + " - Wordpad UWP";
+            AppTitle.Text = file.Name + " - " + appTitleStr;
         }
 
 
@@ -713,13 +718,19 @@ namespace Rich_Text_Editor
                 {
                     var fileArgs = args as FileActivatedEventArgs;
                     StorageFile file = (StorageFile)fileArgs.Files[0];
-                    IBuffer buffer = await FileIO.ReadBufferAsync(file);
-                    var reader = DataReader.FromBuffer(buffer);
-                    reader.UnicodeEncoding = Windows.Storage.Streams.UnicodeEncoding.Utf8;
-                    string text = reader.ReadString(buffer.Length);
-                    // Load the file into the Document property of the RichEditBox.
-                    editor.Document.SetText(Windows.UI.Text.TextSetOptions.FormatRtf, text);
-                    AppTitle.Text = file.Name + " - Wordpad UWP";
+                    using (Windows.Storage.Streams.IRandomAccessStream randAccStream =
+                        await file.OpenAsync(FileAccessMode.ReadWrite))
+                    {
+                        IBuffer buffer = await FileIO.ReadBufferAsync(file);
+                        var reader = DataReader.FromBuffer(buffer);
+                        reader.UnicodeEncoding = Windows.Storage.Streams.UnicodeEncoding.Utf8;
+                        string text = reader.ReadString(buffer.Length);
+                        // Load the file into the Document property of the RichEditBox.
+                        editor.Document.LoadFromStream(TextSetOptions.FormatRtf, randAccStream);
+                        //editor.Document.SetText(Windows.UI.Text.TextSetOptions.FormatRtf, text);
+                        AppTitle.Text = file.Name + " - " + appTitleStr;
+                        fileNameWithPath = file.Path;
+                    }
                     saved = true;
                     fileNameWithPath = file.Path;
                 }
