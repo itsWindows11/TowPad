@@ -251,7 +251,7 @@ namespace Rich_Text_Editor
                 catch (Exception e)
                 {
                     string content = e.GetType() == typeof(UnauthorizedAccessException)
-                        ? appTitleStr + " does not have the required permissions to access the filesystem. But you can fix that."
+                        ? appTitleStr + " does not have the required permissions to access the filesystem. But you can fix that.\n\nNOTE: Changing permissions might terminate the app, so make sure to save your work using \"Save as Copy\" option instead."
                         : "Something weird happened and we could not explain it.";
                     ContentDialog aboutDialog = new ContentDialog
                     {
