@@ -390,6 +390,6 @@
             </controls:WrapPanel>
         </RelativePanel>
 
-        <RichEditBox SelectionFlyout="{x:Null}" FontFamily="Calibri" TextChanged="editor_TextChanged" Margin="0,2,0,0" Style="{StaticResource RichEditBoxStyle}" BorderThickness="1"  BorderBrush="Transparent" x:Name="editor" RelativePanel.Below="containerPanel" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignBottomWithPanel="True"/>
+        <RichEditBox SelectionFlyout="{x:Null}" IsSpellCheckEnabled="False" FontFamily="Calibri" TextChanged="editor_TextChanged" Margin="0,2,0,0" Style="{StaticResource RichEditBoxStyle}" BorderThickness="1"  BorderBrush="Transparent" x:Name="editor" RelativePanel.Below="containerPanel" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignBottomWithPanel="True"/>
     </RelativePanel>
 </Page>
