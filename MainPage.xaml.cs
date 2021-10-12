@@ -145,7 +145,8 @@ namespace Rich_Text_Editor
 
         private async void SaveFile(bool isCopy)
         {
-            if (isCopy)
+            string fileName = AppTitle.Text.Replace(" - " + appTitleStr, "");
+            if (isCopy || fileName == "Untitled")
             {
                 FileSavePicker savePicker = new FileSavePicker();
                 savePicker.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
@@ -199,9 +200,8 @@ namespace Rich_Text_Editor
                     AppTitle.Text = file.Name + " - " + appTitleStr;
                 }
             }
-            else
+            else if (!isCopy || fileName != "Untitled")
             {
-                string fileName = AppTitle.Text.Replace(" - " + appTitleStr, "");
                 string path = fileNameWithPath.Replace("\\" + fileName, "");
                 try
                 {
