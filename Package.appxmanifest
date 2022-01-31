@@ -10,15 +10,15 @@
   xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities">
 
   <Identity
-    Name="4174e5cf-8333-489a-989f-14520a827c3f"
-    Publisher="CN=itsWindows11 (SimpleBear)"
-    Version="1.0.0.0" />
+    Name="14777GamalAsker.WordpadUWP"
+    Publisher="CN=35F1B82D-C87E-47CF-B0C0-F084E1490E1E"
+    Version="1.0.1.0" />
 
-  <mp:PhoneIdentity PhoneProductId="4174e5cf-8333-489a-989f-14520a827c3f" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
+  <mp:PhoneIdentity PhoneProductId="d78e24ed-8c8d-469f-8fa2-4490fa2ef787" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
     <DisplayName>Wordpad UWP</DisplayName>
-    <PublisherDisplayName>itsWindows11 (SimpleBear)</PublisherDisplayName>
+    <PublisherDisplayName>itsWindows11</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
 
@@ -69,10 +69,6 @@
   <Capabilities>
     <Capability Name="internetClient" />
     <rescap:Capability Name="confirmAppClose"/> 
-    <rescap:Capability Name="broadFileSystemAccess" />
     <uap:Capability Name="removableStorage"/>
-    <uap:Capability Name="videosLibrary"/>
-    <uap:Capability Name="musicLibrary"/>
-    <uap:Capability Name="picturesLibrary"/>
   </Capabilities>
 </Package>

@@ -35,9 +35,9 @@ namespace Rich_Text_Editor
 {
     public sealed partial class MainPage : Page
     {
-        bool saved = true;
-        string appTitleStr = "Wordpad UWP";
-        string fileNameWithPath = "";
+        private bool saved = true;
+        private string appTitleStr = "Wordpad UWP";
+        private string fileNameWithPath = "";
 
         public MainPage()
         {
@@ -221,14 +221,14 @@ namespace Rich_Text_Editor
                                 case false:
                                     // RTF file, format for it
                                     {
-                                        editor.Document.SaveToStream(Windows.UI.Text.TextGetOptions.FormatRtf, randAccStream);
+                                        editor.Document.SaveToStream(TextGetOptions.FormatRtf, randAccStream);
                                         randAccStream.Dispose();
                                     }
                                     break;
                                 case true:
                                     // TXT File, disable RTF formatting so that this is plain text
                                     {
-                                        editor.Document.SaveToStream(Windows.UI.Text.TextGetOptions.None, randAccStream);
+                                        editor.Document.SaveToStream(TextGetOptions.None, randAccStream);
                                         randAccStream.Dispose();
                                     }
                                     break;
@@ -248,25 +248,9 @@ namespace Rich_Text_Editor
                         AppTitle.Text = file.Name + " - " + appTitleStr;
                     }
                 } 
-                catch (Exception e)
+                catch (Exception)
                 {
-                    string content = e.GetType() == typeof(UnauthorizedAccessException)
-                        ? appTitleStr + " does not have the required permissions to access the filesystem. But you can fix that.\n\nNOTE: Changing permissions might terminate the app, so make sure to save your work using \"Save as Copy\" option instead."
-                        : "Something weird happened and we could not explain it.";
-                    ContentDialog aboutDialog = new ContentDialog
-                    {
-                        Title = "An error occured during saving this file.",
-                        Content = content,
-                        CloseButtonText = "Cancel",
-                        PrimaryButtonText = "Go to Settings",
-                    };
-
-                    ContentDialogResult result = await aboutDialog.ShowAsync();
-
-                    if (result == ContentDialogResult.Primary)
-                    {
-                        await Windows.System.Launcher.LaunchUriAsync(new Uri("ms-settings:privacy-broadfilesystemaccess"));
-                    }
+                    SaveFile(true);
                 }
             }
         }
@@ -655,10 +639,9 @@ namespace Rich_Text_Editor
 
         private void editor_TextChanged(object sender, RoutedEventArgs e)
         {
-            string textStart;
-            editor.Document.GetText(TextGetOptions.UseObjectText, out textStart);
+            editor.Document.GetText(TextGetOptions.UseObjectText, out string textStart);
 
-            if (textStart == "")
+            if (textStart == "" || string.IsNullOrWhiteSpace(textStart))
             {
                 saved = true;
             }
@@ -667,8 +650,11 @@ namespace Rich_Text_Editor
                 saved = false;
             }
 
-            SolidColorBrush highlightBackgroundColor = (SolidColorBrush)App.Current.Resources["TextControlBackgroundFocused"];
-            editor.Document.Selection.CharacterFormat.BackgroundColor = highlightBackgroundColor.Color;
+            if (!saved) UnsavedTextBlock.Visibility = Visibility.Visible;
+            else UnsavedTextBlock.Visibility = Visibility.Collapsed;
+
+            /*SolidColorBrush highlightBackgroundColor = (SolidColorBrush)App.Current.Resources["TextControlBackgroundFocused"];
+            editor.Document.Selection.CharacterFormat.BackgroundColor = highlightBackgroundColor.Color;*/
         }
 
         private async void Exit_Click(object sender, RoutedEventArgs e)
@@ -707,6 +693,15 @@ namespace Rich_Text_Editor
             AppTitle.Text = file.Name + " - " + appTitleStr;
         }
 
+        public static Visibility ConvertBoolToVis(bool boolean)
+        {
+            return boolean ? Visibility.Visible : Visibility.Collapsed; 
+        }
+
+        public static Visibility ConvertBoolToVisReverse(bool boolean)
+        {
+            return boolean ? Visibility.Collapsed : Visibility.Visible;
+        }
 
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
