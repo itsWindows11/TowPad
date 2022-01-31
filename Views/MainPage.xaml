@@ -34,7 +34,7 @@
     </Page.Resources>
 
     <RelativePanel>
-        <RelativePanel x:Name="containerPanel" Background="{StaticResource SystemAltLowColor}" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignLeftWithPanel="True">
+        <RelativePanel x:Name="containerPanel" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignLeftWithPanel="True">
             
             <Border x:Name="AppTitleBar"
                 IsHitTestVisible="True"

@@ -742,7 +742,7 @@ namespace Rich_Text_Editor
 
         private async void SettingsButton_Click(object sender, RoutedEventArgs e)
         {
-            SettingsDlg dlg = new SettingsDlg(editor, FontsCombo, this);
+            SettingsDialog dlg = new SettingsDialog(editor, FontsCombo, this);
             await dlg.ShowAsync();
         }
 
