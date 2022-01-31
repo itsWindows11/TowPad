@@ -48,9 +48,10 @@
                     <Image x:Name="AppFontIcon"
                          HorizontalAlignment="Left" 
                          VerticalAlignment="Center"
-                         Source="Assets/Square44x44Logo.png" 
+                         Source="ms-appx:///Assets/Square44x44Logo.png" 
                          Width="16" 
-                         Height="16"/>
+                         Height="16"
+                         Margin="0,2,0,0" />
                     <TextBlock x:Name="AppTitle"
                                Text="Untitled - Wordpad UWP"
                                VerticalAlignment="Center"
