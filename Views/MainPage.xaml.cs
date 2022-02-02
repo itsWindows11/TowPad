@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Activation;
@@ -38,6 +39,14 @@ namespace Rich_Text_Editor
         private bool saved = true;
         private string appTitleStr = "Wordpad UWP";
         private string fileNameWithPath = "";
+
+        public List<string> Fonts
+        {
+            get
+            {
+                return CanvasTextFormat.GetSystemFontFamilies().OrderBy(f => f).ToList();
+            }
+        }
 
         public MainPage()
         {
@@ -567,11 +576,11 @@ namespace Rich_Text_Editor
 
         private async void DisplayAboutDialog()
         {
-            ContentDialog aboutDialog = new ContentDialog
+            ContentDialog aboutDialog = new()
             {
                 Title = "Wordpad UWP",
-                Content = "Version 1.0.0.0\n\n© 2021",
-                CloseButtonText = "Ok"
+                Content = $"Version {typeof(App).GetTypeInfo().Assembly.GetName().Version}\n\n© 2022",
+                CloseButtonText = "OK"
             };
 
             await aboutDialog.ShowAsync();
@@ -580,7 +589,7 @@ namespace Rich_Text_Editor
         private async void ShowUnsavedDialog()
         {
             string fileName = AppTitle.Text.Replace(" - " + appTitleStr, "");
-            ContentDialog aboutDialog = new ContentDialog
+            ContentDialog aboutDialog = new()
             {
                 Title = "Do you want to save changes to " + fileName + "?",
                 Content = "There are unsaved changes, want to save them?",
@@ -609,28 +618,10 @@ namespace Rich_Text_Editor
             DisplayAboutDialog();
         }
 
-        public async Task<bool> IsFilePresent(string fileName)
-        {
-            var item = await ApplicationData.Current.LocalFolder.TryGetItemAsync(fileName);
-            return item != null;
-        }
-
         private void FontsCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             editor.Document.Selection.CharacterFormat.Name = FontsCombo.SelectedValue.ToString();
         }
-
-        public async Task<bool> IsFilePresent1(string fileNameWithPath1)
-        {
-            var item = await StorageFile.GetFileFromPathAsync(fileNameWithPath1);
-            return item != null;
-        }
-        public async Task<bool> IsCurrentlyOpenFilePresent()
-        {
-            var item = await StorageFile.GetFileFromPathAsync(fileNameWithPath);
-            return item != null;
-        }
-
 
         private void FindButton_Click(object sender, RoutedEventArgs e)
         {
@@ -675,50 +666,28 @@ namespace Rich_Text_Editor
             // Hide flyout
             colorPickerButton.Flyout.Hide();
         }
+
         private void CancelColor_Click(object sender, RoutedEventArgs e)
         {
             // Cancel flyout
             colorPickerButton.Flyout.Hide();
         }
 
-        public async void OpenFileFromAppClass(FileActivatedEventArgs args)
-        {
-            StorageFile file = (StorageFile)args.Files[0];
-            IBuffer buffer = await FileIO.ReadBufferAsync(file);
-            var reader = DataReader.FromBuffer(buffer);
-            reader.UnicodeEncoding = Windows.Storage.Streams.UnicodeEncoding.Utf8;
-            string text = reader.ReadString(buffer.Length);
-            // Load the file into the Document property of the RichEditBox.
-            editor.Document.SetText(Windows.UI.Text.TextSetOptions.FormatRtf, text);
-            AppTitle.Text = file.Name + " - " + appTitleStr;
-        }
-
-        public static Visibility ConvertBoolToVis(bool boolean)
-        {
-            return boolean ? Visibility.Visible : Visibility.Collapsed; 
-        }
-
-        public static Visibility ConvertBoolToVisReverse(bool boolean)
-        {
-            return boolean ? Visibility.Collapsed : Visibility.Visible;
-        }
-
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
-            var args = e.Parameter as IActivatedEventArgs;
-            if (args != null)
+            if (e.Parameter is IActivatedEventArgs args)
             {
                 if (args.Kind == ActivationKind.File)
                 {
                     var fileArgs = args as FileActivatedEventArgs;
                     StorageFile file = (StorageFile)fileArgs.Files[0];
-                    using (Windows.Storage.Streams.IRandomAccessStream randAccStream =
+                    using (IRandomAccessStream randAccStream =
                         await file.OpenAsync(FileAccessMode.ReadWrite))
                     {
                         IBuffer buffer = await FileIO.ReadBufferAsync(file);
                         var reader = DataReader.FromBuffer(buffer);
-                        reader.UnicodeEncoding = Windows.Storage.Streams.UnicodeEncoding.Utf8;
+                        reader.UnicodeEncoding =UnicodeEncoding.Utf8;
                         string text = reader.ReadString(buffer.Length);
                         // Load the file into the Document property of the RichEditBox.
                         editor.Document.LoadFromStream(TextSetOptions.FormatRtf, randAccStream);
@@ -732,17 +701,9 @@ namespace Rich_Text_Editor
             }
         }
 
-        public List<string> Fonts
-        {
-            get
-            {
-                return CanvasTextFormat.GetSystemFontFamilies().OrderBy(f => f).ToList();
-            }
-        }
-
         private async void SettingsButton_Click(object sender, RoutedEventArgs e)
         {
-            SettingsDialog dlg = new SettingsDialog(editor, FontsCombo, this);
+            SettingsDialog dlg = new(editor, FontsCombo, this);
             await dlg.ShowAsync();
         }
 
@@ -756,6 +717,15 @@ namespace Rich_Text_Editor
             if (editor.Document.Selection != null)
             {
                 editor.Document.Selection.SetText(TextSetOptions.None, replaceBox.Text);
+            }
+        }
+
+        private void ReplaceAll_Click(object sender, RoutedEventArgs e)
+        {
+            editor.Document.GetText(TextGetOptions.FormatRtf, out string value);
+            if (!(string.IsNullOrWhiteSpace(value) && string.IsNullOrWhiteSpace(findBox.Text) && string.IsNullOrWhiteSpace(replaceBox.Text)))
+            {
+                editor.Document.SetText(TextSetOptions.FormatRtf, value.Replace(findBox.Text, replaceBox.Text));
             }
         }
 
