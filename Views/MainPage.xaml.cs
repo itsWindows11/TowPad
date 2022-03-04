@@ -1,4 +1,5 @@
 ﻿using Microsoft.Graphics.Canvas.Text;
+using Rich_Text_Editor.Helpers;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -71,12 +72,12 @@ namespace Rich_Text_Editor
 
             SystemNavigationManagerPreview.GetForCurrentView().CloseRequested += OnCloseRequest;
 
-            string fontSetting = localSettings.Values["FontFamily"] as string;
-            if (fontSetting != null)
+            if (localSettings.Values["FontFamily"] is string fontSetting)
             {
                 FontsCombo.SelectedItem = fontSetting;
                 editor.FontFamily = new FontFamily(fontSetting);
-            } else
+            }
+            else
             {
                 FontsCombo.SelectedItem = "Calibri";
                 editor.FontFamily = new FontFamily("Calibri");
@@ -101,14 +102,7 @@ namespace Rich_Text_Editor
 
         private void CoreTitleBar_IsVisibleChanged(CoreApplicationViewTitleBar sender, object args)
         {
-            if (sender.IsVisible)
-            {
-                AppTitleBar.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                AppTitleBar.Visibility = Visibility.Collapsed;
-            }
+            AppTitleBar.Visibility = sender.IsVisible ? Visibility.Visible : Visibility.Collapsed;
         }
 
         // Update the TitleBar based on the inactive/active state of the app
@@ -139,7 +133,7 @@ namespace Rich_Text_Editor
 
         private void OnCloseRequest(object sender, SystemNavigationCloseRequestedPreviewEventArgs e)
         {
-            if (saved == false) { e.Handled = true; ShowUnsavedDialog(); }
+            if (!saved) { e.Handled = true; ShowUnsavedDialog(); }
         }
 
         private void SaveAsButton_Click(object sender, RoutedEventArgs e)
@@ -300,98 +294,57 @@ namespace Rich_Text_Editor
 
         private void BoldButton_Click(object sender, RoutedEventArgs e)
         {
-            Windows.UI.Text.ITextSelection selectedText = editor.Document.Selection;
-            if (selectedText != null)
-            {
-                Windows.UI.Text.ITextCharacterFormat charFormatting = selectedText.CharacterFormat;
-                charFormatting.Bold = Windows.UI.Text.FormatEffect.Toggle;
-                selectedText.CharacterFormat = charFormatting;
-            }
+            editor.FormatSelected(RichEditHelpers.FormattingMode.Bold);
         }
 
         private async void NewDoc_Click(object sender, RoutedEventArgs e)
         {
             ApplicationView currentAV = ApplicationView.GetForCurrentView();
             CoreApplicationView newAV = CoreApplication.CreateNewView();
-            await newAV.Dispatcher.RunAsync(
-                            CoreDispatcherPriority.Normal,
-                            async () =>
-                            {
-                                var newWindow = Window.Current;
-                                var newAppView = ApplicationView.GetForCurrentView();
-                                newAppView.Title = "Untitled - Wordpad UWP";
+            await newAV.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
+                  {
+                        var newWindow = Window.Current;
+                        var newAppView = ApplicationView.GetForCurrentView();
+                        newAppView.Title = "Untitled - Wordpad UWP";
 
-                                var frame = new Frame();
-                                frame.Navigate(typeof(MainPage), null);
-                                newWindow.Content = frame;
-                                newWindow.Activate();
+                        var frame = new Frame();
+                        frame.Navigate(typeof(MainPage));
+                        newWindow.Content = frame;
+                        newWindow.Activate();
 
-                                await ApplicationViewSwitcher.TryShowAsStandaloneAsync(
-                                    newAppView.Id,
-                                    ViewSizePreference.UseMinimum,
-                                    currentAV.Id,
-                                    ViewSizePreference.UseMinimum);
-                            });
+                        await ApplicationViewSwitcher.TryShowAsStandaloneAsync(newAppView.Id, 
+                            ViewSizePreference.UseMinimum, currentAV.Id, ViewSizePreference.UseMinimum);
+                  });
         }
 
         private void StrikethoughButton_Click(object sender, RoutedEventArgs e)
         {
-            Windows.UI.Text.ITextSelection selectedText = editor.Document.Selection;
-            if (selectedText != null)
-            {
-                Windows.UI.Text.ITextCharacterFormat charFormatting = selectedText.CharacterFormat;
-                charFormatting.Strikethrough = Windows.UI.Text.FormatEffect.Toggle;
-                selectedText.CharacterFormat = charFormatting;
-            }
+            editor.FormatSelected(RichEditHelpers.FormattingMode.Strikethrough);
         }
 
         private void SubscriptButton_Click(object sender, RoutedEventArgs e)
         {
-            Windows.UI.Text.ITextSelection selectedText = editor.Document.Selection;
-            if (selectedText != null)
-            {
-                Windows.UI.Text.ITextCharacterFormat charFormatting = selectedText.CharacterFormat;
-                charFormatting.Subscript = Windows.UI.Text.FormatEffect.Toggle;
-                selectedText.CharacterFormat = charFormatting;
-            }
+            editor.FormatSelected(RichEditHelpers.FormattingMode.Subscript);
         }
 
         private void SuperScriptButton_Click(object sender, RoutedEventArgs e)
         {
-            Windows.UI.Text.ITextSelection selectedText = editor.Document.Selection;
-            if (selectedText != null)
-            {
-                Windows.UI.Text.ITextCharacterFormat charFormatting = selectedText.CharacterFormat;
-                charFormatting.Superscript = Windows.UI.Text.FormatEffect.Toggle;
-                selectedText.CharacterFormat = charFormatting;
-            }
+            editor.FormatSelected(RichEditHelpers.FormattingMode.Superscript);
         }
 
         private void AlignRightButton_Click(object sender, RoutedEventArgs e)
         {
-            Windows.UI.Text.ITextSelection selectedText = editor.Document.Selection;
-            if (selectedText != null)
-            {
-                selectedText.ParagraphFormat.Alignment = ParagraphAlignment.Right;
-            }
+            editor.AlignSelectedTo(RichEditHelpers.AlignMode.Right);
         }
 
         private void AlignCenterButton_Click(object sender, RoutedEventArgs e)
         {
-            Windows.UI.Text.ITextSelection selectedText = editor.Document.Selection;
-            if (selectedText != null)
-            {
-                selectedText.ParagraphFormat.Alignment = ParagraphAlignment.Center;
-            }
+            editor.AlignSelectedTo(RichEditHelpers.AlignMode.Center);
         }
 
         private void AlignLeftButton_Click(object sender, RoutedEventArgs e)
         {
-            Windows.UI.Text.ITextSelection selectedText = editor.Document.Selection;
-            if (selectedText != null)
-            {
-                selectedText.ParagraphFormat.Alignment = ParagraphAlignment.Left;
-            }
+            editor.AlignSelectedTo(RichEditHelpers.AlignMode.Left);
         }
 
         private void FindBoxHighlightMatches()
@@ -426,66 +379,31 @@ namespace Rich_Text_Editor
 
         private void ItalicButton_Click(object sender, RoutedEventArgs e)
         {
-            Windows.UI.Text.ITextSelection selectedText = editor.Document.Selection;
-            if (selectedText != null)
-            {
-                Windows.UI.Text.ITextCharacterFormat charFormatting = selectedText.CharacterFormat;
-                charFormatting.Italic = Windows.UI.Text.FormatEffect.Toggle;
-                selectedText.CharacterFormat = charFormatting;
-            }
+            editor.FormatSelected(RichEditHelpers.FormattingMode.Italic);
         }
 
         private void UnderlineButton_Click(object sender, RoutedEventArgs e)
         {
-            Windows.UI.Text.ITextSelection selectedText = editor.Document.Selection;
-            if (selectedText != null)
-            {
-                Windows.UI.Text.ITextCharacterFormat charFormatting = selectedText.CharacterFormat;
-                if (charFormatting.Underline == Windows.UI.Text.UnderlineType.None)
-                {
-                    charFormatting.Underline = Windows.UI.Text.UnderlineType.Single;
-                }
-                else
-                {
-                    charFormatting.Underline = Windows.UI.Text.UnderlineType.None;
-                }
-                selectedText.CharacterFormat = charFormatting;
-            }
-        }
-
-        private void SetFontSize(object sender, SelectionChangedEventArgs e)
-        {
-            Windows.UI.Text.ITextSelection selectedText = editor.Document.Selection;
-            if (selectedText != null)
-            {
-                string choiceName = e.AddedItems[0].ToString();
-                var charSize = int.Parse(choiceName);
-                Windows.UI.Text.ITextCharacterFormat charFormatting = selectedText.CharacterFormat;
-                charFormatting.Size = charSize;
-                selectedText.CharacterFormat = charFormatting;
-            }
+            editor.FormatSelected(RichEditHelpers.FormattingMode.Underline);
         }
 
         private async void OpenButton_Click(object sender, RoutedEventArgs e)
         {
             // Open a text file.
-            Windows.Storage.Pickers.FileOpenPicker open =
-                new Windows.Storage.Pickers.FileOpenPicker();
-            open.SuggestedStartLocation =
-                Windows.Storage.Pickers.PickerLocationId.DocumentsLibrary;
+            FileOpenPicker open = new();
+            open.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
             open.FileTypeFilter.Add(".rtf");
             open.FileTypeFilter.Add(".txt");
 
-            Windows.Storage.StorageFile file = await open.PickSingleFileAsync();
+            StorageFile file = await open.PickSingleFileAsync();
 
             if (file != null)
             {
-                using (Windows.Storage.Streams.IRandomAccessStream randAccStream =
-                    await file.OpenAsync(FileAccessMode.ReadWrite))
+                using (IRandomAccessStream randAccStream = await file.OpenAsync(FileAccessMode.ReadWrite))
                 {
                     IBuffer buffer = await FileIO.ReadBufferAsync(file);
                     var reader = DataReader.FromBuffer(buffer);
-                    reader.UnicodeEncoding = Windows.Storage.Streams.UnicodeEncoding.Utf8;
+                    reader.UnicodeEncoding = UnicodeEncoding.Utf8;
                     string text = reader.ReadString(buffer.Length);
                     // Load the file into the Document property of the RichEditBox.
                     editor.Document.LoadFromStream(TextSetOptions.FormatRtf, randAccStream);
@@ -501,29 +419,23 @@ namespace Rich_Text_Editor
         private async void AddImageButton_Click(object sender, RoutedEventArgs e)
         {
             // Open an image file.
-            Windows.Storage.Pickers.FileOpenPicker open =
-                new Windows.Storage.Pickers.FileOpenPicker();
-            open.SuggestedStartLocation =
-                Windows.Storage.Pickers.PickerLocationId.DocumentsLibrary;
+            FileOpenPicker open = new();
+            open.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
             open.FileTypeFilter.Add(".png");
             open.FileTypeFilter.Add(".jpg");
             open.FileTypeFilter.Add(".jpeg");
 
-            Windows.Storage.StorageFile file = await open.PickSingleFileAsync();
+            StorageFile file = await open.PickSingleFileAsync();
 
             if (file != null)
             {
-                using (Windows.Storage.Streams.IRandomAccessStream randAccStream =
-                    await file.OpenAsync(FileAccessMode.Read))
-                using (IRandomAccessStream fileStream = await file.OpenAsync(Windows.Storage.FileAccessMode.Read))
-                {
-                    var properties = await file.Properties.GetImagePropertiesAsync();
-                    int width = (int)properties.Width;
-                    int height = (int)properties.Height;
+                using IRandomAccessStream randAccStream = await file.OpenAsync(FileAccessMode.Read);
+                var properties = await file.Properties.GetImagePropertiesAsync();
+                int width = (int)properties.Width;
+                int height = (int)properties.Height;
 
-                    // Load the file into the Document property of the RichEditBox.
-                    editor.Document.Selection.InsertImage(width, height, 0, Windows.UI.Text.VerticalCharacterAlignment.Baseline, "img", randAccStream);
-                }
+                // Load the file into the Document property of the RichEditBox.
+                editor.Document.Selection.InsertImage(width, height, 0, Windows.UI.Text.VerticalCharacterAlignment.Baseline, "img", randAccStream);
             }
         }
 
@@ -532,20 +444,18 @@ namespace Rich_Text_Editor
             // Extract the color of the button that was clicked.
             Button clickedColor = (Button)sender;
             var rectangle = (Windows.UI.Xaml.Shapes.Rectangle)clickedColor.Content;
-            var color = ((Windows.UI.Xaml.Media.SolidColorBrush)rectangle.Fill).Color;
+            var color = (rectangle.Fill as SolidColorBrush).Color;
 
             editor.Document.Selection.CharacterFormat.ForegroundColor = color;
 
             fontColorButton.Flyout.Hide();
-            editor.Focus(Windows.UI.Xaml.FocusState.Keyboard);
+            editor.Focus(FocusState.Keyboard);
         }
-
-
 
         private void AddLinkButton_Click(object sender, RoutedEventArgs e)
         {
-            editor.Document.Selection.Link = '"' + hyperlinkText.Text + '"';
-            editor.Document.Selection.CharacterFormat.ForegroundColor = (Color)XamlBindingHelper.ConvertValue(typeof(Windows.UI.Color), "#6194c7");
+            editor.Document.Selection.Link = $"\"{hyperlinkText.Text}\"";
+            editor.Document.Selection.CharacterFormat.ForegroundColor = (Color)XamlBindingHelper.ConvertValue(typeof(Color), "#6194c7");
             AddLinkButton.Flyout.Hide();
         }
 
@@ -606,10 +516,6 @@ namespace Rich_Text_Editor
             else if (result == ContentDialogResult.Secondary)
             {
                 await ApplicationView.GetForCurrentView().TryConsolidateAsync();
-            }
-            else
-            {
-                // Do nothing
             }
         }
 
@@ -682,8 +588,7 @@ namespace Rich_Text_Editor
                 {
                     var fileArgs = args as FileActivatedEventArgs;
                     StorageFile file = (StorageFile)fileArgs.Files[0];
-                    using (IRandomAccessStream randAccStream =
-                        await file.OpenAsync(FileAccessMode.ReadWrite))
+                    using (IRandomAccessStream randAccStream = await file.OpenAsync(FileAccessMode.ReadWrite))
                     {
                         IBuffer buffer = await FileIO.ReadBufferAsync(file);
                         var reader = DataReader.FromBuffer(buffer);
@@ -714,29 +619,25 @@ namespace Rich_Text_Editor
 
         private void ReplaceSelected_Click(object sender, RoutedEventArgs e)
         {
-            if (editor.Document.Selection != null)
-            {
-                editor.Document.Selection.SetText(TextSetOptions.None, replaceBox.Text);
-            }
+            editor.Replace(false, replaceBox.Text);
         }
 
         private void ReplaceAll_Click(object sender, RoutedEventArgs e)
         {
-            editor.Document.GetText(TextGetOptions.FormatRtf, out string value);
+            /*editor.Document.GetText(TextGetOptions.FormatRtf, out string value);
             if (!(string.IsNullOrWhiteSpace(value) && string.IsNullOrWhiteSpace(findBox.Text) && string.IsNullOrWhiteSpace(replaceBox.Text)))
             {
                 editor.Document.SetText(TextSetOptions.FormatRtf, value.Replace(findBox.Text, replaceBox.Text));
-            }
+            }*/
+
+            editor.Replace(true, find: findBox.Text, replace: replaceBox.Text);
         }
 
         private void FontSizeBox_ValueChanged(Microsoft.UI.Xaml.Controls.NumberBox sender, Microsoft.UI.Xaml.Controls.NumberBoxValueChangedEventArgs args)
         {
             if (editor != null && editor.Document.Selection != null)
             {
-                ITextSelection selectedText = editor.Document.Selection;
-                ITextCharacterFormat charFormatting = selectedText.CharacterFormat;
-                charFormatting.Size = (float)sender.Value;
-                selectedText.CharacterFormat = charFormatting;
+                editor.ChangeFontSize((float)sender.Value);
             }
         }
     }
