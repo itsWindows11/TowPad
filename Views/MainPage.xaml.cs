@@ -1,5 +1,6 @@
 ﻿using Microsoft.Graphics.Canvas.Text;
 using Rich_Text_Editor.Helpers;
+using Rich_Text_Editor.Views;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -201,6 +202,7 @@ namespace Rich_Text_Editor
                     saved = true;
                     fileNameWithPath = file.Path;
                     AppTitle.Text = file.Name + " - " + appTitleStr;
+                    Windows.Storage.AccessCache.StorageApplicationPermissions.MostRecentlyUsedList.Add(file);
                 }
             }
             else if (!isCopy || fileName != "Untitled")
@@ -208,33 +210,23 @@ namespace Rich_Text_Editor
                 string path = fileNameWithPath.Replace("\\" + fileName, "");
                 try
                 {
-                    StorageFolder folder = await StorageFolder.GetFolderFromPathAsync(path);
-                    StorageFile file1 = await folder.CreateFileAsync(fileName, CreationCollisionOption.OpenIfExists);
-                    StorageFile file = await folder.GetFileAsync(fileName);
+                    StorageFile file = await Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.GetFileAsync("CurrentlyOpenFile");
                     if (file != null)
                     {
                         // Prevent updates to the remote version of the file until we
                         // finish making changes and call CompleteUpdatesAsync.
                         CachedFileManager.DeferUpdates(file);
                         // write to file
-                        using (Windows.Storage.Streams.IRandomAccessStream randAccStream =
-                            await file.OpenAsync(Windows.Storage.FileAccessMode.ReadWrite))
-                            switch (file.Name.EndsWith(".txt"))
+                        using (IRandomAccessStream randAccStream = await file.OpenAsync(FileAccessMode.ReadWrite))
+                            if (file.Name.EndsWith(".txt"))
                             {
-                                case false:
-                                    // RTF file, format for it
-                                    {
-                                        editor.Document.SaveToStream(TextGetOptions.FormatRtf, randAccStream);
-                                        randAccStream.Dispose();
-                                    }
-                                    break;
-                                case true:
-                                    // TXT File, disable RTF formatting so that this is plain text
-                                    {
-                                        editor.Document.SaveToStream(TextGetOptions.None, randAccStream);
-                                        randAccStream.Dispose();
-                                    }
-                                    break;
+                                editor.Document.SaveToStream(TextGetOptions.None, randAccStream);
+                                randAccStream.Dispose();
+                            }
+                            else
+                            {
+                                editor.Document.SaveToStream(TextGetOptions.FormatRtf, randAccStream);
+                                randAccStream.Dispose();
                             }
 
 
@@ -249,6 +241,7 @@ namespace Rich_Text_Editor
                         }
                         saved = true;
                         AppTitle.Text = file.Name + " - " + appTitleStr;
+                        Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.Remove("CurrentlyOpenFile");
                     }
                 } 
                 catch (Exception)
@@ -412,6 +405,8 @@ namespace Rich_Text_Editor
                     fileNameWithPath = file.Path;
                 }
                 saved = true;
+                Windows.Storage.AccessCache.StorageApplicationPermissions.MostRecentlyUsedList.Add(file);
+                Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.AddOrReplace("CurrentlyOpenFile", file);
             }
 
         }
@@ -435,7 +430,7 @@ namespace Rich_Text_Editor
                 int height = (int)properties.Height;
 
                 // Load the file into the Document property of the RichEditBox.
-                editor.Document.Selection.InsertImage(width, height, 0, Windows.UI.Text.VerticalCharacterAlignment.Baseline, "img", randAccStream);
+                editor.Document.Selection.InsertImage(width, height, 0, VerticalCharacterAlignment.Baseline, "img", randAccStream);
             }
         }
 
@@ -484,7 +479,7 @@ namespace Rich_Text_Editor
             editor.Document.Redo();
         }
 
-        private async void DisplayAboutDialog()
+        private async Task DisplayAboutDialog()
         {
             ContentDialog aboutDialog = new()
             {
@@ -496,7 +491,7 @@ namespace Rich_Text_Editor
             await aboutDialog.ShowAsync();
         }
 
-        private async void ShowUnsavedDialog()
+        private async Task ShowUnsavedDialog()
         {
             string fileName = AppTitle.Text.Replace(" - " + appTitleStr, "");
             ContentDialog aboutDialog = new()
@@ -519,9 +514,9 @@ namespace Rich_Text_Editor
             }
         }
 
-        private void AboutBtn_Click(object sender, RoutedEventArgs e)
+        private async void AboutBtn_Click(object sender, RoutedEventArgs e)
         {
-            DisplayAboutDialog();
+            await DisplayAboutDialog();
         }
 
         private void FontsCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -549,9 +544,6 @@ namespace Rich_Text_Editor
 
             if (!saved) UnsavedTextBlock.Visibility = Visibility.Visible;
             else UnsavedTextBlock.Visibility = Visibility.Collapsed;
-
-            /*SolidColorBrush highlightBackgroundColor = (SolidColorBrush)App.Current.Resources["TextControlBackgroundFocused"];
-            editor.Document.Selection.CharacterFormat.BackgroundColor = highlightBackgroundColor.Color;*/
         }
 
         private async void Exit_Click(object sender, RoutedEventArgs e)
@@ -602,6 +594,7 @@ namespace Rich_Text_Editor
                     }
                     saved = true;
                     fileNameWithPath = file.Path;
+                    Windows.Storage.AccessCache.StorageApplicationPermissions.MostRecentlyUsedList.Add(file);
                 }
             }
         }
@@ -624,12 +617,6 @@ namespace Rich_Text_Editor
 
         private void ReplaceAll_Click(object sender, RoutedEventArgs e)
         {
-            /*editor.Document.GetText(TextGetOptions.FormatRtf, out string value);
-            if (!(string.IsNullOrWhiteSpace(value) && string.IsNullOrWhiteSpace(findBox.Text) && string.IsNullOrWhiteSpace(replaceBox.Text)))
-            {
-                editor.Document.SetText(TextSetOptions.FormatRtf, value.Replace(findBox.Text, replaceBox.Text));
-            }*/
-
             editor.Replace(true, find: findBox.Text, replace: replaceBox.Text);
         }
 
@@ -638,6 +625,14 @@ namespace Rich_Text_Editor
             if (editor != null && editor.Document.Selection != null)
             {
                 editor.ChangeFontSize((float)sender.Value);
+            }
+        }
+
+        private void Home_Click(object sender, RoutedEventArgs e)
+        {
+            if (Window.Current.Content is Frame rootFrame)
+            {
+                rootFrame.Navigate(typeof(HomePage));
             }
         }
     }

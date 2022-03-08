@@ -72,6 +72,8 @@
                         <MenuFlyoutItem Text="Save as Copy" Click="SaveAsButton_Click"/>
                         <MenuFlyoutItem Text="Print" Click="Print_Click"/>
                         <MenuFlyoutSeparator />
+                        <MenuFlyoutItem Text="Home" Click="Home_Click" />
+                        <MenuFlyoutSeparator />
                         <MenuFlyoutItem Text="Exit" Click="Exit_Click"/>
                     </muxc:MenuBarItem>
 
