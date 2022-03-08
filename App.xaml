@@ -4,14 +4,15 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Rich_Text_Editor"
     xmlns:controls="using:Microsoft.UI.Xaml.Controls"
-    xmlns:converters="using:Microsoft.Toolkit.Uwp.UI.Converters">
+    xmlns:converters="using:Rich_Text_Editor.Converters">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <XamlControlsResources xmlns="using:Microsoft.UI.Xaml.Controls" />
             </ResourceDictionary.MergedDictionaries>
 
-            <converters:BoolToVisibilityConverter x:Key="BoolToVis" />
+            <converters:BooleanToVisibility x:Key="BoolToVis" />
+            <converters:BooleanToVisibility x:Key="BoolToVisReverse" Reverse="True" />
 
             <Style
                 x:Key="TransparentButton"

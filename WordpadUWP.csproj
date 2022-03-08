@@ -130,6 +130,8 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Converters\BooleanToVisibility.cs" />
+    <Compile Include="Converters\SettingsConverters.cs" />
     <Compile Include="Helpers\RichEditHelpers.cs" />
     <Compile Include="ViewModels\RecentlyUsedViewModel.cs" />
     <Compile Include="Views\HomePage.xaml.cs">

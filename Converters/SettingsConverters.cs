@@ -4,7 +4,7 @@ using Windows.UI.Xaml.Data;
 
 #nullable enable
 
-namespace Rich_Text_Editor
+namespace Rich_Text_Editor.Converters
 {
     /// <summary>
     /// The generic base implementation of a value converter.

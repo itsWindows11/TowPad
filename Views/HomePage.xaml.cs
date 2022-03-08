@@ -18,6 +18,7 @@ namespace Rich_Text_Editor.Views
     public sealed partial class HomePage : Page
     {
         private ObservableCollection<RecentlyUsedViewModel> list = new();
+        private bool IsListEmpty = false;
 
         public HomePage()
         {
@@ -76,10 +77,11 @@ namespace Rich_Text_Editor.Views
             AppTitleBar.Margin = new Thickness(currMargin.Left, currMargin.Top, coreTitleBar.SystemOverlayRightInset, currMargin.Bottom);
         }
 
-        private async void HomePage_Loaded(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        private async void HomePage_Loaded(object sender, RoutedEventArgs e)
         {
             list.Clear();
             var mru = Windows.Storage.AccessCache.StorageApplicationPermissions.MostRecentlyUsedList;
+
             foreach (Windows.Storage.AccessCache.AccessListEntry entry in mru.Entries)
             {
                 StorageFile file = await mru.GetFileAsync(entry.Token);
@@ -92,9 +94,11 @@ namespace Rich_Text_Editor.Views
                     Token = entry.Token
                 });
             }
+
+            IsListEmpty = list.Count <= 0;
         }
 
-        private void BackButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        private void BackButton_Click(object sender, RoutedEventArgs e)
         {
             if (Window.Current.Content is Frame rootFrame && rootFrame.CanGoBack)
             {
@@ -121,6 +125,8 @@ namespace Rich_Text_Editor.Views
             RecentlyUsedViewModel item = (sender as MenuFlyoutItem).Tag as RecentlyUsedViewModel;
             Windows.Storage.AccessCache.StorageApplicationPermissions.MostRecentlyUsedList.Remove(item.Token);
             list.Remove(item);
+
+            IsListEmpty = list.Count <= 0;
         }
 
         private void CopyLocation_Click(object sender, RoutedEventArgs e)

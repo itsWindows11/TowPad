@@ -65,49 +65,61 @@
         </Button>
 
         <StackPanel Orientation="Vertical" Grid.Row="1">
-            <TextBlock Margin="10" Text="Recently accessed files" />
+            <StackPanel CornerRadius="5"
+                        Visibility="{x:Bind IsListEmpty, Mode=OneWay, Converter={StaticResource BoolToVisReverse}}"
+                        Spacing="10"
+                        Margin="10"
+                        Orientation="Vertical"
+                        Padding="20,10,10,0"
+                        Background="{ThemeResource LayerFillColorDefaultBrush}">
+                
+                <TextBlock Text="Recently accessed files" />
 
-            <ListView ItemsSource="{x:Bind list, Mode=OneWay}" SelectionMode="None">
-                <ListView.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <ItemsStackPanel Orientation="Horizontal" />
-                    </ItemsPanelTemplate>
-                </ListView.ItemsPanel>
+                <ScrollViewer HorizontalScrollBarVisibility="Auto" Margin="0,0,0,3" Padding="0,0,0,10" HorizontalScrollMode="Enabled">
+                    <ListView Margin="-8,0,0,0" ItemsSource="{x:Bind list, Mode=OneWay}" SelectionMode="None">
+                        <ListView.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <ItemsStackPanel Orientation="Horizontal" />
+                            </ItemsPanelTemplate>
+                        </ListView.ItemsPanel>
 
-                <ListView.ItemTemplate>
-                    <DataTemplate x:DataType="viewmodels:RecentlyUsedViewModel">
-                        <StackPanel Spacing="5"
-                                BorderThickness="1"
-                                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
-                                Background="{StaticResource LayerFillColorDefaultBrush}"
-                                Padding="10"
-                                CornerRadius="6">
-                            <StackPanel.ContextFlyout>
-                                <MenuFlyout>
-                                    <MenuFlyoutItem Click="RemoveItem_Click" Text="Remove" Tag="{x:Bind}">
-                                        <MenuFlyoutItem.Icon>
-                                            <FontIcon Glyph="&#xE107;" />
-                                        </MenuFlyoutItem.Icon>
-                                    </MenuFlyoutItem>
-                                    <MenuFlyoutItem Click="OpenFileLocation_Click" Text="Open file location" Tag="{x:Bind}">
-                                        <MenuFlyoutItem.Icon>
-                                            <FontIcon Glyph="&#xED25;" />
-                                        </MenuFlyoutItem.Icon>
-                                    </MenuFlyoutItem>
-                                    <MenuFlyoutItem Click="CopyLocation_Click" Text="Copy location" Tag="{x:Bind Path}">
-                                        <MenuFlyoutItem.Icon>
-                                            <FontIcon Glyph="&#xE16F;" />
-                                        </MenuFlyoutItem.Icon>
-                                    </MenuFlyoutItem>
-                                </MenuFlyout>
-                            </StackPanel.ContextFlyout>
-                            <TextBlock Text="{x:Bind Name}" />
-                            <TextBlock Text="{x:Bind Path}" />
-                        </StackPanel>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
+                        <ListView.ItemTemplate>
+                            <DataTemplate x:DataType="viewmodels:RecentlyUsedViewModel">
+                                <ListViewItem Margin="5,0,0,0" Padding="0">
+                                    <StackPanel Spacing="5"
+                                        BorderThickness="1"
+                                        BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                                        Background="{StaticResource LayerFillColorDefaultBrush}"
+                                        Padding="10"
+                                        CornerRadius="6">
+                                        <StackPanel.ContextFlyout>
+                                            <MenuFlyout>
+                                                <MenuFlyoutItem Click="OpenFileLocation_Click" Text="Open file location" Tag="{x:Bind}">
+                                                    <MenuFlyoutItem.Icon>
+                                                        <FontIcon Glyph="&#xED25;" />
+                                                    </MenuFlyoutItem.Icon>
+                                                </MenuFlyoutItem>
+                                                <MenuFlyoutItem Click="CopyLocation_Click" Text="Copy location" Tag="{x:Bind Path}">
+                                                    <MenuFlyoutItem.Icon>
+                                                        <FontIcon Glyph="&#xE16F;" />
+                                                    </MenuFlyoutItem.Icon>
+                                                </MenuFlyoutItem>
+                                                <MenuFlyoutItem Click="RemoveItem_Click" Text="Remove" Tag="{x:Bind}">
+                                                    <MenuFlyoutItem.Icon>
+                                                        <FontIcon Glyph="&#xE107;" />
+                                                    </MenuFlyoutItem.Icon>
+                                                </MenuFlyoutItem>
+                                            </MenuFlyout>
+                                        </StackPanel.ContextFlyout>
+                                        <TextBlock Text="{x:Bind Name}" />
+                                        <TextBlock Text="{x:Bind Path}" />
+                                    </StackPanel>
+                                </ListViewItem>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </ScrollViewer>
+            </StackPanel>
         </StackPanel>
-
     </Grid>
 </Page>
