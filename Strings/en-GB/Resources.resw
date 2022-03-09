@@ -127,7 +127,7 @@
     <value>Add image</value>
   </data>
   <data name="AlignCenter" xml:space="preserve">
-    <value>Align to Center</value>
+    <value>Align to Centre</value>
   </data>
   <data name="AlignLeft" xml:space="preserve">
     <value>Align to Left</value>
@@ -160,7 +160,7 @@
     <value>Find in document</value>
   </data>
   <data name="FontColorTooltip" xml:space="preserve">
-    <value>Font color</value>
+    <value>Font colour</value>
   </data>
   <data name="HelpText" xml:space="preserve">
     <value>Help</value>
