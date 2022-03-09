@@ -135,6 +135,9 @@
     <Compile Include="Helpers\RichEditHelpers.cs" />
     <Compile Include="Strings\Resources.cs" />
     <Compile Include="ViewModels\RecentlyUsedViewModel.cs" />
+    <Compile Include="ViewModels\Settings\SettingsManager.cs" />
+    <Compile Include="ViewModels\Settings\SettingsViewModel.cs" />
+    <Compile Include="ViewModels\Settings\ViewModel.cs" />
     <Compile Include="ViewModels\WhatsNewItemViewModel.cs" />
     <Compile Include="Views\HomePage.xaml.cs">
       <DependentUpon>HomePage.xaml</DependentUpon>

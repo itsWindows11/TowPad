@@ -45,11 +45,9 @@ namespace Rich_Text_Editor
         /// <param name="e">Details about the launch request and process.</param>
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
-            Frame rootFrame = Window.Current.Content as Frame;
-
             // Do not repeat app initialization when the Window already has content,
             // just ensure that the window is active
-            if (rootFrame == null)
+            if (Window.Current.Content is not Frame rootFrame)
             {
                 // Create a Frame to act as the navigation context and navigate to the first page
                 rootFrame = new Frame();
@@ -98,17 +96,17 @@ namespace Rich_Text_Editor
         /// <param name="e">Details about the suspend request.</param>
         private void OnSuspending(object sender, SuspendingEventArgs e)
         {
-            var deferral = e.SuspendingOperation.GetDeferral();
+            var deferral = e?.SuspendingOperation?.GetDeferral();
             //TODO: Save application state and stop any background activity
-            deferral.Complete();
+            deferral?.Complete();
         }
 
-        protected override async void OnFileActivated(FileActivatedEventArgs args)
+        protected override void OnFileActivated(FileActivatedEventArgs args)
         {
             // TODO: Handle file activation
             // The number of files received is args.Files.Size
             // The name of the first file is args.Files[0].Name
-            var rootFrame = new Frame();
+            Frame rootFrame = new Frame();
             rootFrame.Navigate(typeof(MainPage), args);
             Window.Current.Content = rootFrame;
             Window.Current.Activate();
