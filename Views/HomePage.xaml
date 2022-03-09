@@ -8,7 +8,7 @@
     mc:Ignorable="d"
     xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     muxc:BackdropMaterial.ApplyToRootOrPageBackground="True"
-    xmlns:viewmodels="using:Rich_Text_Editor.ViewModels" xmlns:animatedvisuals="using:Microsoft.UI.Xaml.Controls.AnimatedVisuals">
+    xmlns:viewmodels="using:Rich_Text_Editor.ViewModels" xmlns:animatedvisuals="using:Microsoft.UI.Xaml.Controls.AnimatedVisuals" xmlns:res="using:Rich_Text_Editor.Strings">
 
     <Grid>
         <Grid.RowDefinitions>
@@ -33,7 +33,7 @@
                        Height="16"
                        Margin="0,3,0,0" />
                 <TextBlock x:Name="AppTitle"
-                           Text="Home"
+                           Text="{x:Bind res:Resources.HomeTitle}"
                            VerticalAlignment="Center"
                            Margin="12,2,0,0"
                            Style="{StaticResource CaptionTextBlockStyle}" />
@@ -64,62 +64,112 @@
 
         </Button>
 
-        <StackPanel Orientation="Vertical" Grid.Row="1">
-            <StackPanel CornerRadius="5"
+        <ScrollViewer Grid.Row="1">
+            <StackPanel Orientation="Vertical">
+                <StackPanel CornerRadius="5"
                         Visibility="{x:Bind IsListEmpty, Mode=OneWay, Converter={StaticResource BoolToVisReverse}}"
                         Spacing="10"
                         Margin="10"
                         Orientation="Vertical"
                         Padding="20,10,10,0"
                         Background="{ThemeResource LayerFillColorDefaultBrush}">
-                
-                <TextBlock Text="Recently accessed files" />
 
-                <ScrollViewer HorizontalScrollBarVisibility="Auto" Margin="0,0,0,3" Padding="0,0,0,10" HorizontalScrollMode="Enabled">
-                    <ListView Margin="-8,0,0,0" ItemsSource="{x:Bind list, Mode=OneWay}" SelectionMode="None">
-                        <ListView.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <ItemsStackPanel Orientation="Horizontal" />
-                            </ItemsPanelTemplate>
-                        </ListView.ItemsPanel>
+                    <TextBlock Text="{x:Bind res:Resources.RecentlyAccessedTitle}" />
 
-                        <ListView.ItemTemplate>
-                            <DataTemplate x:DataType="viewmodels:RecentlyUsedViewModel">
-                                <ListViewItem Margin="5,0,0,0" Padding="0">
-                                    <StackPanel Spacing="5"
-                                        BorderThickness="1"
-                                        BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
-                                        Background="{StaticResource LayerFillColorDefaultBrush}"
-                                        Padding="10"
-                                        CornerRadius="6">
-                                        <StackPanel.ContextFlyout>
-                                            <MenuFlyout>
-                                                <MenuFlyoutItem Click="OpenFileLocation_Click" Text="Open file location" Tag="{x:Bind}">
-                                                    <MenuFlyoutItem.Icon>
-                                                        <FontIcon Glyph="&#xED25;" />
-                                                    </MenuFlyoutItem.Icon>
-                                                </MenuFlyoutItem>
-                                                <MenuFlyoutItem Click="CopyLocation_Click" Text="Copy location" Tag="{x:Bind Path}">
-                                                    <MenuFlyoutItem.Icon>
-                                                        <FontIcon Glyph="&#xE16F;" />
-                                                    </MenuFlyoutItem.Icon>
-                                                </MenuFlyoutItem>
-                                                <MenuFlyoutItem Click="RemoveItem_Click" Text="Remove" Tag="{x:Bind}">
-                                                    <MenuFlyoutItem.Icon>
-                                                        <FontIcon Glyph="&#xE107;" />
-                                                    </MenuFlyoutItem.Icon>
-                                                </MenuFlyoutItem>
-                                            </MenuFlyout>
-                                        </StackPanel.ContextFlyout>
-                                        <TextBlock Text="{x:Bind Name}" />
-                                        <TextBlock Text="{x:Bind Path}" />
+                    <ScrollViewer HorizontalScrollBarVisibility="Auto" Margin="0,0,0,3" Padding="0,0,0,10" HorizontalScrollMode="Enabled">
+                        <ListView Margin="-8,0,0,0" ItemsSource="{x:Bind list, Mode=OneWay}" SelectionMode="None">
+                            <ListView.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <ItemsStackPanel Orientation="Horizontal" />
+                                </ItemsPanelTemplate>
+                            </ListView.ItemsPanel>
+
+                            <ListView.ItemTemplate>
+                                <DataTemplate x:DataType="viewmodels:RecentlyUsedViewModel">
+                                    <ListViewItem Margin="5,0,0,0" Padding="0">
+                                        <StackPanel
+                                            Spacing="5"
+                                            BorderThickness="1"
+                                            BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                                            Background="{StaticResource LayerFillColorDefaultBrush}"
+                                            Padding="10"
+                                            CornerRadius="6">
+                                            <StackPanel.ContextFlyout>
+                                                <MenuFlyout>
+                                                    <MenuFlyoutItem Click="OpenFileLocation_Click" Text="Open file location" Tag="{x:Bind}">
+                                                        <MenuFlyoutItem.Icon>
+                                                            <FontIcon Glyph="&#xED25;" />
+                                                        </MenuFlyoutItem.Icon>
+                                                    </MenuFlyoutItem>
+                                                    <MenuFlyoutItem Click="CopyLocation_Click" Text="Copy location" Tag="{x:Bind Path}">
+                                                        <MenuFlyoutItem.Icon>
+                                                            <FontIcon Glyph="&#xE16F;" />
+                                                        </MenuFlyoutItem.Icon>
+                                                    </MenuFlyoutItem>
+                                                    <MenuFlyoutItem Click="RemoveItem_Click" Text="Remove" Tag="{x:Bind}">
+                                                        <MenuFlyoutItem.Icon>
+                                                            <FontIcon Glyph="&#xE107;" />
+                                                        </MenuFlyoutItem.Icon>
+                                                    </MenuFlyoutItem>
+                                                </MenuFlyout>
+                                            </StackPanel.ContextFlyout>
+                                            <TextBlock Text="{x:Bind Name}" />
+                                            <TextBlock Text="{x:Bind Path}" />
+                                        </StackPanel>
+                                    </ListViewItem>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </ScrollViewer>
+                </StackPanel>
+
+                <StackPanel
+                        CornerRadius="5"
+                        Visibility="{x:Bind IsListEmpty, Mode=OneWay, Converter={StaticResource BoolToVisReverse}}"
+                        Spacing="10"
+                        Margin="10,0,10,10"
+                        Orientation="Vertical"
+                        Padding="20,10,10,0"
+                        Background="{ThemeResource LayerFillColorDefaultBrush}">
+
+                    <TextBlock Text="{x:Bind res:Resources.WhatsNewTitle}" />
+
+                    <Grid Margin="-8,0,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.25*" MinWidth="230" />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+
+                        <ListView Tapped="ListView_Tapped" ItemsSource="{x:Bind WhatsNew, Mode=OneWay}" Margin="0,0,10,10">
+                            <ListView.ItemTemplate>
+                                <DataTemplate x:DataType="viewmodels:WhatsNewItemViewModel">
+                                    <StackPanel Margin="-11,0,0,0" Orientation="Horizontal" Spacing="10" Padding="10,13">
+                                        <FontIcon Glyph="{x:Bind Icon, Mode=OneWay}" />
+                                        <TextBlock Text="{x:Bind Title, Mode=OneWay}" TextWrapping="Wrap" />
                                     </StackPanel>
-                                </ListViewItem>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
-                </ScrollViewer>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+
+                        <StackPanel Orientation="Vertical" Grid.Column="1" Spacing="6">
+                            <StackPanel Orientation="Horizontal" Spacing="10">
+                                <FontIcon x:Name="FontIconWhatsNew" FontSize="20" Margin="0,3,0,0" />
+                                <TextBlock 
+                                    x:Name="TitleWhatsNew"
+                                    Text="{x:Bind SelectedItem.Title}"
+                                    FontSize="25"
+                                    FontWeight="SemiBold" />
+                            </StackPanel>
+
+                            <TextBlock 
+                                x:Name="DescWhatsNew"
+                                Text="{x:Bind SelectedItem.Description}"
+                                TextWrapping="Wrap"
+                                Margin="0,0,6,0"/>
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
             </StackPanel>
-        </StackPanel>
+        </ScrollViewer>
     </Grid>
 </Page>

@@ -133,7 +133,9 @@
     <Compile Include="Converters\BooleanToVisibility.cs" />
     <Compile Include="Converters\SettingsConverters.cs" />
     <Compile Include="Helpers\RichEditHelpers.cs" />
+    <Compile Include="Strings\Resources.cs" />
     <Compile Include="ViewModels\RecentlyUsedViewModel.cs" />
+    <Compile Include="ViewModels\WhatsNewItemViewModel.cs" />
     <Compile Include="Views\HomePage.xaml.cs">
       <DependentUpon>HomePage.xaml</DependentUpon>
     </Compile>
@@ -243,8 +245,11 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
+    <PRIResource Include="Strings\Resources.resw" />
+    <PRIResource Include="Strings\en-GB\Resources.resw" />
     <None Include="WordpadUWP_TemporaryKey.pfx" />
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

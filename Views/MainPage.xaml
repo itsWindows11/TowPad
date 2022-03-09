@@ -6,7 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    xmlns:muxc="using:Microsoft.UI.Xaml.Controls" xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    xmlns:muxc="using:Microsoft.UI.Xaml.Controls" xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls" xmlns:res="using:Rich_Text_Editor.Strings"
     muxc:BackdropMaterial.ApplyToRootOrPageBackground="True">
 
     <Page.Resources>
@@ -35,7 +35,6 @@
 
     <RelativePanel>
         <RelativePanel x:Name="containerPanel" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignLeftWithPanel="True">
-            
             <Border x:Name="AppTitleBar"
                 IsHitTestVisible="True"
                 VerticalAlignment="Top"
@@ -53,7 +52,7 @@
                          Height="16"
                          Margin="0,2,0,0" />
                     <TextBlock x:Name="AppTitle"
-                               Text="Untitled - Wordpad UWP"
+                               Text="Untitled - WordPad UWP"
                                VerticalAlignment="Center"
                                Margin="12,2,0,0"
                                Style="{StaticResource CaptionTextBlockStyle}" />
@@ -65,30 +64,30 @@
             </Border>
             <StackPanel Orientation="Horizontal" x:Name="MenuPanel" VerticalAlignment="Center" RelativePanel.Below="AppTitleBar">
                 <muxc:MenuBar x:Name="menu" Margin="5,0,0,0" VerticalAlignment="Center">
-                    <muxc:MenuBarItem Title="File">
-                        <MenuFlyoutItem Text="New Document" Click="NewDoc_Click" />
-                        <MenuFlyoutItem Text="Open..." Click="OpenButton_Click"/>
-                        <MenuFlyoutItem Text="Save" Click="SaveButton_Click"/>
-                        <MenuFlyoutItem Text="Save as Copy" Click="SaveAsButton_Click"/>
-                        <MenuFlyoutItem Text="Print" Click="Print_Click"/>
+                    <muxc:MenuBarItem Title="{x:Bind res:Resources.FileText}">
+                        <MenuFlyoutItem Text="{x:Bind res:Resources.NewDocText}" Click="NewDoc_Click" />
+                        <MenuFlyoutItem Text="{x:Bind res:Resources.OpenText}" Click="OpenButton_Click"/>
+                        <MenuFlyoutItem Text="{x:Bind res:Resources.SaveText}" Click="SaveButton_Click"/>
+                        <MenuFlyoutItem Text="{x:Bind res:Resources.SaveAsCopyText}" Click="SaveAsButton_Click"/>
+                        <MenuFlyoutItem Text="{x:Bind res:Resources.PrintText}" Click="Print_Click"/>
                         <MenuFlyoutSeparator />
-                        <MenuFlyoutItem Text="Home" Click="Home_Click" />
+                        <MenuFlyoutItem Text="{x:Bind res:Resources.HomeTitle}" Click="Home_Click" />
                         <MenuFlyoutSeparator />
-                        <MenuFlyoutItem Text="Exit" Click="Exit_Click"/>
+                        <MenuFlyoutItem Text="{x:Bind res:Resources.ExitText}" Click="Exit_Click"/>
                     </muxc:MenuBarItem>
 
-                    <muxc:MenuBarItem Title="Edit">
-                        <MenuFlyoutItem Text="Undo" Click="UndoButton_Click"/>
-                        <MenuFlyoutItem Text="Redo" Click="RedoButton_Click"/>
+                    <muxc:MenuBarItem Title="{x:Bind res:Resources.EditText}">
+                        <MenuFlyoutItem Text="{x:Bind res:Resources.UndoTooltip}" Click="UndoButton_Click"/>
+                        <MenuFlyoutItem Text="{x:Bind res:Resources.RedoTooltip}" Click="RedoButton_Click"/>
                         <MenuFlyoutSeparator />
-                        <MenuFlyoutItem Text="Cut" Click="CutButton_Click"/>
-                        <MenuFlyoutItem Text="Copy" Click="CopyButton_Click"/>
-                        <MenuFlyoutItem Text="Paste" Click="PasteButton_Click"/>
+                        <MenuFlyoutItem Text="{x:Bind res:Resources.CutText}" Click="CutButton_Click"/>
+                        <MenuFlyoutItem Text="{x:Bind res:Resources.CopyText}" Click="CopyButton_Click"/>
+                        <MenuFlyoutItem Text="{x:Bind res:Resources.PasteText}" Click="PasteButton_Click"/>
                     </muxc:MenuBarItem>
 
-                    <muxc:MenuBarItem Title="Help">
-                        <MenuFlyoutItem Text="About" Click="AboutBtn_Click"/>
-                        <MenuFlyoutItem Text="Settings" Click="SettingsButton_Click"/>
+                    <muxc:MenuBarItem Title="{x:Bind res:Resources.HelpText}">
+                        <MenuFlyoutItem Text="{x:Bind res:Resources.AboutText}" Click="AboutBtn_Click"/>
+                        <MenuFlyoutItem Text="{x:Bind res:Resources.SettingsText}" Click="SettingsButton_Click"/>
                     </muxc:MenuBarItem>
                   
                 </muxc:MenuBar>
@@ -107,44 +106,44 @@
             </StackPanel>
 
             <controls:WrapPanel HorizontalSpacing="5" VerticalSpacing="5" x:Name="ButtonPanel" RelativePanel.Below="MenuPanel" Margin="0,3,0,0" Padding="10,0,10,10">
-                <ToggleButton Click="BoldButton_Click" ToolTipService.ToolTip="Bold" Style="{StaticResource TransparentToggleButton}">
+                <ToggleButton Click="BoldButton_Click" ToolTipService.ToolTip="{x:Bind res:Resources.Bold}" Style="{StaticResource TransparentToggleButton}">
                     <Viewbox MaxHeight="17" MaxWidth="17">
                         <SymbolIcon Symbol="Bold" />
                     </Viewbox>
                 </ToggleButton>
 
-                <ToggleButton Click="ItalicButton_Click" ToolTipService.ToolTip="Italic" Style="{StaticResource TransparentToggleButton}">
+                <ToggleButton Click="ItalicButton_Click" ToolTipService.ToolTip="{x:Bind res:Resources.Italic}" Style="{StaticResource TransparentToggleButton}">
                     <Viewbox MaxHeight="17" MaxWidth="17">
                         <SymbolIcon Symbol="Italic" />
                     </Viewbox>
                 </ToggleButton>
-                <ToggleButton Click="UnderlineButton_Click" ToolTipService.ToolTip="Underline" Style="{StaticResource TransparentToggleButton}">
+                <ToggleButton Click="UnderlineButton_Click" ToolTipService.ToolTip="{x:Bind res:Resources.Underline}" Style="{StaticResource TransparentToggleButton}">
                     <Viewbox MaxHeight="17" MaxWidth="17">
                         <SymbolIcon Symbol="Underline" />
                     </Viewbox>
                 </ToggleButton>
-                <ToggleButton Click="StrikethoughButton_Click" ToolTipService.ToolTip="Strikethrough" Style="{StaticResource TransparentToggleButton}">
+                <ToggleButton Click="StrikethoughButton_Click" ToolTipService.ToolTip="{x:Bind res:Resources.Strikethrough}" Style="{StaticResource TransparentToggleButton}">
                     <FontIcon Glyph="&#xEDE0;" FontSize="17" />
                 </ToggleButton>
                 <AppBarSeparator />
-                <Button Click="AlignLeftButton_Click" ToolTipService.ToolTip="Align to Left" Style="{StaticResource TransparentButton}">
+                <Button Click="AlignLeftButton_Click" ToolTipService.ToolTip="{x:Bind res:Resources.AlignLeft}" Style="{StaticResource TransparentButton}">
                     <Viewbox MaxHeight="17" MaxWidth="17">
                         <SymbolIcon Symbol="AlignLeft" />
                     </Viewbox>
                 </Button>
-                <Button Click="AlignCenterButton_Click" ToolTipService.ToolTip="Align to Center" Style="{StaticResource TransparentButton}">
+                <Button Click="AlignCenterButton_Click" ToolTipService.ToolTip="{x:Bind res:Resources.AlignCenter}" Style="{StaticResource TransparentButton}">
                     <Viewbox MaxHeight="17" MaxWidth="17">
                         <SymbolIcon Symbol="AlignCenter" />
                     </Viewbox>
                 </Button>
-                <Button Click="AlignRightButton_Click" ToolTipService.ToolTip="Align to Right" Style="{StaticResource TransparentButton}">
+                <Button Click="AlignRightButton_Click" ToolTipService.ToolTip="{x:Bind res:Resources.AlignRight}" Style="{StaticResource TransparentButton}">
                     <Viewbox MaxHeight="17" MaxWidth="17">
                         <SymbolIcon Symbol="AlignRight" />
                     </Viewbox>
                 </Button>
                 <AppBarSeparator />
-                <muxc:DropDownButton x:Name="fontColorButton" AutomationProperties.Name="Font color"
-                                BorderThickness="0" ToolTipService.ToolTip="Font color"
+                <muxc:DropDownButton x:Name="fontColorButton" AutomationProperties.Name="{x:Bind res:Resources.FontColorTooltip}"
+                                BorderThickness="0" ToolTipService.ToolTip="{x:Bind res:Resources.FontColorTooltip}"
                                 RelativePanel.AlignRightWithPanel="True">
                     <SymbolIcon Symbol="FontColor"/>
                     <muxc:DropDownButton.Flyout>
@@ -241,7 +240,7 @@
                     </ComboBox.ItemTemplate>
                 </ComboBox>
                 <AppBarSeparator />
-                <Button ToolTipService.ToolTip="Find in document" Style="{StaticResource TransparentButton}">
+                <Button ToolTipService.ToolTip="{x:Bind res:Resources.FindDocTooltip}" Style="{StaticResource TransparentButton}">
                     <Button.Flyout>
                         <Flyout Placement="Bottom">
                             <StackPanel Orientation="Vertical">
@@ -272,10 +271,10 @@
                 <ToggleButton Click="SubscriptButton_Click" Style="{StaticResource TransparentToggleButton}">Subscript (₂)</ToggleButton>
                 <ToggleButton Click="SuperScriptButton_Click" Style="{StaticResource TransparentToggleButton}">Superscript (²)</ToggleButton>
                 <AppBarSeparator />
-                <Button Click="AddImageButton_Click" ToolTipService.ToolTip="Add Image" Style="{StaticResource TransparentButton}">
+                <Button Click="AddImageButton_Click" ToolTipService.ToolTip="{x:Bind res:Resources.AddImageTooltip}" Style="{StaticResource TransparentButton}">
                     <FontIcon FontSize="17" Glyph="&#xE8B9;" />
                 </Button>
-                <Button ToolTipService.ToolTip="Add Hyperlink" Style="{StaticResource TransparentButton}" x:Name="AddLinkButton">
+                <Button ToolTipService.ToolTip="{x:Bind res:Resources.AddHyperlinkTooltip}" Style="{StaticResource TransparentButton}" x:Name="AddLinkButton">
                     <Button.Content>
                         <FontIcon Glyph="&#xE71B;" FontSize="17" />
                     </Button.Content>

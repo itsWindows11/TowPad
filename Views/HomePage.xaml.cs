@@ -18,6 +18,12 @@ namespace Rich_Text_Editor.Views
     public sealed partial class HomePage : Page
     {
         private ObservableCollection<RecentlyUsedViewModel> list = new();
+        private ObservableCollection<WhatsNewItemViewModel> WhatsNew = new();
+        private WhatsNewItemViewModel SelectedItem = new()
+        {
+            Title = "Select an item from the sidebar",
+            Description = "To view its details."
+        };
         private bool IsListEmpty = false;
 
         public HomePage()
@@ -80,6 +86,8 @@ namespace Rich_Text_Editor.Views
         private async void HomePage_Loaded(object sender, RoutedEventArgs e)
         {
             list.Clear();
+            WhatsNew.Clear();
+
             var mru = Windows.Storage.AccessCache.StorageApplicationPermissions.MostRecentlyUsedList;
 
             foreach (Windows.Storage.AccessCache.AccessListEntry entry in mru.Entries)
@@ -94,6 +102,38 @@ namespace Rich_Text_Editor.Views
                     Token = entry.Token
                 });
             }
+
+            WhatsNew.Add(new()
+            {
+                Title = "Home page",
+                Icon = "\uEA8A",
+                Tag = "HomePage",
+                Description = "Now you can see your recent files, and what's new in WordPad UWP!"
+            });
+
+            WhatsNew.Add(new()
+            {
+                Title = "Localization & Accessbility",
+                Icon = "\uE774",
+                Tag = "LocAndAcc",
+                Description = "You can contribute translations to WordPad UWP, and help make this app reach more countries! And elements in the app will be more accessible."
+            });
+
+            WhatsNew.Add(new()
+            {
+                Title = "New Settings UI",
+                Icon = "\uE713",
+                Tag = "SettingsUI",
+                Description = "Settings will be in a separate page, and you can apply colors to the app window, set app mode, and change more settings, with a refreshed, and redesigned settings UI."
+            });
+
+            WhatsNew.Add(new()
+            {
+                Title = "Compact mode",
+                Icon = "\uE737",
+                Tag = "CompactMode",
+                Description = "Now you can make WordPad UWP overlay over windows!"
+            });
 
             IsListEmpty = list.Count <= 0;
         }
@@ -134,6 +174,18 @@ namespace Rich_Text_Editor.Views
             var dataPackage = new DataPackage();
             dataPackage.SetText((sender as MenuFlyoutItem).Tag as string);
             Clipboard.SetContent(dataPackage);
+        }
+
+        private void ListView_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
+        {
+            if ((e.OriginalSource as FrameworkElement).DataContext is WhatsNewItemViewModel item)
+            {
+                SelectedItem = item;
+
+                FontIconWhatsNew.Glyph = item.Icon;
+                TitleWhatsNew.Text = item.Title;
+                DescWhatsNew.Text = item.Description;
+            }
         }
     }
 }

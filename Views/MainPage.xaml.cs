@@ -39,7 +39,7 @@ namespace Rich_Text_Editor
     public sealed partial class MainPage : Page
     {
         private bool saved = true;
-        private string appTitleStr = "Wordpad UWP";
+        private string appTitleStr = Strings.Resources.AppName;
         private string fileNameWithPath = "";
 
         public List<string> Fonts
