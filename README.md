@@ -5,8 +5,6 @@ A UWP version of... WordPad!
 
 This app features a simple and easy to use interface other than ribbons.
 
-NOTE: if you set the system theme to Dark and opened the exported RTF files (by Wordpad UWP) in a light-themed editor, you may notice that the text has a gray background, that's intended
-
 ![Wordpad UWP](https://user-images.githubusercontent.com/81253203/134414755-894fcb4c-cac1-4edb-af92-4be47a342177.png)
 
 ### Windows 11
