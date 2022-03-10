@@ -32,8 +32,8 @@ namespace Rich_Text_Editor
         /// </summary>
 
         public static ResourceLoader Resources { get; private set; }
-
         public static SettingsViewModel SViewModel { get; private set; }
+        public static List<string> Tips { get; private set; }
 
         public App()
         {
@@ -42,6 +42,7 @@ namespace Rich_Text_Editor
 
             Resources = ResourceLoader.GetForViewIndependentUse();
             SViewModel = new();
+            Tips = new();
         }
 
         /// <summary>
