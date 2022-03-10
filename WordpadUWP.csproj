@@ -130,10 +130,18 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Converters\IntToTextWrapping.cs" />
+    <Compile Include="Converters\IntToThickness.cs" />
     <Compile Include="Converters\BooleanToVisibility.cs" />
     <Compile Include="Converters\SettingsConverters.cs" />
     <Compile Include="Helpers\RichEditHelpers.cs" />
     <Compile Include="Strings\Resources.cs" />
+    <Compile Include="UserControls\SettingsBlockControl.xaml.cs">
+      <DependentUpon>SettingsBlockControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\SettingsDisplayControl.xaml.cs">
+      <DependentUpon>SettingsDisplayControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ViewModels\RecentlyUsedViewModel.cs" />
     <Compile Include="ViewModels\Settings\SettingsManager.cs" />
     <Compile Include="ViewModels\Settings\SettingsViewModel.cs" />
@@ -220,6 +228,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="UserControls\SettingsBlockControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UserControls\SettingsDisplayControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\HomePage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

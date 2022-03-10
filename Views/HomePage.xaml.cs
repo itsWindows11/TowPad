@@ -124,7 +124,7 @@ namespace Rich_Text_Editor.Views
                 Title = "New Settings UI",
                 Icon = "\uE713",
                 Tag = "SettingsUI",
-                Description = "Settings will be in a separate page, and you can apply colors to the app window, set app mode, and change more settings, with a refreshed, and redesigned settings UI."
+                Description = "Settings will be in a separate page, you can set app mode, and change more settings, with a refreshed, and redesigned settings UI."
             });
 
             WhatsNew.Add(new()

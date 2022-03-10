@@ -6,7 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    xmlns:muxc="using:Microsoft.UI.Xaml.Controls" xmlns:animatedvisuals="using:Microsoft.UI.Xaml.Controls.AnimatedVisuals" xmlns:res="using:Rich_Text_Editor.Strings"
+    xmlns:muxc="using:Microsoft.UI.Xaml.Controls" xmlns:animatedvisuals="using:Microsoft.UI.Xaml.Controls.AnimatedVisuals" xmlns:res="using:Rich_Text_Editor.Strings" xmlns:uc="using:Rich_Text_Editor.UserControls" xmlns:local1="using:Rich_Text_Editor"
     muxc:BackdropMaterial.ApplyToRootOrPageBackground="True">
 
     <Grid>
@@ -29,7 +29,8 @@
                        VerticalAlignment="Center"
                        Source="ms-appx:///Assets/Square44x44Logo.png" 
                        Width="16" 
-                       Height="16" />
+                       Height="16"
+                       Margin="0,2,0,0" />
                 <TextBlock x:Name="AppTitle"
                            Text="{x:Bind res:Resources.SettingsText}"
                            VerticalAlignment="Center"
@@ -62,8 +63,36 @@
         </Button>
 
         <ScrollViewer Grid.Row="1">
-            <StackPanel Orientation="Vertical" Padding="20">
-                <TextBlock Text="{x:Bind res:Resources.SettingsText}" FontSize="25" FontWeight="SemiBold" />
+            <StackPanel Orientation="Vertical" Padding="20" Spacing="5">
+                <TextBlock Text="{x:Bind res:Resources.SettingsText}" Margin="0,0,0,10" FontSize="32" FontWeight="SemiBold" />
+
+                <TextBlock Text="Editor" Margin="0,0,0,10" FontSize="18" FontWeight="SemiBold" />
+
+                <uc:SettingsBlockControl Title="{x:Bind res:Resources.WrapTextSettingName}">
+                    <ComboBox SelectedIndex="{x:Bind local1:App.SViewModel.TextWrapping, Mode=TwoWay}">
+                        <x:String>No wrap</x:String>
+                        <x:String>Wrap</x:String>
+                        <x:String>Wrap whole words</x:String>
+                    </ComboBox>
+                </uc:SettingsBlockControl>
+
+                <uc:SettingsBlockControl Title="{x:Bind res:Resources.DocumentPaddingSettingName}">
+                    <muxc:NumberBox 
+                                SpinButtonPlacementMode="Compact"
+                                Minimum="2"
+                                Maximum="30"
+                                Value="{x:Bind local1:App.SViewModel.DocumentViewPadding, Mode=TwoWay}"/>
+                </uc:SettingsBlockControl>
+
+                <uc:SettingsBlockControl Title="{x:Bind res:Resources.DefaultFontSettingName}">
+                    <ComboBox x:Name="FontsCombo" IsTextSearchEnabled="True" ItemsSource="{x:Bind local1:App.SViewModel.Fonts}" PlaceholderText="Font" SelectedItem="{x:Bind local1:App.SViewModel.DefaultFont, Mode=TwoWay}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate x:DataType="x:String">
+                                <TextBlock FontFamily="{x:Bind}" Text="{x:Bind}" />
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                </uc:SettingsBlockControl>
             </StackPanel>
         </ScrollViewer>
     </Grid>

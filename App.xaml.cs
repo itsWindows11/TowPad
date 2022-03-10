@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Rich_Text_Editor.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -30,12 +31,17 @@ namespace Rich_Text_Editor
         /// executed, and as such is the logical equivalent of main() or WinMain().
         /// </summary>
 
-        public static ResourceLoader Resources = ResourceLoader.GetForViewIndependentUse();
+        public static ResourceLoader Resources { get; private set; }
+
+        public static SettingsViewModel SViewModel { get; private set; }
 
         public App()
         {
             InitializeComponent();
             Suspending += OnSuspending;
+
+            Resources = ResourceLoader.GetForViewIndependentUse();
+            SViewModel = new();
         }
 
         /// <summary>

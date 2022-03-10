@@ -1,6 +1,7 @@
 ﻿using Microsoft.Graphics.Canvas.Text;
 using Rich_Text_Editor.Helpers;
 using Rich_Text_Editor.Views;
+using Rich_Text_Editor.Views.Settings;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -42,14 +43,6 @@ namespace Rich_Text_Editor
         private string appTitleStr = Strings.Resources.AppName;
         private string fileNameWithPath = "";
 
-        public List<string> Fonts
-        {
-            get
-            {
-                return CanvasTextFormat.GetSystemFontFamilies().OrderBy(f => f).ToList();
-            }
-        }
-
         public MainPage()
         {
             InitializeComponent();
@@ -73,27 +66,7 @@ namespace Rich_Text_Editor
 
             SystemNavigationManagerPreview.GetForCurrentView().CloseRequested += OnCloseRequest;
 
-            if (localSettings.Values["FontFamily"] is string fontSetting)
-            {
-                FontsCombo.SelectedItem = fontSetting;
-                editor.FontFamily = new FontFamily(fontSetting);
-            }
-            else
-            {
-                FontsCombo.SelectedItem = "Calibri";
-                editor.FontFamily = new FontFamily("Calibri");
-            }
-
-            string textWrapping = localSettings.Values["TextWrapping"] as string;
-            if (textWrapping == "enabled")
-            {
-                editor.TextWrapping = TextWrapping.Wrap;
-            }
-            else if (textWrapping == "disabled")
-            {
-                editor.TextWrapping = TextWrapping.NoWrap;
-            }
-
+            NavigationCacheMode = NavigationCacheMode.Required;
         }
 
         private void CoreTitleBar_LayoutMetricsChanged(CoreApplicationViewTitleBar sender, object args)
@@ -601,8 +574,13 @@ namespace Rich_Text_Editor
 
         private async void SettingsButton_Click(object sender, RoutedEventArgs e)
         {
-            SettingsDialog dlg = new(editor, FontsCombo, this);
-            await dlg.ShowAsync();
+            /*SettingsDialog dlg = new(editor, FontsCombo, this);
+            await dlg.ShowAsync();*/
+
+            if (Window.Current.Content is Frame rootFrame)
+            {
+                rootFrame.Navigate(typeof(SettingsPage));
+            }
         }
 
         private void RemoveHighlightButton_Click(object sender, RoutedEventArgs e)
@@ -634,6 +612,11 @@ namespace Rich_Text_Editor
             {
                 rootFrame.Navigate(typeof(HomePage));
             }
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

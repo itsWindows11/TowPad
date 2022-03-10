@@ -39,5 +39,9 @@ namespace Rich_Text_Editor.Strings
         public static string SaveAsCopyText = App.Resources.GetString("SaveAsCopyText");
         public static string PrintText = App.Resources.GetString("PrintText");
         public static string ExitText = App.Resources.GetString("ExitText");
+        public static string WrapTextSettingName = App.Resources.GetString("WrapTextSettingName");
+        public static string DocumentPaddingSettingName = App.Resources.GetString("DocumentPaddingSettingName");
+        public static string DefaultFontSettingName = App.Resources.GetString("DefaultFontSettingName");
+        public static string EditorHeaderName = App.Resources.GetString("EditorHeaderName");
     }
 }

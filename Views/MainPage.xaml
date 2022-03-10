@@ -92,15 +92,23 @@
                   
                 </muxc:MenuBar>
 
-                <Button Click="UndoButton_Click" Background="Transparent" BorderBrush="Transparent" VerticalAlignment="Center" ToolTipService.ToolTip="Undo">
+                <Button Click="UndoButton_Click" Background="Transparent" BorderBrush="Transparent" VerticalAlignment="Center" ToolTipService.ToolTip="{x:Bind res:Resources.UndoTooltip}">
                     <Viewbox MaxHeight="17" MaxWidth="17">
                         <SymbolIcon Symbol="Undo" />
                     </Viewbox>
                 </Button>
 
-                <Button Click="RedoButton_Click" Background="Transparent" BorderBrush="Transparent" VerticalAlignment="Center" ToolTipService.ToolTip="Redo">
+                <Button Click="RedoButton_Click" Background="Transparent" BorderBrush="Transparent" VerticalAlignment="Center" ToolTipService.ToolTip="{x:Bind res:Resources.RedoTooltip}">
                     <Viewbox MaxHeight="17" MaxWidth="17">
                         <SymbolIcon Symbol="Redo" />
+                    </Viewbox>
+                </Button>
+
+                <AppBarSeparator />
+
+                <Button Background="Transparent" BorderBrush="Transparent" Click="SettingsButton_Click" ToolTipService.ToolTip="{x:Bind res:Resources.SettingsText}">
+                    <Viewbox MaxHeight="17" MaxWidth="17">
+                        <SymbolIcon Symbol="Setting" />
                     </Viewbox>
                 </Button>
             </StackPanel>
@@ -231,11 +239,10 @@
                     </muxc:DropDownButton.Flyout>
                 </muxc:DropDownButton>
                 <muxc:NumberBox PlaceholderText="Font size" Value="11" x:Name="FontSizeBox" ValueChanged="FontSizeBox_ValueChanged" MinWidth="120" Minimum="8" Maximum="150" SpinButtonPlacementMode="Compact" />
-                <ComboBox x:Name="FontsCombo" IsTextSearchEnabled="True" ItemsSource="{x:Bind Fonts}" PlaceholderText="Font" SelectionChanged="FontsCombo_SelectionChanged">
+                <ComboBox x:Name="FontsCombo" SelectedItem="{x:Bind local:App.SViewModel.DefaultFont}" IsTextSearchEnabled="True" ItemsSource="{x:Bind local:App.SViewModel.Fonts}" PlaceholderText="Font" SelectionChanged="FontsCombo_SelectionChanged">
                     <ComboBox.ItemTemplate>
                         <DataTemplate x:DataType="x:String">
-                            <TextBlock FontFamily="{x:Bind}"
-                    Text="{x:Bind}" />
+                            <TextBlock FontFamily="{x:Bind}" Text="{x:Bind}" />
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
@@ -290,6 +297,18 @@
             </controls:WrapPanel>
         </RelativePanel>
 
-        <RichEditBox SelectionFlyout="{x:Null}" IsSpellCheckEnabled="False" FontFamily="Calibri" TextChanged="editor_TextChanged" Style="{StaticResource RichEditBoxStyle}" BorderThickness="1"  BorderBrush="Transparent" x:Name="editor" RelativePanel.Below="containerPanel" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignBottomWithPanel="True"/>
+        <RichEditBox x:Name="editor"
+                     SelectionFlyout="{x:Null}"
+                     IsSpellCheckEnabled="False"
+                     FontFamily="{x:Bind local:App.SViewModel.DefaultFont}"
+                     TextChanged="editor_TextChanged"
+                     Style="{StaticResource RichEditBoxStyle}"
+                     RelativePanel.Below="containerPanel"
+                     RelativePanel.AlignLeftWithPanel="True"
+                     RelativePanel.AlignRightWithPanel="True"
+                     RelativePanel.AlignBottomWithPanel="True"
+                     Padding="{x:Bind local:App.SViewModel.DocumentViewPadding, Mode=OneWay, Converter={StaticResource IntToThickness}}"
+                     BorderThickness="0"
+                     TextWrapping="{x:Bind local:App.SViewModel.TextWrapping, Mode=OneWay, Converter={StaticResource IntToTextWrapping}}" />
     </RelativePanel>
 </Page>

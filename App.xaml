@@ -13,6 +13,8 @@
 
             <converters:BooleanToVisibility x:Key="BoolToVis" />
             <converters:BooleanToVisibility x:Key="BoolToVisReverse" Reverse="True" />
+            <converters:IntToThickness x:Key="IntToThickness" />
+            <converters:IntToTextWrapping x:Key="IntToTextWrapping" />
 
             <Style
                 x:Key="TransparentButton"
