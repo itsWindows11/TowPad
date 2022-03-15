@@ -140,7 +140,7 @@
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
 
-                        <ListView Tapped="ListView_Tapped" ItemsSource="{x:Bind WhatsNew, Mode=OneWay}" Margin="0,0,10,10">
+                        <ListView SelectionChanged="ListView_SelectionChanged" ItemsSource="{x:Bind WhatsNew, Mode=OneWay}" Margin="0,0,10,10">
                             <ListView.ItemTemplate>
                                 <DataTemplate x:DataType="viewmodels:WhatsNewItemViewModel">
                                     <StackPanel Margin="-11,0,0,0" Orientation="Horizontal" Spacing="10" Padding="10,13">

@@ -108,7 +108,7 @@ namespace Rich_Text_Editor.Views
                 Title = "Home page",
                 Icon = "\uEA8A",
                 Tag = "HomePage",
-                Description = "Now you can see your recent files, and what's new in WordPad UWP!"
+                Description = $"Now you can see your recent files, and what's new in {Strings.Resources.AppName}!"
             });
 
             WhatsNew.Add(new()
@@ -116,7 +116,7 @@ namespace Rich_Text_Editor.Views
                 Title = "Localization & Accessbility",
                 Icon = "\uE774",
                 Tag = "LocAndAcc",
-                Description = "You can contribute translations to WordPad UWP, and help make this app reach more countries! And elements in the app will be more accessible."
+                Description = $"You can contribute translations to {Strings.Resources.AppName}, and help make this app reach more countries! And elements in the app will be more accessible."
             });
 
             WhatsNew.Add(new()
@@ -132,7 +132,7 @@ namespace Rich_Text_Editor.Views
                 Title = "Compact mode",
                 Icon = "\uE737",
                 Tag = "CompactMode",
-                Description = "Now you can make WordPad UWP overlay over windows!"
+                Description = $"Now you can make {Strings.Resources.AppName} overlay over windows! (experimental)"
             });
 
             IsListEmpty = list.Count <= 0;
@@ -176,9 +176,9 @@ namespace Rich_Text_Editor.Views
             Clipboard.SetContent(dataPackage);
         }
 
-        private void ListView_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
+        private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if ((e.OriginalSource as FrameworkElement).DataContext is WhatsNewItemViewModel item)
+            if (e.AddedItems[0] is WhatsNewItemViewModel item)
             {
                 SelectedItem = item;
 

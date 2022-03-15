@@ -52,7 +52,7 @@
                          Height="16"
                          Margin="0,2,0,0" />
                     <TextBlock x:Name="AppTitle"
-                               Text="Untitled - WordPad UWP"
+                               Text="Untitled - Wordpad UWP"
                                VerticalAlignment="Center"
                                Margin="12,2,0,0"
                                Style="{StaticResource CaptionTextBlockStyle}" />
@@ -62,6 +62,11 @@
                                VerticalAlignment="Center" Padding="5,0" />
                 </StackPanel>
             </Border>
+
+            <Button Click="CompactOverlayBtn_Click" ToolTipService.ToolTip="Toggle overlay" x:Name="CompactOverlayBtn" Canvas.ZIndex="2" Margin="10,5,195,10" d:Margin="10" RelativePanel.AlignRightWithPanel="True">
+                <FontIcon Glyph="&#xEE49;" FontSize="16" />
+            </Button>
+            
             <StackPanel Orientation="Horizontal" x:Name="MenuPanel" VerticalAlignment="Center" RelativePanel.Below="AppTitleBar">
                 <muxc:MenuBar x:Name="menu" Margin="5,0,0,0" VerticalAlignment="Center">
                     <muxc:MenuBarItem Title="{x:Bind res:Resources.FileText}">

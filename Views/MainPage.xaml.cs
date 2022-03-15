@@ -1,21 +1,14 @@
-﻿using Microsoft.Graphics.Canvas.Text;
-using Rich_Text_Editor.Helpers;
+﻿using Rich_Text_Editor.Helpers;
 using Rich_Text_Editor.Views;
 using Rich_Text_Editor.Views.Settings;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Activation;
 using Windows.ApplicationModel.Core;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.Graphics.Printing;
 using Windows.Storage;
-using Windows.Storage.FileProperties;
 using Windows.Storage.Pickers;
 using Windows.Storage.Provider;
 using Windows.Storage.Streams;
@@ -26,20 +19,16 @@ using Windows.UI.Text;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Markup;
 using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
-using Windows.UI.Xaml.Printing;
 
 namespace Rich_Text_Editor
 {
     public sealed partial class MainPage : Page
     {
         private bool saved = true;
+        private bool _wasOpen = false;
         private string appTitleStr = Strings.Resources.AppName;
         private string fileNameWithPath = "";
 
@@ -67,6 +56,8 @@ namespace Rich_Text_Editor
             SystemNavigationManagerPreview.GetForCurrentView().CloseRequested += OnCloseRequest;
 
             NavigationCacheMode = NavigationCacheMode.Required;
+
+            (CompactOverlayBtn.Content as FontIcon).Glyph = ApplicationView.GetForCurrentView().ViewMode == ApplicationViewMode.CompactOverlay ? "\uEE49" : "\uEE47";
         }
 
         private void CoreTitleBar_LayoutMetricsChanged(CoreApplicationViewTitleBar sender, object args)
@@ -142,34 +133,22 @@ namespace Rich_Text_Editor
                     // finish making changes and call CompleteUpdatesAsync.
                     CachedFileManager.DeferUpdates(file);
                     // write to file
-                    using (Windows.Storage.Streams.IRandomAccessStream randAccStream =
-                        await file.OpenAsync(Windows.Storage.FileAccessMode.ReadWrite))
-                        switch (file.Name.EndsWith(".txt"))
+                    using (IRandomAccessStream randAccStream = await file.OpenAsync(FileAccessMode.ReadWrite))
+                        if (file.Name.EndsWith(".txt"))
                         {
-                            case false:
-                                // RTF file, format for it
-                                {
-                                    editor.Document.SaveToStream(Windows.UI.Text.TextGetOptions.FormatRtf, randAccStream);
-                                    randAccStream.Dispose();
-                                }
-                                break;
-                            case true:
-                                // TXT File, disable RTF formatting so that this is plain text
-                                {
-                                    editor.Document.SaveToStream(Windows.UI.Text.TextGetOptions.None, randAccStream);
-                                    randAccStream.Dispose();
-                                }
-                                break;
+                            editor.Document.SaveToStream(Windows.UI.Text.TextGetOptions.None, randAccStream);
                         }
-
+                        else
+                        {
+                            editor.Document.SaveToStream(Windows.UI.Text.TextGetOptions.FormatRtf, randAccStream);
+                        }
 
                     // Let Windows know that we're finished changing the file so the
                     // other app can update the remote version of the file.
                     FileUpdateStatus status = await CachedFileManager.CompleteUpdatesAsync(file);
                     if (status != FileUpdateStatus.Complete)
                     {
-                        Windows.UI.Popups.MessageDialog errorBox =
-                            new Windows.UI.Popups.MessageDialog("File " + file.Name + " couldn't be saved.");
+                        Windows.UI.Popups.MessageDialog errorBox = new("File " + file.Name + " couldn't be saved.");
                         await errorBox.ShowAsync();
                     }
                     saved = true;
@@ -194,12 +173,10 @@ namespace Rich_Text_Editor
                             if (file.Name.EndsWith(".txt"))
                             {
                                 editor.Document.SaveToStream(TextGetOptions.None, randAccStream);
-                                randAccStream.Dispose();
                             }
                             else
                             {
                                 editor.Document.SaveToStream(TextGetOptions.FormatRtf, randAccStream);
-                                randAccStream.Dispose();
                             }
 
 
@@ -208,8 +185,7 @@ namespace Rich_Text_Editor
                         FileUpdateStatus status = await CachedFileManager.CompleteUpdatesAsync(file);
                         if (status != FileUpdateStatus.Complete)
                         {
-                            Windows.UI.Popups.MessageDialog errorBox =
-                                new Windows.UI.Popups.MessageDialog("File " + file.Name + " couldn't be saved.");
+                            Windows.UI.Popups.MessageDialog errorBox = new("File " + file.Name + " couldn't be saved.");
                             await errorBox.ShowAsync();
                         }
                         saved = true;
@@ -236,7 +212,7 @@ namespace Rich_Text_Editor
                 catch
                 {
                     // Printing cannot proceed at this time
-                    ContentDialog noPrintingDialog = new ContentDialog()
+                    ContentDialog noPrintingDialog = new()
                     {
                         Title = "Printing error",
                         Content = "Sorry, printing can't proceed at this time.",
@@ -248,7 +224,7 @@ namespace Rich_Text_Editor
             else
             {
                 // Printing is not supported on this device
-                ContentDialog noPrintingDialog = new ContentDialog()
+                ContentDialog noPrintingDialog = new()
                 {
                     Title = "Printing not supported",
                     Content = "Sorry, printing is not supported on this device.",
@@ -378,10 +354,10 @@ namespace Rich_Text_Editor
                     fileNameWithPath = file.Path;
                 }
                 saved = true;
+                _wasOpen = true;
                 Windows.Storage.AccessCache.StorageApplicationPermissions.MostRecentlyUsedList.Add(file);
                 Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.AddOrReplace("CurrentlyOpenFile", file);
             }
-
         }
 
         private async void AddImageButton_Click(object sender, RoutedEventArgs e)
@@ -456,7 +432,7 @@ namespace Rich_Text_Editor
         {
             ContentDialog aboutDialog = new()
             {
-                Title = "Wordpad UWP",
+                Title = appTitleStr,
                 Content = $"Version {typeof(App).GetTypeInfo().Assembly.GetName().Version}\n\n© 2022",
                 CloseButtonText = "OK"
             };
@@ -494,7 +470,10 @@ namespace Rich_Text_Editor
 
         private void FontsCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            editor.Document.Selection.CharacterFormat.Name = FontsCombo.SelectedValue.ToString();
+            if (editor.Document.Selection != null)
+            {
+                editor.Document.Selection.CharacterFormat.Name = FontsCombo.SelectedValue.ToString();
+            }
         }
 
         private void FindButton_Click(object sender, RoutedEventArgs e)
@@ -506,7 +485,7 @@ namespace Rich_Text_Editor
         {
             editor.Document.GetText(TextGetOptions.UseObjectText, out string textStart);
 
-            if (textStart == "" || string.IsNullOrWhiteSpace(textStart))
+            if (textStart == "" || string.IsNullOrWhiteSpace(textStart) || _wasOpen)
             {
                 saved = true;
             }
@@ -525,7 +504,7 @@ namespace Rich_Text_Editor
             {
                 await ApplicationView.GetForCurrentView().TryConsolidateAsync();
             }
-            else ShowUnsavedDialog();
+            else await ShowUnsavedDialog();
         }
 
         private void ConfirmColor_Click(object sender, RoutedEventArgs e)
@@ -568,6 +547,8 @@ namespace Rich_Text_Editor
                     saved = true;
                     fileNameWithPath = file.Path;
                     Windows.Storage.AccessCache.StorageApplicationPermissions.MostRecentlyUsedList.Add(file);
+                    Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.AddOrReplace("CurrentlyOpenFile", file);
+                    _wasOpen = true;
                 }
             }
         }
@@ -614,9 +595,25 @@ namespace Rich_Text_Editor
             }
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private async void CompactOverlayBtn_Click(object sender, RoutedEventArgs e)
         {
-
+            if (sender is Button button)
+            {
+                if (ApplicationView.GetForCurrentView().ViewMode == ApplicationViewMode.CompactOverlay)
+                {
+                    await ApplicationView.GetForCurrentView().TryEnterViewModeAsync(ApplicationViewMode.Default);
+                    (button.Content as FontIcon).Glyph = "\uEE49";
+                    button.Margin = new(10, 5, 195, 10);
+                }
+                else
+                {
+                    ViewModePreferences preferences = ViewModePreferences.CreateDefault(ApplicationViewMode.CompactOverlay);
+                    preferences.CustomSize = new Windows.Foundation.Size(400, 400);
+                    await ApplicationView.GetForCurrentView().TryEnterViewModeAsync(ApplicationViewMode.CompactOverlay, preferences);
+                    (button.Content as FontIcon).Glyph = "\uEE47";
+                    button.Margin = new(10, 5, 70, 10);
+                }
+            }
         }
     }
 }
