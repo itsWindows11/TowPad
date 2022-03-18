@@ -1,11 +1,11 @@
-# Wordpad UWP
-**Reminder:** this app is still in development
+# TowPad
+
 
 A UWP version of... WordPad!
 
 This app features a simple and easy to use interface other than ribbons.
 
-![Wordpad UWP](https://user-images.githubusercontent.com/81253203/134414755-894fcb4c-cac1-4edb-af92-4be47a342177.png)
+![TowPad](https://user-images.githubusercontent.com/81253203/134414755-894fcb4c-cac1-4edb-af92-4be47a342177.png)
 
 ### Windows 11
 ![image](https://user-images.githubusercontent.com/81253203/135627983-c9b242ba-ad76-4134-8ed6-a57e3b477390.png)
