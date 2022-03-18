@@ -247,7 +247,7 @@ namespace Rich_Text_Editor
                   {
                         var newWindow = Window.Current;
                         var newAppView = ApplicationView.GetForCurrentView();
-                        newAppView.Title = "Untitled - Wordpad UWP";
+                        newAppView.Title = $"Untitled - {Strings.Resources.AppName}";
 
                         var frame = new Frame();
                         frame.Navigate(typeof(MainPage));
@@ -293,8 +293,8 @@ namespace Rich_Text_Editor
         {
             FindBoxRemoveHighlights();
 
-            Color highlightBackgroundColor = (Color)App.Current.Resources["SystemColorHighlightColor"];
-            Color highlightForegroundColor = (Color)App.Current.Resources["SystemColorHighlightTextColor"];
+            Color highlightBackgroundColor = (Color)Application.Current.Resources["SystemColorHighlightColor"];
+            Color highlightForegroundColor = (Color)Application.Current.Resources["SystemColorHighlightTextColor"];
 
             string textToFind = findBox.Text;
             if (textToFind != null)

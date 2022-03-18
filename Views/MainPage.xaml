@@ -52,7 +52,7 @@
                          Height="16"
                          Margin="0,2,0,0" />
                     <TextBlock x:Name="AppTitle"
-                               Text="Untitled - Wordpad UWP"
+                               Text="Untitled - TowPad"
                                VerticalAlignment="Center"
                                Margin="12,2,0,0"
                                Style="{StaticResource CaptionTextBlockStyle}" />
