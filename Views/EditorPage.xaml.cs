@@ -96,7 +96,7 @@ namespace Rich_Text_Editor.Pages
                     }
                     saved = true;
                     fileNameWithPath = file.Path;
-                    MainPage.Current.SelectedTab.Title = file.Name + " - " + appTitleStr;
+                    MainPage.Current.SelectedTab.Title = file.Name;
                     Windows.Storage.AccessCache.StorageApplicationPermissions.MostRecentlyUsedList.Add(file);
                 }
             }
@@ -132,7 +132,7 @@ namespace Rich_Text_Editor.Pages
                             await errorBox.ShowAsync();
                         }
                         saved = true;
-                        MainPage.Current.SelectedTab.Title = file.Name + " - " + appTitleStr;
+                        MainPage.Current.SelectedTab.Title = file.Name;
                         Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.Remove("CurrentlyOpenFile");
                     }
                 } 
@@ -293,7 +293,7 @@ namespace Rich_Text_Editor.Pages
                     // Load the file into the Document property of the RichEditBox.
                     editor.Document.LoadFromStream(TextSetOptions.FormatRtf, randAccStream);
                     //editor.Document.SetText(Windows.UI.Text.TextSetOptions.FormatRtf, text);
-                    MainPage.Current.SelectedTab.Title = file.Name + " - " + appTitleStr;
+                    MainPage.Current.SelectedTab.Title = file.Name;
                     fileNameWithPath = file.Path;
                 }
                 saved = true;
