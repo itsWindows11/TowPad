@@ -172,14 +172,13 @@ namespace Rich_Text_Editor.Views
             TabItem item = new()
             {
                 Title = $"Text document {MainPage.Current.Tabs.Count + 1}",
-                Icon = "&#xE130;",
+                Icon = "\uE130",
                 TargetPage = typeof(EditorPage),
-                Saved = true
+                Saved = true,
+                Content = new EditorPage()
             };
 
             MainPage.Current.Tabs.Add(item);
-
-            MainPage.Current.CurrentTabFrame.Navigate(item.TargetPage, item);
         }
 
         private void OpenExistingButton_Click(object sender, RoutedEventArgs e)
@@ -189,14 +188,13 @@ namespace Rich_Text_Editor.Views
             TabItem item = new()
             {
                 Title = $"Text document {MainPage.Current.Tabs.Count + 1}",
-                Icon = "&#xE130;",
+                Icon = "\uE130",
                 TargetPage = typeof(EditorPage),
-                Saved = true
+                Saved = true,
+                Content = new EditorPage()
             };
 
             MainPage.Current.Tabs.Add(item);
-
-            MainPage.Current.CurrentTabFrame.Navigate(item.TargetPage, item);
         }
     }
 }

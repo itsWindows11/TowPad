@@ -30,15 +30,13 @@ namespace Rich_Text_Editor.Pages
         private bool saved = true;
         private bool _wasOpen = false;
         private string appTitleStr = Strings.Resources.AppName;
-        private string fileNameWithPath = "";
+        public string fileNameWithPath = "";
 
         public EditorPage()
         {
             InitializeComponent();
 
             ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
-
-            NavigationCacheMode = NavigationCacheMode.Required;
         }
 
         private void OnCloseRequest(object sender, SystemNavigationCloseRequestedPreviewEventArgs e)

@@ -416,6 +416,7 @@
 
         <RichEditBox
             x:Name="editor"
+            x:FieldModifier="public"
             Padding="{x:Bind local:App.SViewModel.DocumentViewPadding, Mode=OneWay, Converter={StaticResource IntToThickness}}"
             BorderThickness="0"
             FontFamily="{x:Bind local:App.SViewModel.DefaultFont}"

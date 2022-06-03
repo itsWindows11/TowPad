@@ -7,8 +7,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     xmlns:viewmodels="using:Rich_Text_Editor.ViewModels"
-    muxc:BackdropMaterial.ApplyToRootOrPageBackground="True"
     d:Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+    muxc:BackdropMaterial.ApplyToRootOrPageBackground="True"
     mc:Ignorable="d">
 
     <Grid>
@@ -26,45 +26,45 @@
             Canvas.ZIndex="1"
             IsHitTestVisible="True" />
 
-        <RelativePanel Grid.Row="0" Canvas.ZIndex="2">
-            <Button
-                x:Name="CompactOverlayBtn"
-                Margin="10,5,195,10"
-                d:Margin="12,5,12,0"
-                Canvas.ZIndex="2"
-                Height="40"
-                Click="CompactOverlayBtn_Click"
-                RelativePanel.AlignRightWithPanel="True"
-                ToolTipService.ToolTip="Toggle overlay">
-                <FontIcon FontSize="16" Glyph="&#xEE49;" />
-            </Button>
+        <Button
+            x:Name="CompactOverlayBtn"
+            Grid.RowSpan="2"
+            Height="32"
+            Margin="10,5,195,10"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Top"
+            d:Margin="12,5,12,0"
+            Canvas.ZIndex="2"
+            Click="CompactOverlayBtn_Click"
+            RelativePanel.AlignRightWithPanel="True"
+            ToolTipService.ToolTip="Toggle overlay">
+            <FontIcon FontSize="16" Glyph="&#xEE49;" />
+        </Button>
 
-            <muxc:TabView
-                x:Name="TabView"
-                RelativePanel.AlignLeftWithPanel="True"
-                RelativePanel.AlignBottomWithPanel="True"
-                TabItemsSource="{x:Bind Tabs}">
-                <muxc:TabView.TabItemTemplate>
-                    <DataTemplate x:DataType="viewmodels:TabItem">
-                        <muxc:TabViewItem>
-                            <muxc:TabViewItem.IconSource>
-                                <muxc:FontIconSource Glyph="{x:Bind Icon}" />
-                            </muxc:TabViewItem.IconSource>
-                            <muxc:TabViewItem.Header>
-                                <StackPanel Orientation="Horizontal" Spacing="4">
-                                    <TextBlock Text="{x:Bind Title, Mode=OneWay}" />
-                                    <TextBlock Text="*" Visibility="{x:Bind Saved, Mode=OneWay, Converter={StaticResource BoolToVisReverse}}" />
-                                </StackPanel>
-                            </muxc:TabViewItem.Header>
-                        </muxc:TabViewItem>
-                    </DataTemplate>
-                </muxc:TabView.TabItemTemplate>
-            </muxc:TabView>
-        </RelativePanel>
-
-        <Frame
-            x:Name="CurrentTabFrame"
+        <muxc:TabView
+            x:Name="TabView"
             Grid.Row="1"
-            x:FieldModifier="public" />
+            Margin="0,-40,0,0"
+            VerticalAlignment="Stretch"
+            AddTabButtonClick="TabView_AddTabButtonClick"
+            Canvas.ZIndex="2"
+            TabCloseRequested="TabView_TabCloseRequested"
+            TabItemsSource="{x:Bind Tabs}">
+            <muxc:TabView.TabItemTemplate>
+                <DataTemplate x:DataType="viewmodels:TabItem">
+                    <muxc:TabViewItem Content="{x:Bind Content}">
+                        <muxc:TabViewItem.IconSource>
+                            <muxc:FontIconSource Glyph="{x:Bind Icon}" />
+                        </muxc:TabViewItem.IconSource>
+                        <muxc:TabViewItem.Header>
+                            <StackPanel Orientation="Horizontal" Spacing="4">
+                                <TextBlock Text="{x:Bind Title, Mode=OneWay}" />
+                                <TextBlock Text="*" Visibility="{x:Bind Saved, Mode=OneWay, Converter={StaticResource BoolToVisReverse}}" />
+                            </StackPanel>
+                        </muxc:TabViewItem.Header>
+                    </muxc:TabViewItem>
+                </DataTemplate>
+            </muxc:TabView.TabItemTemplate>
+        </muxc:TabView>
     </Grid>
 </Page>
