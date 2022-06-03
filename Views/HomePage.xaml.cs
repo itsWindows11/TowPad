@@ -12,6 +12,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Core;
 using Windows.System;
 using Windows.ApplicationModel.DataTransfer;
+using Rich_Text_Editor.Pages;
 
 namespace Rich_Text_Editor.Views
 {
@@ -105,34 +106,10 @@ namespace Rich_Text_Editor.Views
 
             WhatsNew.Add(new()
             {
-                Title = "Home page",
+                Title = "Tabs",
                 Icon = "\uEA8A",
-                Tag = "HomePage",
-                Description = $"Now you can see your recent files, and what's new in {Strings.Resources.AppName}!"
-            });
-
-            WhatsNew.Add(new()
-            {
-                Title = "Localization & Accessbility",
-                Icon = "\uE774",
-                Tag = "LocAndAcc",
-                Description = $"You can contribute translations to {Strings.Resources.AppName}, and help make this app reach more countries! And elements in the app will be more accessible."
-            });
-
-            WhatsNew.Add(new()
-            {
-                Title = "New Settings UI",
-                Icon = "\uE713",
-                Tag = "SettingsUI",
-                Description = "Settings will be in a separate page, you can set app mode, and change more settings, with a refreshed, and redesigned settings UI."
-            });
-
-            WhatsNew.Add(new()
-            {
-                Title = "Compact mode",
-                Icon = "\uE737",
-                Tag = "CompactMode",
-                Description = $"Now you can make {Strings.Resources.AppName} overlay over windows! (experimental)"
+                Tag = "Tabs",
+                Description = $"Open multiple documents at the same time!"
             });
 
             IsListEmpty = list.Count <= 0;
@@ -152,7 +129,7 @@ namespace Rich_Text_Editor.Views
 
             try
             {
-                await Launcher.LaunchFolderPathAsync(item.Path.Replace(item.Name, ""));
+                _ = await Launcher.LaunchFolderPathAsync(item.Path.Replace(item.Name, ""));
             }
             catch (Exception e1)
             {
@@ -186,6 +163,40 @@ namespace Rich_Text_Editor.Views
                 TitleWhatsNew.Text = item.Title;
                 DescWhatsNew.Text = item.Description;
             }
+        }
+
+        private void CreateDocumentButton_Click(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(MainPage));
+
+            TabItem item = new()
+            {
+                Title = $"Text document {MainPage.Current.Tabs.Count + 1}",
+                Icon = "&#xE130;",
+                TargetPage = typeof(EditorPage),
+                Saved = true
+            };
+
+            MainPage.Current.Tabs.Add(item);
+
+            MainPage.Current.CurrentTabFrame.Navigate(item.TargetPage, item);
+        }
+
+        private void OpenExistingButton_Click(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(MainPage));
+
+            TabItem item = new()
+            {
+                Title = $"Text document {MainPage.Current.Tabs.Count + 1}",
+                Icon = "&#xE130;",
+                TargetPage = typeof(EditorPage),
+                Saved = true
+            };
+
+            MainPage.Current.Tabs.Add(item);
+
+            MainPage.Current.CurrentTabFrame.Navigate(item.TargetPage, item);
         }
     }
 }

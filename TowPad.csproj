@@ -135,6 +135,9 @@
     <Compile Include="Converters\BooleanToVisibility.cs" />
     <Compile Include="Converters\SettingsConverters.cs" />
     <Compile Include="Helpers\RichEditHelpers.cs" />
+    <Compile Include="MainPage.xaml.cs">
+      <DependentUpon>MainPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Strings\Resources.cs" />
     <Compile Include="UserControls\SettingsBlockControl.xaml.cs">
       <DependentUpon>SettingsBlockControl.xaml</DependentUpon>
@@ -146,13 +149,12 @@
     <Compile Include="ViewModels\Settings\SettingsManager.cs" />
     <Compile Include="ViewModels\Settings\SettingsViewModel.cs" />
     <Compile Include="ViewModels\Settings\ViewModel.cs" />
+    <Compile Include="ViewModels\TabItem.cs" />
     <Compile Include="ViewModels\WhatsNewItemViewModel.cs" />
     <Compile Include="Views\HomePage.xaml.cs">
       <DependentUpon>HomePage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MainPage.xaml.cs">
-      <DependentUpon>Views\MainPage.xaml</DependentUpon>
-    </Compile>
+    <Compile Include="Views\EditorPage.xaml.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Dialogs\SettingsDialog.xaml.cs">
       <DependentUpon>Dialogs\SettingsDialog.xaml</DependentUpon>
@@ -228,6 +230,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="MainPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UserControls\SettingsBlockControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -240,7 +246,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\MainPage.xaml">
+    <Page Include="Views\EditorPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

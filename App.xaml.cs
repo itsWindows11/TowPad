@@ -1,4 +1,5 @@
 ﻿using Rich_Text_Editor.ViewModels;
+using Rich_Text_Editor.Views;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -6,6 +7,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
+using Windows.ApplicationModel.Core;
 using Windows.ApplicationModel.Resources;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
@@ -40,9 +42,9 @@ namespace Rich_Text_Editor
             InitializeComponent();
             Suspending += OnSuspending;
 
-            Resources = ResourceLoader.GetForViewIndependentUse();
-            SViewModel = new();
-            Tips = new();
+            Resources ??= ResourceLoader.GetForViewIndependentUse();
+            SViewModel ??= new();
+            Tips ??= new();
         }
 
         /// <summary>
@@ -70,14 +72,15 @@ namespace Rich_Text_Editor
                 Window.Current.Content = rootFrame;
             }
 
-            if (e.PrelaunchActivated == false)
+            if (!e.PrelaunchActivated)
             {
+                CoreApplication.EnablePrelaunch(true);
                 if (rootFrame.Content == null)
                 {
                     // When the navigation stack isn't restored navigate to the first page,
                     // configuring the new page by passing required information as a navigation
                     // parameter
-                    rootFrame.Navigate(typeof(MainPage), e.Arguments);
+                    rootFrame.Navigate(typeof(HomePage), e.Arguments);
                 }
                 // Ensure the current window is active
                 Window.Current.Activate();
@@ -113,7 +116,7 @@ namespace Rich_Text_Editor
             // TODO: Handle file activation
             // The number of files received is args.Files.Size
             // The name of the first file is args.Files[0].Name
-            Frame rootFrame = new Frame();
+            Frame rootFrame = new();
             rootFrame.Navigate(typeof(MainPage), args);
             Window.Current.Content = rootFrame;
             Window.Current.Activate();
