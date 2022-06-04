@@ -179,6 +179,8 @@ namespace Rich_Text_Editor.Views
             };
 
             MainPage.Current.Tabs.Add(item);
+
+            MainPage.Current.TabView.SelectedItem = item;
         }
 
         private void OpenExistingButton_Click(object sender, RoutedEventArgs e)
@@ -195,6 +197,8 @@ namespace Rich_Text_Editor.Views
             };
 
             MainPage.Current.Tabs.Add(item);
+
+            MainPage.Current.TabView.SelectedItem = item;
         }
     }
 }

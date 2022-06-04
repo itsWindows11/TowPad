@@ -461,7 +461,7 @@ namespace Rich_Text_Editor.Pages
                 saved = true;
                 MainPage.Current.SelectedTab.Saved = true;
             }
-            else if (!_wasOpen)
+            else
             {
                 saved = false;
                 MainPage.Current.SelectedTab.Saved = false;

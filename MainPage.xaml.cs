@@ -1,6 +1,7 @@
 ﻿using Rich_Text_Editor.Pages;
 using Rich_Text_Editor.ViewModels;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -21,7 +22,7 @@ namespace Rich_Text_Editor
     {
         public static MainPage Current;
 
-        public ObservableCollection<TabItem> Tabs;
+        public IList<object> Tabs => TabView.TabItems;
 
         public TabItem SelectedTab => (TabItem)TabView.SelectedItem;
 
@@ -31,7 +32,19 @@ namespace Rich_Text_Editor
 
             Current = this;
 
-            Tabs = new();
+            if (Tabs.Count == 0)
+            {
+                TabItem item = new()
+                {
+                    Title = $"Text document {Tabs.Count + 1}",
+                    Icon = "\uE130",
+                    TargetPage = typeof(EditorPage),
+                    Saved = true,
+                    Content = new EditorPage()
+                };
+
+                Tabs.Add(item);
+            }
 
             var appViewTitleBar = ApplicationView.GetForCurrentView().TitleBar;
 
@@ -139,7 +152,7 @@ namespace Rich_Text_Editor
 
         private async void TabView_TabCloseRequested(Microsoft.UI.Xaml.Controls.TabView sender, Microsoft.UI.Xaml.Controls.TabViewTabCloseRequestedEventArgs args)
         {
-            var item = args.Tab.DataContext as TabItem;
+            TabItem item = args.Item as TabItem;
 
             ContentDialogResult result = ContentDialogResult.None;
 
@@ -148,9 +161,9 @@ namespace Rich_Text_Editor
                 result = await ShowUnsavedDialog();
             }
 
-            Tabs.Remove(item);
+            Tabs.Remove(Tabs.FirstOrDefault(i => ((TabItem)i).Title == item.Title));
 
-            if (Tabs.Count == 0 && (result != ContentDialogResult.Secondary))
+            if (Tabs.Count == 0 && result != ContentDialogResult.Secondary)
             {
                 await ApplicationView.GetForCurrentView().TryConsolidateAsync();
             }

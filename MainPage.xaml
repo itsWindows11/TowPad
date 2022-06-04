@@ -48,8 +48,8 @@
             VerticalAlignment="Stretch"
             AddTabButtonClick="TabView_AddTabButtonClick"
             Canvas.ZIndex="1"
-            TabCloseRequested="TabView_TabCloseRequested"
-            TabItemsSource="{x:Bind Tabs}">
+            x:FieldModifier="public"
+            TabCloseRequested="TabView_TabCloseRequested">
             <muxc:TabView.TabStripHeader>
                 <Grid x:Name="ShellTitleBarInset" Background="Transparent" />
             </muxc:TabView.TabStripHeader>
@@ -64,8 +64,8 @@
                         </muxc:TabViewItem.IconSource>
                         <muxc:TabViewItem.Header>
                             <StackPanel Orientation="Horizontal" Spacing="4">
-                                <TextBlock Text="{x:Bind Title, Mode=OneWay}" />
-                                <TextBlock Text="*" Visibility="{x:Bind Saved, Mode=OneWay, Converter={StaticResource BoolToVisReverse}}" />
+                                <TextBlock Text="{Binding Title}" />
+                                <TextBlock Text="*" Visibility="{Binding Saved, Converter={StaticResource BoolToVisReverse}}" />
                             </StackPanel>
                         </muxc:TabViewItem.Header>
                     </muxc:TabViewItem>
