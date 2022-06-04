@@ -32,11 +32,16 @@ namespace Rich_Text_Editor.Pages
         private string appTitleStr = Strings.Resources.AppName;
         public string fileNameWithPath = "";
 
-        public EditorPage()
+        public EditorPage(StorageFile file)
         {
             InitializeComponent();
 
-            ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
+            _ = LoadDocumentFromFileAsync(file);
+        }
+
+        public EditorPage()
+        {
+            InitializeComponent();
         }
 
         private void OnCloseRequest(object sender, SystemNavigationCloseRequestedPreviewEventArgs e)
@@ -54,7 +59,27 @@ namespace Rich_Text_Editor.Pages
             SaveFile(false);
         }
 
-        private async void SaveFile(bool isCopy)
+        private async Task LoadDocumentFromFileAsync(StorageFile file)
+        {
+            using IRandomAccessStream randAccStream = await file.OpenAsync(FileAccessMode.ReadWrite);
+            IBuffer buffer = await FileIO.ReadBufferAsync(file);
+            var reader = DataReader.FromBuffer(buffer);
+            reader.UnicodeEncoding = UnicodeEncoding.Utf8;
+            string text = reader.ReadString(buffer.Length);
+
+            if (file.Name.EndsWith(".txt"))
+            {
+                editor.Document.LoadFromStream(TextSetOptions.None, randAccStream);
+            }
+            else
+            {
+                editor.Document.LoadFromStream(TextSetOptions.FormatRtf, randAccStream);
+            }
+
+            fileNameWithPath = file.Path;
+        }
+
+        public async void SaveFile(bool isCopy)
         {
             string fileName = MainPage.Current.SelectedTab.Title.Replace(" - " + appTitleStr, "");
             if (isCopy || fileName == "Untitled")
@@ -95,6 +120,7 @@ namespace Rich_Text_Editor.Pages
                         await errorBox.ShowAsync();
                     }
                     saved = true;
+                    MainPage.Current.SelectedTab.Saved = true;
                     fileNameWithPath = file.Path;
                     MainPage.Current.SelectedTab.Title = file.Name;
                     Windows.Storage.AccessCache.StorageApplicationPermissions.MostRecentlyUsedList.Add(file);
@@ -132,6 +158,7 @@ namespace Rich_Text_Editor.Pages
                             await errorBox.ShowAsync();
                         }
                         saved = true;
+                        MainPage.Current.SelectedTab.Saved = true;
                         MainPage.Current.SelectedTab.Title = file.Name;
                         Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.Remove("CurrentlyOpenFile");
                     }
@@ -297,6 +324,7 @@ namespace Rich_Text_Editor.Pages
                     fileNameWithPath = file.Path;
                 }
                 saved = true;
+                MainPage.Current.SelectedTab.Saved = true;
                 _wasOpen = true;
                 Windows.Storage.AccessCache.StorageApplicationPermissions.MostRecentlyUsedList.Add(file);
                 Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.AddOrReplace("CurrentlyOpenFile", file);
@@ -431,10 +459,12 @@ namespace Rich_Text_Editor.Pages
             if (textStart == "" || string.IsNullOrWhiteSpace(textStart) || _wasOpen)
             {
                 saved = true;
+                MainPage.Current.SelectedTab.Saved = true;
             }
-            else
+            else if (!_wasOpen)
             {
                 saved = false;
+                MainPage.Current.SelectedTab.Saved = false;
             }
         }
 

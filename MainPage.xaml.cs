@@ -2,6 +2,7 @@
 using Rich_Text_Editor.ViewModels;
 using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Activation;
 using Windows.ApplicationModel.Core;
@@ -22,7 +23,7 @@ namespace Rich_Text_Editor
 
         public ObservableCollection<TabItem> Tabs;
 
-        public TabItem SelectedTab;
+        public TabItem SelectedTab => (TabItem)TabView.SelectedItem;
 
         public MainPage()
         {
@@ -41,7 +42,7 @@ namespace Rich_Text_Editor
             coreTitleBar.ExtendViewIntoTitleBar = true;
             UpdateTitleBarLayout(coreTitleBar);
 
-            Window.Current.SetTitleBar(AppTitleBar);
+            Window.Current.SetTitleBar(CustomDragRegion);
 
             coreTitleBar.LayoutMetricsChanged += CoreTitleBar_LayoutMetricsChanged;
             coreTitleBar.IsVisibleChanged += CoreTitleBar_IsVisibleChanged;
@@ -102,7 +103,7 @@ namespace Rich_Text_Editor
                 {
                     foreach (var file in (args as FileActivatedEventArgs).Files)
                     {
-                        var editorPage = new EditorPage();
+                        var editorPage = new EditorPage(file as StorageFile);
                         TabItem item = new()
                         {
                             Title = file.Name,
@@ -112,17 +113,9 @@ namespace Rich_Text_Editor
                             Content = editorPage
                         };
 
-                        using (IRandomAccessStream randAccStream = await (file as StorageFile).OpenAsync(FileAccessMode.ReadWrite))
-                        {
-                            IBuffer buffer = await FileIO.ReadBufferAsync(file as StorageFile);
-                            var reader = DataReader.FromBuffer(buffer);
-                            reader.UnicodeEncoding = UnicodeEncoding.Utf8;
-                            string text = reader.ReadString(buffer.Length);
-                            editorPage.editor.Document.LoadFromStream(TextSetOptions.FormatRtf, randAccStream);
-                            editorPage.fileNameWithPath = file.Path;
-                        }
-
                         Tabs.Add(item);
+
+                        TabView.SelectedItem = item;
                     }
                 }
             }
@@ -146,20 +139,24 @@ namespace Rich_Text_Editor
 
         private async void TabView_TabCloseRequested(Microsoft.UI.Xaml.Controls.TabView sender, Microsoft.UI.Xaml.Controls.TabViewTabCloseRequestedEventArgs args)
         {
-            if (!(args.Item as TabItem).Saved)
+            var item = args.Tab.DataContext as TabItem;
+
+            ContentDialogResult result = ContentDialogResult.None;
+
+            if (!item.Saved)
             {
-                await ShowUnsavedDialog();
+                result = await ShowUnsavedDialog();
             }
 
-            Tabs.Remove(args.Item as TabItem);
+            Tabs.Remove(item);
 
-            if (Tabs.Count == 0)
+            if (Tabs.Count == 0 && (result != ContentDialogResult.Secondary))
             {
                 await ApplicationView.GetForCurrentView().TryConsolidateAsync();
             }
         }
 
-        private async Task ShowUnsavedDialog()
+        private async Task<ContentDialogResult> ShowUnsavedDialog()
         {
             string fileName = SelectedTab.Title.Replace(" - " + SelectedTab.Title, "");
             ContentDialog aboutDialog = new()
@@ -174,12 +171,17 @@ namespace Rich_Text_Editor
             ContentDialogResult result = await aboutDialog.ShowAsync();
             if (result == ContentDialogResult.Primary)
             {
-                //SaveFile(true);
+                (SelectedTab.Content as EditorPage).SaveFile(SelectedTab.Saved);
             }
             else if (result == ContentDialogResult.Secondary)
             {
-                await ApplicationView.GetForCurrentView().TryConsolidateAsync();
+                if (Tabs.Count == 0)
+                {
+                    await ApplicationView.GetForCurrentView().TryConsolidateAsync();
+                }
             }
+
+            return result;
         }
     }
 }

@@ -47,9 +47,15 @@
             Margin="0,-40,0,0"
             VerticalAlignment="Stretch"
             AddTabButtonClick="TabView_AddTabButtonClick"
-            Canvas.ZIndex="2"
+            Canvas.ZIndex="1"
             TabCloseRequested="TabView_TabCloseRequested"
             TabItemsSource="{x:Bind Tabs}">
+            <muxc:TabView.TabStripHeader>
+                <Grid x:Name="ShellTitleBarInset" Background="Transparent" />
+            </muxc:TabView.TabStripHeader>
+            <muxc:TabView.TabStripFooter>
+                <Grid x:Name="CustomDragRegion" Background="Transparent" />
+            </muxc:TabView.TabStripFooter>
             <muxc:TabView.TabItemTemplate>
                 <DataTemplate x:DataType="viewmodels:TabItem">
                     <muxc:TabViewItem Content="{x:Bind Content}">
