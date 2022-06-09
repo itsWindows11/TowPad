@@ -43,8 +43,6 @@ namespace Rich_Text_Editor
             SystemNavigationManagerPreview.GetForCurrentView().CloseRequested += OnCloseRequest;
 
             NavigationCacheMode = NavigationCacheMode.Required;
-
-            (CompactOverlayBtn.Content as FontIcon).Glyph = ApplicationView.GetForCurrentView().ViewMode == ApplicationViewMode.CompactOverlay ? "\uEE49" : "\uEE47";
         }
 
         private async void OnCloseRequest(object sender, SystemNavigationCloseRequestedPreviewEventArgs e)
@@ -541,27 +539,6 @@ namespace Rich_Text_Editor
             if (Window.Current.Content is Frame rootFrame)
             {
                 rootFrame.Navigate(typeof(HomePage));
-            }
-        }
-
-        private async void CompactOverlayBtn_Click(object sender, RoutedEventArgs e)
-        {
-            if (sender is Button button)
-            {
-                if (ApplicationView.GetForCurrentView().ViewMode == ApplicationViewMode.CompactOverlay)
-                {
-                    await ApplicationView.GetForCurrentView().TryEnterViewModeAsync(ApplicationViewMode.Default);
-                    (button.Content as FontIcon).Glyph = "\uEE49";
-                    button.Margin = new(10, 5, 195, 10);
-                }
-                else
-                {
-                    ViewModePreferences preferences = ViewModePreferences.CreateDefault(ApplicationViewMode.CompactOverlay);
-                    preferences.CustomSize = new Windows.Foundation.Size(400, 400);
-                    await ApplicationView.GetForCurrentView().TryEnterViewModeAsync(ApplicationViewMode.CompactOverlay, preferences);
-                    (button.Content as FontIcon).Glyph = "\uEE47";
-                    button.Margin = new(10, 5, 70, 10);
-                }
             }
         }
     }

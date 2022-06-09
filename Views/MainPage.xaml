@@ -52,17 +52,6 @@
             Background="{StaticResource TabViewItemHeaderBackground}"
             RelativePanel.AlignLeftWithPanel="True"
             RelativePanel.AlignRightWithPanel="True">
-            <Button
-                x:Name="CompactOverlayBtn"
-                Margin="10,5,195,10"
-                d:Margin="10"
-                Canvas.ZIndex="2"
-                Click="CompactOverlayBtn_Click"
-                RelativePanel.AlignRightWithPanel="True"
-                ToolTipService.ToolTip="Toggle overlay">
-                <FontIcon FontSize="16" Glyph="&#xEE49;" />
-            </Button>
-
             <StackPanel
                 x:Name="MenuPanel"
                 VerticalAlignment="Center"

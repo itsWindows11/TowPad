@@ -468,7 +468,27 @@
                 Background="Transparent" />
         </muxc:TabView.TabStripHeader>
         <muxc:TabView.TabStripFooter>
-            <Grid x:Name="CustomDragRegion" Background="Transparent" />
+            <RelativePanel>
+                <Grid
+                    x:Name="CustomDragRegion"
+                    Background="Transparent"
+                    Canvas.ZIndex="1"
+                    Margin="0"
+                    RelativePanel.AlignLeftWithPanel="True"
+                    RelativePanel.AlignTopWithPanel="True"
+                    RelativePanel.AlignBottomWithPanel="True"
+                    RelativePanel.LeftOf="CompactOverlayBtn" />
+                <Button
+                    x:Name="CompactOverlayBtn"
+                    Margin="0,0,195,0"
+                    Canvas.ZIndex="2"
+                    Click="CompactOverlayBtn_Click"
+                    RelativePanel.AlignRightWithPanel="True"
+                    RelativePanel.AlignVerticalCenterWithPanel="True"
+                    ToolTipService.ToolTip="Toggle overlay">
+                    <FontIcon FontSize="16" Glyph="&#xEE49;" />
+                </Button>
+            </RelativePanel>
         </muxc:TabView.TabStripFooter>
     </muxc:TabView>
 </Page>
