@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
+using Windows.ApplicationModel.Core;
 using Windows.ApplicationModel.Resources;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
@@ -70,14 +71,15 @@ namespace Rich_Text_Editor
                 Window.Current.Content = rootFrame;
             }
 
-            if (e.PrelaunchActivated == false)
+            if (!e.PrelaunchActivated)
             {
+                CoreApplication.EnablePrelaunch(true);
                 if (rootFrame.Content == null)
                 {
                     // When the navigation stack isn't restored navigate to the first page,
                     // configuring the new page by passing required information as a navigation
                     // parameter
-                    rootFrame.Navigate(typeof(MainPage), e.Arguments);
+                    rootFrame.Navigate(typeof(BasePage), e.Arguments);
                 }
                 // Ensure the current window is active
                 Window.Current.Activate();
@@ -114,7 +116,7 @@ namespace Rich_Text_Editor
             // The number of files received is args.Files.Size
             // The name of the first file is args.Files[0].Name
             Frame rootFrame = new Frame();
-            rootFrame.Navigate(typeof(MainPage), args);
+            rootFrame.Navigate(typeof(BasePage), args);
             Window.Current.Content = rootFrame;
             Window.Current.Activate();
         }
