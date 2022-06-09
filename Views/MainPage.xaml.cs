@@ -479,30 +479,25 @@ namespace Rich_Text_Editor
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
-            if (e.Parameter is IActivatedEventArgs args)
+            if (e.Parameter is StorageFile file)
             {
-                if (args.Kind == ActivationKind.File)
+                using (IRandomAccessStream randAccStream = await file.OpenAsync(FileAccessMode.ReadWrite))
                 {
-                    var fileArgs = args as FileActivatedEventArgs;
-                    StorageFile file = (StorageFile)fileArgs.Files[0];
-                    using (IRandomAccessStream randAccStream = await file.OpenAsync(FileAccessMode.ReadWrite))
-                    {
-                        IBuffer buffer = await FileIO.ReadBufferAsync(file);
-                        var reader = DataReader.FromBuffer(buffer);
-                        reader.UnicodeEncoding =UnicodeEncoding.Utf8;
-                        string text = reader.ReadString(buffer.Length);
-                        // Load the file into the Document property of the RichEditBox.
-                        editor.Document.LoadFromStream(TextSetOptions.FormatRtf, randAccStream);
-                        //editor.Document.SetText(Windows.UI.Text.TextSetOptions.FormatRtf, text);
-                        (BasePage.Current.Tabs.TabItems[BasePage.Current.Tabs.SelectedIndex] as TabViewItem).Header = file.Name;
-                        fileNameWithPath = file.Path;
-                    }
-                    saved = true;
+                    IBuffer buffer = await FileIO.ReadBufferAsync(file);
+                    var reader = DataReader.FromBuffer(buffer);
+                    reader.UnicodeEncoding = UnicodeEncoding.Utf8;
+                    string text = reader.ReadString(buffer.Length);
+                    // Load the file into the Document property of the RichEditBox.
+                    editor.Document.LoadFromStream(TextSetOptions.FormatRtf, randAccStream);
+                    editor.Document.GetText(TextGetOptions.UseObjectText, out originalDocText);
+                    //editor.Document.SetText(Windows.UI.Text.TextSetOptions.FormatRtf, text);
                     fileNameWithPath = file.Path;
-                    Windows.Storage.AccessCache.StorageApplicationPermissions.MostRecentlyUsedList.Add(file);
-                    Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.AddOrReplace("CurrentlyOpenFile", file);
-                    _wasOpen = true;
                 }
+                saved = true;
+                fileNameWithPath = file.Path;
+                Windows.Storage.AccessCache.StorageApplicationPermissions.MostRecentlyUsedList.Add(file);
+                Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.AddOrReplace("CurrentlyOpenFile", file);
+                _wasOpen = true;
             }
         }
 

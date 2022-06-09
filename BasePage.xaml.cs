@@ -4,9 +4,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using Windows.ApplicationModel.Activation;
 using Windows.ApplicationModel.Core;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Storage;
 using Windows.UI;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
@@ -34,7 +36,8 @@ namespace Rich_Text_Editor
 
             Current = this;
 
-            CreateNewTab(false);
+            if (Tabs.TabItems.Count == 0)
+                CreateNewTab(false);
 
             var appViewTitleBar = ApplicationView.GetForCurrentView().TitleBar;
 
@@ -64,7 +67,7 @@ namespace Rich_Text_Editor
             CreateNewTab();
         }
 
-        public void CreateNewTab(bool selectTab = true, string tabName = null)
+        public void CreateNewTab(bool selectTab = true, string tabName = null, object parameter = null)
         {
             TabViewItem newTab = new();
 
@@ -80,7 +83,7 @@ namespace Rich_Text_Editor
 
             newTab.Style = Resources["TabViewItemStyle1"] as Style;
 
-            frame.Navigate(typeof(MainPage));
+            frame.Navigate(typeof(MainPage), parameter);
 
             Tabs.TabItems.Add(newTab);
 
@@ -114,6 +117,16 @@ namespace Rich_Text_Editor
                     (button.Content as FontIcon).Glyph = "\uEE47";
                     button.Margin = new(10, 5, 70, 10);
                 }
+            }
+        }
+
+        public void OpenFilesWithArgs(FileActivatedEventArgs args)
+        {
+            foreach (var item in args.Files)
+            {
+                StorageFile file = item as StorageFile;
+
+                CreateNewTab(tabName: file.Name, parameter: file);
             }
         }
     }

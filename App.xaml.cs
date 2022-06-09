@@ -115,10 +115,19 @@ namespace Rich_Text_Editor
             // TODO: Handle file activation
             // The number of files received is args.Files.Size
             // The name of the first file is args.Files[0].Name
-            Frame rootFrame = new Frame();
-            rootFrame.Navigate(typeof(BasePage), args);
-            Window.Current.Content = rootFrame;
-            Window.Current.Activate();
+            if (Window.Current.Content is not Frame)
+            {
+                Frame rootFrame = new();
+
+                rootFrame.Navigate(typeof(BasePage));
+                Window.Current.Content = rootFrame;
+                Window.Current.Activate();
+
+                BasePage.Current.Tabs.TabItems.RemoveAt(0);
+            }
+
+            if (BasePage.Current != null)
+                BasePage.Current.OpenFilesWithArgs(args);
         }
     }
 }
