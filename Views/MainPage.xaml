@@ -440,6 +440,7 @@
             RelativePanel.AlignLeftWithPanel="True"
             RelativePanel.AlignRightWithPanel="True"
             BorderThickness="0,1,0,0"
+            Opacity="0.6"
             BorderBrush="{StaticResource CheckBoxBorderThemeBrush}">
             <TextBlock
                 HorizontalAlignment="Right"

@@ -28,30 +28,17 @@ namespace Rich_Text_Editor
 {
     public sealed partial class MainPage : Page
     {
-        private bool saved = true;
-        private bool _wasOpen = false;
-        private string appTitleStr = Strings.Resources.AppName;
-        private string fileNameWithPath = "";
-        private string originalDocText = "";
+        public bool saved = true;
+        public bool _wasOpen = false;
+        string appTitleStr = Strings.Resources.AppName;
+        string fileNameWithPath = "";
+        string originalDocText = "";
 
         public MainPage()
         {
             InitializeComponent();
 
-            ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
-
-            SystemNavigationManagerPreview.GetForCurrentView().CloseRequested += OnCloseRequest;
-
             NavigationCacheMode = NavigationCacheMode.Required;
-        }
-
-        private async void OnCloseRequest(object sender, SystemNavigationCloseRequestedPreviewEventArgs e)
-        {
-            if (!saved) 
-            { 
-                e.Handled = true;
-                ShowUnsavedDialog();
-            }
         }
 
         private void SaveAsButton_Click(object sender, RoutedEventArgs e)
@@ -64,7 +51,7 @@ namespace Rich_Text_Editor
             SaveFile(false);
         }
 
-        private async void SaveFile(bool isCopy)
+        public async void SaveFile(bool isCopy)
         {
             string fileName = (BasePage.Current.Tabs.TabItems[BasePage.Current.Tabs.SelectedIndex] as TabViewItem).Header as string;
             if (isCopy || fileName == "Untitled")
@@ -394,7 +381,7 @@ namespace Rich_Text_Editor
             await aboutDialog.ShowAsync();
         }
 
-        private async Task ShowUnsavedDialog()
+        public async Task ShowUnsavedDialog()
         {
             string fileName = (BasePage.Current.Tabs.TabItems[BasePage.Current.Tabs.SelectedIndex] as TabViewItem).Header as string;
             ContentDialog aboutDialog = new()

@@ -10,6 +10,7 @@ using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Storage;
 using Windows.UI;
+using Windows.UI.Core.Preview;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -55,6 +56,45 @@ namespace Rich_Text_Editor
             NavigationCacheMode = NavigationCacheMode.Enabled;
 
             (CompactOverlayBtn.Content as FontIcon).Glyph = ApplicationView.GetForCurrentView().ViewMode == ApplicationViewMode.CompactOverlay ? "\uEE49" : "\uEE47";
+
+            SystemNavigationManagerPreview.GetForCurrentView().CloseRequested += OnCloseRequest;
+        }
+
+        private async void OnCloseRequest(object sender, SystemNavigationCloseRequestedPreviewEventArgs e)
+        {
+            e.Handled = true;
+            if (Tabs.TabItems.Count == 1)
+            {
+                if (!(((Tabs.SelectedItem as TabViewItem).Content as Frame).Content as MainPage).saved)
+                {
+                    e.Handled = true;
+                    (((Tabs.SelectedItem as TabViewItem).Content as Frame).Content as MainPage).ShowUnsavedDialog();
+                }
+            } else if (Tabs.TabItems.Count > 1)
+            {
+                int unsavedItemsCount = 0;
+                
+                foreach (TabViewItem item in Tabs.TabItems)
+                {
+                    if (!((item.Content as Frame).Content as MainPage).saved)
+                    {
+                        unsavedItemsCount++;
+                    }
+                }
+
+                ContentDialog confirmationDialog = new()
+                {
+                    Title = "Save",
+                    Content = $"There are unsaved changes to {(unsavedItemsCount > 1 ? "multiple documents" : "a document")}, want to save them?",
+                    CloseButtonText = "Cancel and save changes",
+                    PrimaryButtonText = "Close app",
+                };
+
+                ContentDialogResult result = await confirmationDialog.ShowAsync();
+
+                if (result == ContentDialogResult.Primary)
+                    await ApplicationView.GetForCurrentView().TryConsolidateAsync();
+            }
         }
 
         private void CoreTitleBar_LayoutMetricsChanged(CoreApplicationViewTitleBar sender, object args)
@@ -129,5 +169,60 @@ namespace Rich_Text_Editor
                 CreateNewTab(tabName: file.Name, parameter: file);
             }
         }
+
+        #region TabView keyboard accelerators
+        private void NavigateToNumberedTabKeyboardAccelerator_Invoked(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args)
+        {
+            int tabToSelect = 0;
+
+            switch (sender.Key)
+            {
+                case Windows.System.VirtualKey.Number1:
+                case Windows.System.VirtualKey.NumberPad1:
+                    tabToSelect = 0;
+                    break;
+                case Windows.System.VirtualKey.Number2:
+                case Windows.System.VirtualKey.NumberPad2:
+                    tabToSelect = 1;
+                    break;
+                case Windows.System.VirtualKey.Number3:
+                case Windows.System.VirtualKey.NumberPad3:
+                    tabToSelect = 2;
+                    break;
+                case Windows.System.VirtualKey.Number4:
+                case Windows.System.VirtualKey.NumberPad4:
+                    tabToSelect = 3;
+                    break;
+                case Windows.System.VirtualKey.Number5:
+                case Windows.System.VirtualKey.NumberPad5:
+                    tabToSelect = 4;
+                    break;
+                case Windows.System.VirtualKey.Number6:
+                case Windows.System.VirtualKey.NumberPad6:
+                    tabToSelect = 5;
+                    break;
+                case Windows.System.VirtualKey.Number7:
+                case Windows.System.VirtualKey.NumberPad7:
+                    tabToSelect = 6;
+                    break;
+                case Windows.System.VirtualKey.Number8:
+                case Windows.System.VirtualKey.NumberPad8:
+                    tabToSelect = 7;
+                    break;
+                case Windows.System.VirtualKey.Number9:
+                case Windows.System.VirtualKey.NumberPad9:
+                    // Select the last tab
+                    tabToSelect = Tabs.TabItems.Count - 1;
+                    break;
+            }
+
+            // Only select the tab if it is in the list
+            if (tabToSelect < Tabs.TabItems.Count)
+            {
+                Tabs.SelectedIndex = tabToSelect;
+            }
+        }
+
+        #endregion
     }
 }
