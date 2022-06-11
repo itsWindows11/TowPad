@@ -1,4 +1,5 @@
-﻿using Rich_Text_Editor.Helpers;
+﻿using Microsoft.UI.Xaml.Controls;
+using Rich_Text_Editor.Helpers;
 using Rich_Text_Editor.Views;
 using Rich_Text_Editor.Views.Settings;
 using System;
@@ -27,78 +28,17 @@ namespace Rich_Text_Editor
 {
     public sealed partial class MainPage : Page
     {
-        private bool saved = true;
-        private bool _wasOpen = false;
-        private string appTitleStr = Strings.Resources.AppName;
-        private string fileNameWithPath = "";
+        public bool saved = true;
+        public bool _wasOpen = false;
+        string appTitleStr = Strings.Resources.AppName;
+        string fileNameWithPath = "";
+        string originalDocText = "";
 
         public MainPage()
         {
             InitializeComponent();
 
-            ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
-
-            var appViewTitleBar = ApplicationView.GetForCurrentView().TitleBar;
-
-            appViewTitleBar.ButtonBackgroundColor = Colors.Transparent;
-            appViewTitleBar.ButtonInactiveBackgroundColor = Colors.Transparent;
-
-            var coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
-            coreTitleBar.ExtendViewIntoTitleBar = true;
-            UpdateTitleBarLayout(coreTitleBar);
-
-            Window.Current.SetTitleBar(AppTitleBar);
-
-            coreTitleBar.LayoutMetricsChanged += CoreTitleBar_LayoutMetricsChanged;
-            coreTitleBar.IsVisibleChanged += CoreTitleBar_IsVisibleChanged;
-            Window.Current.Activated += Current_Activated;
-
-            SystemNavigationManagerPreview.GetForCurrentView().CloseRequested += OnCloseRequest;
-
             NavigationCacheMode = NavigationCacheMode.Required;
-
-            (CompactOverlayBtn.Content as FontIcon).Glyph = ApplicationView.GetForCurrentView().ViewMode == ApplicationViewMode.CompactOverlay ? "\uEE49" : "\uEE47";
-        }
-
-        private void CoreTitleBar_LayoutMetricsChanged(CoreApplicationViewTitleBar sender, object args)
-        {
-            UpdateTitleBarLayout(sender);
-        }
-
-        private void CoreTitleBar_IsVisibleChanged(CoreApplicationViewTitleBar sender, object args)
-        {
-            AppTitleBar.Visibility = sender.IsVisible ? Visibility.Visible : Visibility.Collapsed;
-        }
-
-        // Update the TitleBar based on the inactive/active state of the app
-        private void Current_Activated(object sender, WindowActivatedEventArgs e)
-        {
-            SolidColorBrush defaultForegroundBrush = (SolidColorBrush)Application.Current.Resources["TextFillColorPrimaryBrush"];
-            SolidColorBrush inactiveForegroundBrush = (SolidColorBrush)Application.Current.Resources["TextFillColorDisabledBrush"];
-
-            if (e.WindowActivationState == CoreWindowActivationState.Deactivated)
-            {
-                AppTitle.Foreground = inactiveForegroundBrush;
-            }
-            else
-            {
-                AppTitle.Foreground = defaultForegroundBrush;
-            }
-        }
-
-        private void UpdateTitleBarLayout(CoreApplicationViewTitleBar coreTitleBar)
-        {
-            // Update title bar control size as needed to account for system size changes.
-            AppTitleBar.Height = coreTitleBar.Height;
-
-            // Ensure the custom title bar does not overlap window caption controls
-            Thickness currMargin = AppTitleBar.Margin;
-            AppTitleBar.Margin = new Thickness(currMargin.Left, currMargin.Top, coreTitleBar.SystemOverlayRightInset, currMargin.Bottom);
-        }
-
-        private void OnCloseRequest(object sender, SystemNavigationCloseRequestedPreviewEventArgs e)
-        {
-            if (!saved) { e.Handled = true; ShowUnsavedDialog(); }
         }
 
         private void SaveAsButton_Click(object sender, RoutedEventArgs e)
@@ -111,9 +51,9 @@ namespace Rich_Text_Editor
             SaveFile(false);
         }
 
-        private async void SaveFile(bool isCopy)
+        public async void SaveFile(bool isCopy)
         {
-            string fileName = AppTitle.Text.Replace(" - " + appTitleStr, "");
+            string fileName = (BasePage.Current.Tabs.TabItems[BasePage.Current.Tabs.SelectedIndex] as TabViewItem).Header as string;
             if (isCopy || fileName == "Untitled")
             {
                 FileSavePicker savePicker = new FileSavePicker();
@@ -153,7 +93,7 @@ namespace Rich_Text_Editor
                     }
                     saved = true;
                     fileNameWithPath = file.Path;
-                    AppTitle.Text = file.Name + " - " + appTitleStr;
+                    (BasePage.Current.Tabs.TabItems[BasePage.Current.Tabs.SelectedIndex] as TabViewItem).Header = file.Name;
                     Windows.Storage.AccessCache.StorageApplicationPermissions.MostRecentlyUsedList.Add(file);
                 }
             }
@@ -189,7 +129,7 @@ namespace Rich_Text_Editor
                             await errorBox.ShowAsync();
                         }
                         saved = true;
-                        AppTitle.Text = file.Name + " - " + appTitleStr;
+                        (BasePage.Current.Tabs.TabItems[BasePage.Current.Tabs.SelectedIndex] as TabViewItem).Header = file.Name;
                         Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.Remove("CurrentlyOpenFile");
                     }
                 } 
@@ -349,8 +289,9 @@ namespace Rich_Text_Editor
                     string text = reader.ReadString(buffer.Length);
                     // Load the file into the Document property of the RichEditBox.
                     editor.Document.LoadFromStream(TextSetOptions.FormatRtf, randAccStream);
+                    editor.Document.GetText(TextGetOptions.UseObjectText, out originalDocText);
                     //editor.Document.SetText(Windows.UI.Text.TextSetOptions.FormatRtf, text);
-                    AppTitle.Text = file.Name + " - " + appTitleStr;
+                    (BasePage.Current.Tabs.TabItems[BasePage.Current.Tabs.SelectedIndex] as TabViewItem).Header = file.Name;
                     fileNameWithPath = file.Path;
                 }
                 saved = true;
@@ -440,17 +381,20 @@ namespace Rich_Text_Editor
             await aboutDialog.ShowAsync();
         }
 
-        private async Task ShowUnsavedDialog()
+        public async Task ShowUnsavedDialog()
         {
-            string fileName = AppTitle.Text.Replace(" - " + appTitleStr, "");
+            string fileName = (BasePage.Current.Tabs.TabItems[BasePage.Current.Tabs.SelectedIndex] as TabViewItem).Header as string;
             ContentDialog aboutDialog = new()
             {
                 Title = "Do you want to save changes to " + fileName + "?",
                 Content = "There are unsaved changes, want to save them?",
                 CloseButtonText = "Cancel",
                 PrimaryButtonText = "Save changes",
+                PrimaryButtonStyle = Resources["AccentButtonStyle"] as Style,
                 SecondaryButtonText = "No (close app)",
             };
+
+            aboutDialog.CloseButtonClick += (s, e) => BasePage.Current._openDialog = false;
 
             ContentDialogResult result = await aboutDialog.ShowAsync();
             if (result == ContentDialogResult.Primary)
@@ -485,11 +429,10 @@ namespace Rich_Text_Editor
         {
             editor.Document.GetText(TextGetOptions.UseObjectText, out string textStart);
 
-            if (textStart == "" || string.IsNullOrWhiteSpace(textStart) || _wasOpen)
+            if (string.IsNullOrWhiteSpace(textStart) || (_wasOpen && textStart == originalDocText))
             {
                 saved = true;
-            }
-            else
+            } else
             {
                 saved = false;
             }
@@ -526,42 +469,31 @@ namespace Rich_Text_Editor
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
-            if (e.Parameter is IActivatedEventArgs args)
+            if (e.Parameter is StorageFile file)
             {
-                if (args.Kind == ActivationKind.File)
+                using (IRandomAccessStream randAccStream = await file.OpenAsync(FileAccessMode.ReadWrite))
                 {
-                    var fileArgs = args as FileActivatedEventArgs;
-                    StorageFile file = (StorageFile)fileArgs.Files[0];
-                    using (IRandomAccessStream randAccStream = await file.OpenAsync(FileAccessMode.ReadWrite))
-                    {
-                        IBuffer buffer = await FileIO.ReadBufferAsync(file);
-                        var reader = DataReader.FromBuffer(buffer);
-                        reader.UnicodeEncoding =UnicodeEncoding.Utf8;
-                        string text = reader.ReadString(buffer.Length);
-                        // Load the file into the Document property of the RichEditBox.
-                        editor.Document.LoadFromStream(TextSetOptions.FormatRtf, randAccStream);
-                        //editor.Document.SetText(Windows.UI.Text.TextSetOptions.FormatRtf, text);
-                        AppTitle.Text = file.Name + " - " + appTitleStr;
-                        fileNameWithPath = file.Path;
-                    }
-                    saved = true;
+                    IBuffer buffer = await FileIO.ReadBufferAsync(file);
+                    var reader = DataReader.FromBuffer(buffer);
+                    reader.UnicodeEncoding = UnicodeEncoding.Utf8;
+                    string text = reader.ReadString(buffer.Length);
+                    // Load the file into the Document property of the RichEditBox.
+                    editor.Document.LoadFromStream(TextSetOptions.FormatRtf, randAccStream);
+                    editor.Document.GetText(TextGetOptions.UseObjectText, out originalDocText);
+                    //editor.Document.SetText(Windows.UI.Text.TextSetOptions.FormatRtf, text);
                     fileNameWithPath = file.Path;
-                    Windows.Storage.AccessCache.StorageApplicationPermissions.MostRecentlyUsedList.Add(file);
-                    Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.AddOrReplace("CurrentlyOpenFile", file);
-                    _wasOpen = true;
                 }
+                saved = true;
+                fileNameWithPath = file.Path;
+                Windows.Storage.AccessCache.StorageApplicationPermissions.MostRecentlyUsedList.Add(file);
+                Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.AddOrReplace("CurrentlyOpenFile", file);
+                _wasOpen = true;
             }
         }
 
-        private async void SettingsButton_Click(object sender, RoutedEventArgs e)
+        private void SettingsButton_Click(object sender, RoutedEventArgs e)
         {
-            /*SettingsDialog dlg = new(editor, FontsCombo, this);
-            await dlg.ShowAsync();*/
-
-            if (Window.Current.Content is Frame rootFrame)
-            {
-                rootFrame.Navigate(typeof(SettingsPage));
-            }
+            (Window.Current.Content as Frame).Navigate(typeof(SettingsPage));
         }
 
         private void RemoveHighlightButton_Click(object sender, RoutedEventArgs e)
@@ -592,27 +524,6 @@ namespace Rich_Text_Editor
             if (Window.Current.Content is Frame rootFrame)
             {
                 rootFrame.Navigate(typeof(HomePage));
-            }
-        }
-
-        private async void CompactOverlayBtn_Click(object sender, RoutedEventArgs e)
-        {
-            if (sender is Button button)
-            {
-                if (ApplicationView.GetForCurrentView().ViewMode == ApplicationViewMode.CompactOverlay)
-                {
-                    await ApplicationView.GetForCurrentView().TryEnterViewModeAsync(ApplicationViewMode.Default);
-                    (button.Content as FontIcon).Glyph = "\uEE49";
-                    button.Margin = new(10, 5, 195, 10);
-                }
-                else
-                {
-                    ViewModePreferences preferences = ViewModePreferences.CreateDefault(ApplicationViewMode.CompactOverlay);
-                    preferences.CustomSize = new Windows.Foundation.Size(400, 400);
-                    await ApplicationView.GetForCurrentView().TryEnterViewModeAsync(ApplicationViewMode.CompactOverlay, preferences);
-                    (button.Content as FontIcon).Glyph = "\uEE47";
-                    button.Margin = new(10, 5, 70, 10);
-                }
             }
         }
     }

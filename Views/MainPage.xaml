@@ -8,11 +8,11 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     xmlns:res="using:Rich_Text_Editor.Strings"
-    muxc:BackdropMaterial.ApplyToRootOrPageBackground="True"
     d:Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
-    mc:Ignorable="d"
     d:DesignHeight="564"
-    d:DesignWidth="876">
+    d:DesignWidth="876"
+    muxc:BackdropMaterial.ApplyToRootOrPageBackground="True"
+    mc:Ignorable="d">
 
     <Page.Resources>
         <Flyout x:Key="myColorPickerFlyout">
@@ -49,58 +49,13 @@
     <RelativePanel>
         <RelativePanel
             x:Name="containerPanel"
+            Background="{StaticResource TabViewItemHeaderBackground}"
             RelativePanel.AlignLeftWithPanel="True"
             RelativePanel.AlignRightWithPanel="True">
-            <Border
-                x:Name="AppTitleBar"
-                Height="40"
-                Margin="12,2,0,0"
-                VerticalAlignment="Top"
-                Background="Transparent"
-                Canvas.ZIndex="1"
-                IsHitTestVisible="True"
-                RelativePanel.AlignLeftWithPanel="True"
-                RelativePanel.AlignRightWithPanel="True">
-                <StackPanel Orientation="Horizontal">
-                    <Image
-                        x:Name="AppFontIcon"
-                        Width="16"
-                        Height="16"
-                        Margin="0,2,0,0"
-                        HorizontalAlignment="Left"
-                        VerticalAlignment="Center"
-                        Source="ms-appx:///Assets/Square44x44Logo.png" />
-                    <TextBlock
-                        x:Name="AppTitle"
-                        Margin="12,2,0,0"
-                        VerticalAlignment="Center"
-                        Style="{StaticResource CaptionTextBlockStyle}"
-                        Text="Untitled - TowPad" />
-                    <TextBlock
-                        x:Name="UnsavedTextBlock"
-                        Padding="5,0"
-                        VerticalAlignment="Center"
-                        Text="*"
-                        ToolTipService.ToolTip="There are unsaved changes." />
-                </StackPanel>
-            </Border>
-
-            <Button
-                x:Name="CompactOverlayBtn"
-                Margin="10,5,195,10"
-                d:Margin="10"
-                Canvas.ZIndex="2"
-                Click="CompactOverlayBtn_Click"
-                RelativePanel.AlignRightWithPanel="True"
-                ToolTipService.ToolTip="Toggle overlay">
-                <FontIcon FontSize="16" Glyph="&#xEE49;" />
-            </Button>
-
             <StackPanel
                 x:Name="MenuPanel"
                 VerticalAlignment="Center"
-                Orientation="Horizontal"
-                RelativePanel.Below="AppTitleBar">
+                Orientation="Horizontal">
                 <muxc:MenuBar
                     x:Name="menu"
                     Margin="5,0,0,0"
@@ -469,7 +424,7 @@
             BorderThickness="0"
             FontFamily="{x:Bind local:App.SViewModel.DefaultFont}"
             IsSpellCheckEnabled="False"
-            RelativePanel.AlignBottomWithPanel="True"
+            RelativePanel.Above="UnsavedTextBlock"
             RelativePanel.AlignLeftWithPanel="True"
             RelativePanel.AlignRightWithPanel="True"
             RelativePanel.Below="containerPanel"
@@ -477,5 +432,20 @@
             Style="{StaticResource RichEditBoxStyle}"
             TextChanged="editor_TextChanged"
             TextWrapping="{x:Bind local:App.SViewModel.TextWrapping, Mode=OneWay, Converter={StaticResource IntToTextWrapping}}" />
+
+        <StackPanel
+            x:Name="UnsavedTextBlock"
+            Padding="16,4"
+            RelativePanel.AlignBottomWithPanel="True"
+            RelativePanel.AlignLeftWithPanel="True"
+            RelativePanel.AlignRightWithPanel="True"
+            BorderThickness="0,1,0,0"
+            Opacity="0.6"
+            BorderBrush="{StaticResource CheckBoxBorderThemeBrush}">
+            <TextBlock
+                HorizontalAlignment="Right"
+                Text="Modified"
+                Foreground="{StaticResource SystemAccentColor}" />
+        </StackPanel>
     </RelativePanel>
 </Page>
