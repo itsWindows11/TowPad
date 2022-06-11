@@ -100,6 +100,7 @@ namespace Rich_Text_Editor
                         Title = "Save",
                         Content = $"There are unsaved changes to {(unsavedItemsCount > 1 ? "multiple documents" : "a document")}, want to save them?",
                         CloseButtonText = "Cancel and save changes",
+                        CloseButtonStyle = Resources["AccentButtonStyle"] as Style,
                         PrimaryButtonText = "Close app",
                     };
 

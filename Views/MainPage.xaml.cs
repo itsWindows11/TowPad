@@ -390,6 +390,7 @@ namespace Rich_Text_Editor
                 Content = "There are unsaved changes, want to save them?",
                 CloseButtonText = "Cancel",
                 PrimaryButtonText = "Save changes",
+                PrimaryButtonStyle = Resources["AccentButtonStyle"] as Style,
                 SecondaryButtonText = "No (close app)",
             };
 
