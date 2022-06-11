@@ -393,6 +393,8 @@ namespace Rich_Text_Editor
                 SecondaryButtonText = "No (close app)",
             };
 
+            aboutDialog.CloseButtonClick += (s, e) => BasePage.Current._openDialog = false;
+
             ContentDialogResult result = await aboutDialog.ShowAsync();
             if (result == ContentDialogResult.Primary)
             {

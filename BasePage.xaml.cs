@@ -31,6 +31,8 @@ namespace Rich_Text_Editor
     {
         public static BasePage Current;
 
+        public bool _openDialog;
+
         public BasePage()
         {
             InitializeComponent();
@@ -62,7 +64,14 @@ namespace Rich_Text_Editor
 
         private async void OnCloseRequest(object sender, SystemNavigationCloseRequestedPreviewEventArgs e)
         {
-            e.Handled = true;
+            if (_openDialog)
+            {
+                e.Handled = true;
+                return;
+            }
+            
+            _openDialog = true;
+
             if (Tabs.TabItems.Count == 1)
             {
                 if (!(((Tabs.SelectedItem as TabViewItem).Content as Frame).Content as MainPage).saved)
@@ -82,18 +91,26 @@ namespace Rich_Text_Editor
                     }
                 }
 
-                ContentDialog confirmationDialog = new()
+                if (unsavedItemsCount > 0)
                 {
-                    Title = "Save",
-                    Content = $"There are unsaved changes to {(unsavedItemsCount > 1 ? "multiple documents" : "a document")}, want to save them?",
-                    CloseButtonText = "Cancel and save changes",
-                    PrimaryButtonText = "Close app",
-                };
+                    e.Handled = true;
 
-                ContentDialogResult result = await confirmationDialog.ShowAsync();
+                    ContentDialog confirmationDialog = new()
+                    {
+                        Title = "Save",
+                        Content = $"There are unsaved changes to {(unsavedItemsCount > 1 ? "multiple documents" : "a document")}, want to save them?",
+                        CloseButtonText = "Cancel and save changes",
+                        PrimaryButtonText = "Close app",
+                    };
 
-                if (result == ContentDialogResult.Primary)
-                    await ApplicationView.GetForCurrentView().TryConsolidateAsync();
+                    // Allow the dialog to be opened again
+                    confirmationDialog.CloseButtonClick += (s, e) => _openDialog = false; 
+
+                    ContentDialogResult result = await confirmationDialog.ShowAsync();
+
+                    if (result == ContentDialogResult.Primary)
+                        await ApplicationView.GetForCurrentView().TryConsolidateAsync();
+                }
             }
         }
 
