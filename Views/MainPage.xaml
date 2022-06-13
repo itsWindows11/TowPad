@@ -131,6 +131,7 @@
                 RelativePanel.Below="MenuPanel"
                 VerticalSpacing="5">
                 <ToggleButton
+                    x:Name="BoldButton"
                     Click="BoldButton_Click"
                     Style="{StaticResource TransparentToggleButton}"
                     ToolTipService.ToolTip="{x:Bind res:Resources.Bold}">
@@ -140,6 +141,7 @@
                 </ToggleButton>
 
                 <ToggleButton
+                    x:Name="ItalicButton"
                     Click="ItalicButton_Click"
                     Style="{StaticResource TransparentToggleButton}"
                     ToolTipService.ToolTip="{x:Bind res:Resources.Italic}">
@@ -147,7 +149,9 @@
                         <SymbolIcon Symbol="Italic" />
                     </Viewbox>
                 </ToggleButton>
+                
                 <ToggleButton
+                    x:Name="UnderlineButton"
                     Click="UnderlineButton_Click"
                     Style="{StaticResource TransparentToggleButton}"
                     ToolTipService.ToolTip="{x:Bind res:Resources.Underline}">
@@ -430,8 +434,16 @@
             RelativePanel.Below="containerPanel"
             SelectionFlyout="{x:Null}"
             Style="{StaticResource RichEditBoxStyle}"
+            SelectionChanged="editor_SelectionChanged"
             TextChanged="editor_TextChanged"
-            TextWrapping="{x:Bind local:App.SViewModel.TextWrapping, Mode=OneWay, Converter={StaticResource IntToTextWrapping}}" />
+            TextWrapping="{x:Bind local:App.SViewModel.TextWrapping, Mode=OneWay, Converter={StaticResource IntToTextWrapping}}">
+            <RichEditBox.KeyboardAccelerators>
+                <KeyboardAccelerator Modifiers="Control" Key="B" Invoked="OnKeyboardAcceleratorInvoked" />
+                <KeyboardAccelerator Modifiers="Control" Key="I" Invoked="OnKeyboardAcceleratorInvoked" />
+                <KeyboardAccelerator Modifiers="Control" Key="U" Invoked="OnKeyboardAcceleratorInvoked" />
+                <KeyboardAccelerator Modifiers="Control" Key="S" Invoked="OnKeyboardAcceleratorInvoked" />
+            </RichEditBox.KeyboardAccelerators>
+        </RichEditBox>
 
         <StackPanel
             x:Name="UnsavedTextBlock"

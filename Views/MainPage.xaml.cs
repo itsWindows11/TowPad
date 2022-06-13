@@ -526,5 +526,37 @@ namespace Rich_Text_Editor
                 rootFrame.Navigate(typeof(HomePage));
             }
         }
+
+        private void OnKeyboardAcceleratorInvoked(Windows.UI.Xaml.Input.KeyboardAccelerator sender, Windows.UI.Xaml.Input.KeyboardAcceleratorInvokedEventArgs args)
+        {
+            switch (sender.Key)
+            {
+                case Windows.System.VirtualKey.B:
+                    editor.FormatSelected(RichEditHelpers.FormattingMode.Bold);
+                    BoldButton.IsChecked = editor.Document.Selection.CharacterFormat.Bold == FormatEffect.On;
+                    args.Handled = true;
+                    break;
+                case Windows.System.VirtualKey.I:
+                    editor.FormatSelected(RichEditHelpers.FormattingMode.Italic);
+                    ItalicButton.IsChecked = editor.Document.Selection.CharacterFormat.Italic == FormatEffect.On;
+                    args.Handled = true;
+                    break;
+                case Windows.System.VirtualKey.U:
+                    editor.FormatSelected(RichEditHelpers.FormattingMode.Underline);
+                    UnderlineButton.IsChecked = editor.Document.Selection.CharacterFormat.Underline == UnderlineType.Single;
+                    args.Handled = true;
+                    break;
+                case Windows.System.VirtualKey.S:
+                    SaveFile(false);
+                    break;
+            }
+        }
+
+        private void editor_SelectionChanged(object sender, RoutedEventArgs e)
+        {
+            BoldButton.IsChecked = editor.Document.Selection.CharacterFormat.Bold == FormatEffect.On;
+            ItalicButton.IsChecked = editor.Document.Selection.CharacterFormat.Italic == FormatEffect.On;
+            UnderlineButton.IsChecked = editor.Document.Selection.CharacterFormat.Underline == UnderlineType.Single;
+        }
     }
 }

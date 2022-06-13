@@ -64,29 +64,22 @@ namespace Rich_Text_Editor.Helpers
                 switch (mode)
                 {
                     case FormattingMode.Bold:
-                        charFormatting.Bold = FormatEffect.Toggle;
+                        charFormatting.Bold = charFormatting.Bold == FormatEffect.On ? FormatEffect.Off : FormatEffect.On;
                         break;
                     case FormattingMode.Italic:
-                        charFormatting.Italic = FormatEffect.Toggle;
+                        charFormatting.Italic = charFormatting.Italic == FormatEffect.On ? FormatEffect.Off : FormatEffect.On;
                         break;
                     case FormattingMode.Underline:
-                        if (charFormatting.Underline == UnderlineType.None)
-                        {
-                            charFormatting.Underline = UnderlineType.Single;
-                        }
-                        else
-                        {
-                            charFormatting.Underline = UnderlineType.None;
-                        }
+                        charFormatting.Underline = charFormatting.Underline == UnderlineType.Single ? UnderlineType.None : UnderlineType.Single;
                         break;
                     case FormattingMode.Strikethrough:
-                        charFormatting.Strikethrough = FormatEffect.Toggle;
+                        charFormatting.Strikethrough = charFormatting.Strikethrough == FormatEffect.On ? FormatEffect.Off : FormatEffect.On;
                         break;
                     case FormattingMode.Subscript:
-                        charFormatting.Subscript = FormatEffect.Toggle;
+                        charFormatting.Subscript = charFormatting.Subscript == FormatEffect.On ? FormatEffect.Off : FormatEffect.On;
                         break;
                     case FormattingMode.Superscript:
-                        charFormatting.Superscript = FormatEffect.Toggle;
+                        charFormatting.Superscript = charFormatting.Superscript == FormatEffect.On ? FormatEffect.Off : FormatEffect.On;
                         break;
                 }
                 selectedText.CharacterFormat = charFormatting;
