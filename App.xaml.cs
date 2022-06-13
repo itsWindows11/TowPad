@@ -1,4 +1,5 @@
-﻿using Rich_Text_Editor.ViewModels;
+﻿using Microsoft.Toolkit.Uwp.UI.Helpers;
+using Rich_Text_Editor.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -59,6 +60,19 @@ namespace Rich_Text_Editor
             {
                 // Create a Frame to act as the navigation context and navigate to the first page
                 rootFrame = new Frame();
+
+                switch (SViewModel.Theme)
+                {
+                    case 0:
+                        rootFrame.RequestedTheme = ElementTheme.Light;
+                        break;
+                    case 1:
+                        rootFrame.RequestedTheme = ElementTheme.Dark;
+                        break;
+                    case 2:
+                        rootFrame.RequestedTheme = ElementTheme.Default;
+                        break;
+                }
 
                 rootFrame.NavigationFailed += OnNavigationFailed;
 

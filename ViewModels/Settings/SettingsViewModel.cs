@@ -1,6 +1,8 @@
 ﻿using Microsoft.Graphics.Canvas.Text;
 using System.Collections.Generic;
 using System.Linq;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
 
 namespace Rich_Text_Editor.ViewModels
 {
@@ -38,6 +40,32 @@ namespace Rich_Text_Editor.ViewModels
         {
             get => Get("Appearance", nameof(TextWrapping), 0);
             set => Set("Appearance", nameof(TextWrapping), value);
+        }
+
+        // Modes:
+        // 0. Light
+        // 1. Dark
+        // 2. Default
+
+        public int Theme
+        {
+            get => Get("Appearance", nameof(Theme), 2);
+            set
+            {
+                Set("Appearance", nameof(Theme), value);
+                switch (value)
+                {
+                    case 0:
+                        (Window.Current.Content as Frame).RequestedTheme = ElementTheme.Light;
+                        break;
+                    case 1:
+                        (Window.Current.Content as Frame).RequestedTheme = ElementTheme.Dark;
+                        break;
+                    case 2:
+                        (Window.Current.Content as Frame).RequestedTheme = ElementTheme.Default;
+                        break;
+                }
+            }
         }
         #endregion
     }

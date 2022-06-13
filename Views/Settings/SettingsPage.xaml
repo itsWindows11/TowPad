@@ -66,6 +66,18 @@
             <StackPanel Orientation="Vertical" Padding="20" Spacing="5">
                 <TextBlock Text="{x:Bind res:Resources.SettingsText}" Margin="0,0,0,10" FontSize="32" FontWeight="SemiBold" />
 
+                <TextBlock Text="Appearance" Margin="0,0,0,10" FontSize="18" FontWeight="SemiBold" />
+
+                <uc:SettingsBlockControl Title="Theme">
+                    <uc:SettingsBlockControl.SettingsActionableElement>
+                        <ComboBox SelectedIndex="{x:Bind local1:App.SViewModel.Theme, Mode=TwoWay}">
+                            <ComboBoxItem Content="Light" />
+                            <ComboBoxItem Content="Dark" />
+                            <ComboBoxItem Content="System default" />
+                        </ComboBox>
+                    </uc:SettingsBlockControl.SettingsActionableElement>
+                </uc:SettingsBlockControl>
+                
                 <TextBlock Text="Editor" Margin="0,0,0,10" FontSize="18" FontWeight="SemiBold" />
 
                 <uc:SettingsBlockControl Title="{x:Bind res:Resources.WrapTextSettingName}">
