@@ -17,7 +17,7 @@ This app features a simple and easy to use interface other than ribbons.
 
 ### **Features:**
 
-  - **Bold** / *Italic* / <ins>Underline</ins> / ~~Strikethough~~
+  - **Bold** / *Italic* / <ins>Underline</ins> / ~~Strikethrough~~
   
   - <sup>Superscript</sup> / <sub>Subscript</sub>
   
@@ -36,27 +36,19 @@ This app features a simple and easy to use interface other than ribbons.
   - Undo/redo
   
   - Fluid, fast
-  
-### **Planned to be included:**
-
-  - Replace selected text
-  
-  - Printing
-  
-  - Better app icon/file icons
-  
-  - ... and more!
 
 ### **Requirements to run the app**
-
-  - You must run at least Windows 10, version 1809
+You must run at least Windows 10, version 1809
   
 ### **Prerequisites to compile the app**
+- Have at least Windows SDK (UWP) version 1809
+- Visual Studio 2019
 
-  - Have at least Windows SDK (UWP) version 1809
+### Used libraries
+- [WinUI](https://github.com/microsoft/microsoft-ui-xaml)
+- [Win2D](https://github.com/Microsoft/Win2D)
+- [Windows Community Toolkit](https://github.com/CommunityToolkit/WindowsCommunityToolkit)
   
-  - Visual Studio 2019
-  
-This file and project is still in development, things might change over time as Wordpad UWP takes shape ~~and ideas~~.
+This file and project is still in development, things might change over time as the app takes shape ~~and ideas~~.
 
 Licensed under the MIT license.
