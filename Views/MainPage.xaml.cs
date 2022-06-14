@@ -1,4 +1,5 @@
 ﻿using Microsoft.UI.Xaml.Controls;
+using Rich_Text_Editor.Dialogs;
 using Rich_Text_Editor.Helpers;
 using Rich_Text_Editor.Views;
 using Rich_Text_Editor.Views.Settings;
@@ -371,14 +372,7 @@ namespace Rich_Text_Editor
 
         private async Task DisplayAboutDialog()
         {
-            ContentDialog aboutDialog = new()
-            {
-                Title = appTitleStr,
-                Content = $"Version {typeof(App).GetTypeInfo().Assembly.GetName().Version}\n\n© 2022",
-                CloseButtonText = "OK"
-            };
-
-            await aboutDialog.ShowAsync();
+            await new AboutDialog().ShowAsync();
         }
 
         public async Task ShowUnsavedDialog()
