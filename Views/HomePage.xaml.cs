@@ -105,34 +105,18 @@ namespace Rich_Text_Editor.Views
 
             WhatsNew.Add(new()
             {
-                Title = "Home page",
-                Icon = "\uEA8A",
-                Tag = "HomePage",
-                Description = $"Now you can see your recent files, and what's new in {Strings.Resources.AppName}!"
+                Title = "Tabs",
+                Icon = "\uF7ED",
+                Tag = "Tabs",
+                Description = $"Now you can open multiple text documents."
             });
 
             WhatsNew.Add(new()
             {
-                Title = "Localization & Accessbility",
-                Icon = "\uE774",
-                Tag = "LocAndAcc",
-                Description = $"You can contribute translations to {Strings.Resources.AppName}, and help make this app reach more countries! And elements in the app will be more accessible."
-            });
-
-            WhatsNew.Add(new()
-            {
-                Title = "New Settings UI",
-                Icon = "\uE713",
-                Tag = "SettingsUI",
-                Description = "Settings will be in a separate page, you can set app mode, and change more settings, with a refreshed, and redesigned settings UI."
-            });
-
-            WhatsNew.Add(new()
-            {
-                Title = "Compact mode",
-                Icon = "\uE737",
-                Tag = "CompactMode",
-                Description = $"Now you can make {Strings.Resources.AppName} overlay over windows! (experimental)"
+                Title = "Image resizing",
+                Icon = "\uEE71",
+                Tag = "ImageResizing",
+                Description = $"Resizing images is now easier than ever, open an image, adjust the height/width, set a tag and insert it into your document."
             });
 
             IsListEmpty = list.Count <= 0;
