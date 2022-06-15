@@ -61,7 +61,6 @@
                     Margin="5,0,0,0"
                     VerticalAlignment="Center">
                     <muxc:MenuBarItem Title="{x:Bind res:Resources.FileText}" d:Title="File">
-                        <MenuFlyoutItem Click="NewDoc_Click" Text="{x:Bind res:Resources.NewDocText}" />
                         <MenuFlyoutItem Click="OpenButton_Click" Text="{x:Bind res:Resources.OpenText}" />
                         <MenuFlyoutItem Click="SaveButton_Click" Text="{x:Bind res:Resources.SaveText}" />
                         <MenuFlyoutItem Click="SaveAsButton_Click" Text="{x:Bind res:Resources.SaveAsCopyText}" />
