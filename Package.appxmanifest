@@ -18,7 +18,7 @@
   <mp:PhoneIdentity PhoneProductId="d78e24ed-8c8d-469f-8fa2-4490fa2ef787" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
-    <DisplayName>Wordpad UWP</DisplayName>
+    <DisplayName>TowPad</DisplayName>
     <PublisherDisplayName>itsWindows11</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
@@ -32,11 +32,14 @@
   </Resources>
 
   <Applications>
-    <Application Id="App"
-      Executable="$targetnametoken$.exe"
-      EntryPoint="Rich_Text_Editor.App">
+    <Application 
+		Id="App"
+        Executable="$targetnametoken$.exe"
+        EntryPoint="Rich_Text_Editor.App"
+		desktop4:SupportsMultipleInstances="true"
+		iot2:SupportsMultipleInstances="true">
       <uap:VisualElements
-        DisplayName="Wordpad UWP"
+        DisplayName="TowPad"
         Square150x150Logo="Assets\Square150x150Logo.png"
         Square44x44Logo="Assets\Square44x44Logo.png"
         Description="WordPad but with Fluent design"
