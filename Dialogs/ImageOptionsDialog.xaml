@@ -1,0 +1,39 @@
+﻿<ContentDialog
+    x:Class="Rich_Text_Editor.Dialogs.ImageOptionsDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="using:Rich_Text_Editor.Dialogs"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
+    Title="Image Options"
+    PrimaryButtonClick="ContentDialog_PrimaryButtonClick"
+    PrimaryButtonStyle="{ThemeResource AccentButtonStyle}"
+    PrimaryButtonText="Insert"
+    SecondaryButtonClick="ContentDialog_SecondaryButtonClick"
+    SecondaryButtonText="Cancel"
+    Style="{ThemeResource DefaultContentDialogStyle}"
+    mc:Ignorable="d">
+
+    <StackPanel>
+        <Grid ColumnSpacing="12">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+
+            <muxc:NumberBox
+                x:Name="WidthBox"
+                Header="Width"
+                SpinButtonPlacementMode="Compact" />
+
+            <muxc:NumberBox
+                x:Name="HeightBox"
+                Grid.Column="1"
+                Header="Height"
+                SpinButtonPlacementMode="Compact" />
+        </Grid>
+
+        <TextBox Text="{x:Bind Tag, Mode=TwoWay}" Header="Tag" Margin="0,8,0,0" />
+    </StackPanel>
+</ContentDialog>

@@ -140,6 +140,9 @@
     <Compile Include="Dialogs\AboutDialog.xaml.cs">
       <DependentUpon>AboutDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Dialogs\ImageOptionsDialog.xaml.cs">
+      <DependentUpon>ImageOptionsDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Helpers\RichEditHelpers.cs" />
     <Compile Include="Strings\Resources.cs" />
     <Compile Include="UserControls\SettingsBlockControl.xaml.cs">
@@ -239,6 +242,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Dialogs\AboutDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Dialogs\ImageOptionsDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
