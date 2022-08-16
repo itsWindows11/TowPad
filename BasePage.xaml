@@ -6,6 +6,7 @@
     xmlns:local="using:Rich_Text_Editor"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
+    xmlns:primitiveContract7Present="using:Microsoft.UI.Xaml.Controls.Primitives?IsApiContractPresent(Windows.Foundation.UniversalApiContract,7)"
     d:Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     muxc:BackdropMaterial.ApplyToRootOrPageBackground="True"
     mc:Ignorable="d">
@@ -71,6 +72,102 @@
                                     </VisualStateGroup>
                                 </VisualStateManager.VisualStateGroups>
                             </ContentPresenter>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <Style x:Key="TabViewStyle1" TargetType="muxc:TabView">
+                <Setter Property="VerticalAlignment" Value="Top" />
+                <Setter Property="Padding" Value="{ThemeResource TabViewHeaderPadding}" />
+                <Setter Property="IsTabStop" Value="False" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="muxc:TabView">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" MinHeight="44" />
+                                    <RowDefinition />
+                                </Grid.RowDefinitions>
+                                <Grid
+                                    x:Name="TabContainerGrid"
+                                    Margin="119,0,0,0"
+                                    Padding="-123,0,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition x:Name="LeftContentColumn" Width="Auto" />
+                                        <ColumnDefinition
+                                            x:Name="TabColumn"
+                                            Width="Auto"
+                                            MinWidth="10" />
+                                        <ColumnDefinition x:Name="AddButtonColumn" Width="Auto" />
+                                        <ColumnDefinition x:Name="RightContentColumn" Width="*" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <ContentPresenter
+                                        x:Name="LeftContentPresenter"
+                                        Grid.Column="0"
+                                        Content="{TemplateBinding TabStripHeader}"
+                                        ContentTemplate="{TemplateBinding TabStripHeaderTemplate}" />
+                                    <primitiveContract7Present:TabViewListView
+                                        x:Name="TabListView"
+                                        Grid.Column="1"
+                                        Padding="{TemplateBinding Padding}"
+                                        AllowDrop="{TemplateBinding AllowDropTabs}"
+                                        CanDragItems="{TemplateBinding CanDragTabs}"
+                                        CanReorderItems="{TemplateBinding CanReorderTabs}"
+                                        ItemTemplate="{TemplateBinding TabItemTemplate}"
+                                        ItemTemplateSelector="{TemplateBinding TabItemTemplateSelector}"
+                                        ItemsSource="{TemplateBinding TabItemsSource}" />
+                                    <Border
+                                        Grid.Column="2"
+                                        Width="29"
+                                        Height="29"
+                                        Margin="0,4,0,0"
+                                        Padding="{ThemeResource TabViewItemAddButtonContainerPadding}"
+                                        VerticalAlignment="Center"
+                                        Visibility="{Binding IsAddTabButtonVisible, RelativeSource={RelativeSource Mode=TemplatedParent}}">
+                                        <Button
+                                            x:Name="AddButton"
+                                            Width="30"
+                                            Height="30"
+                                            Margin="-4,0,0,-4"
+                                            Padding="8"
+                                            HorizontalAlignment="Stretch"
+                                            VerticalAlignment="Stretch"
+                                            Background="#00808080"
+                                            BorderThickness="0,0,0,0"
+                                            Command="{TemplateBinding AddTabButtonCommand}"
+                                            CommandParameter="{TemplateBinding AddTabButtonCommandParameter}"
+                                            CornerRadius="5,5,5,5"
+                                            FontSize="13"
+                                            HighContrastAdjustment="None"
+                                            IsTextScaleFactorEnabled="False"
+                                            UseLayoutRounding="False">
+                                            <Button.Content>
+                                                <Viewbox Width="13" Height="13">
+                                                    <SymbolIcon Symbol="Add" />
+                                                </Viewbox>
+                                            </Button.Content>
+                                            <Button.BorderBrush>
+                                                <LinearGradientBrush MappingMode="Absolute" EndPoint="0,3">
+                                                    <LinearGradientBrush.RelativeTransform>
+                                                        <ScaleTransform CenterY="0.5" ScaleY="-1" />
+                                                    </LinearGradientBrush.RelativeTransform>
+                                                    <GradientStop Offset="0.33" Color="#29000000" />
+                                                    <GradientStop Offset="1" Color="#19000000" />
+                                                </LinearGradientBrush>
+                                            </Button.BorderBrush>
+                                        </Button>
+                                    </Border>
+                                    <ContentPresenter
+                                        x:Name="RightContentPresenter"
+                                        Grid.Column="3"
+                                        HorizontalAlignment="Stretch"
+                                        Content="{TemplateBinding TabStripFooter}"
+                                        ContentTemplate="{TemplateBinding TabStripFooterTemplate}" />
+                                </Grid>
+                                <ContentPresenter x:Name="TabContentPresenter" Grid.Row="1" />
+                            </Grid>
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>
@@ -459,6 +556,7 @@
         x:FieldModifier="public"
         AddTabButtonClick="TabView_AddTabButtonClick"
         Background="{x:Null}"
+        Style="{StaticResource TabViewStyle1}"
         CloseButtonOverlayMode="OnPointerOver"
         TabCloseRequested="TabView_TabCloseRequested">
         <muxc:TabView.KeyboardAccelerators>
