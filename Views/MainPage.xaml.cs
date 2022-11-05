@@ -31,6 +31,7 @@ namespace Rich_Text_Editor
     {
         public bool saved = true;
         public bool _wasOpen = false;
+        private bool updateFontFormat = true;
         string appTitleStr = Strings.Resources.AppName;
         string fileNameWithPath = "";
         string originalDocText = "";
@@ -200,7 +201,7 @@ namespace Rich_Text_Editor
                   });
         }
 
-        private void StrikethoughButton_Click(object sender, RoutedEventArgs e)
+        private void StrikethroughButton_Click(object sender, RoutedEventArgs e)
         {
             editor.FormatSelected(RichEditHelpers.FormattingMode.Strikethrough);
         }
@@ -218,16 +219,19 @@ namespace Rich_Text_Editor
         private void AlignRightButton_Click(object sender, RoutedEventArgs e)
         {
             editor.AlignSelectedTo(RichEditHelpers.AlignMode.Right);
+            editor_SelectionChanged(sender, e);
         }
 
         private void AlignCenterButton_Click(object sender, RoutedEventArgs e)
         {
             editor.AlignSelectedTo(RichEditHelpers.AlignMode.Center);
+            editor_SelectionChanged(sender, e);
         }
 
         private void AlignLeftButton_Click(object sender, RoutedEventArgs e)
         {
             editor.AlignSelectedTo(RichEditHelpers.AlignMode.Left);
+            editor_SelectionChanged(sender, e);
         }
 
         private void FindBoxHighlightMatches()
@@ -357,9 +361,17 @@ namespace Rich_Text_Editor
 
         private void AddLinkButton_Click(object sender, RoutedEventArgs e)
         {
-            editor.Document.Selection.Link = $"\"{hyperlinkText.Text}\"";
-            editor.Document.Selection.CharacterFormat.ForegroundColor = (Color)XamlBindingHelper.ConvertValue(typeof(Color), "#6194c7");
+            if (!string.IsNullOrWhiteSpace(hyperlinkText.Text))
+            {
+                if (editor.Document.Selection.Length == 0)
+                {
+                    editor.Document.Selection.Text = hyperlinkText.Text;
+                }
+                editor.Document.Selection.Link = $"\"{hyperlinkText.Text}\"";
+                editor.Document.Selection.CharacterFormat.ForegroundColor = (Color)XamlBindingHelper.ConvertValue(typeof(Color), "#6194c7");
+            }
             AddLinkButton.Flyout.Hide();
+            editor.Focus(FocusState.Programmatic);
         }
 
         private void CopyButton_Click(object sender, RoutedEventArgs e)
@@ -425,9 +437,10 @@ namespace Rich_Text_Editor
 
         private void FontsCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (editor.Document.Selection != null)
+            if (editor.Document.Selection != null && updateFontFormat)
             {
                 editor.Document.Selection.CharacterFormat.Name = FontsCombo.SelectedValue.ToString();
+                editor.Focus(FocusState.Programmatic);
             }
         }
 
@@ -567,7 +580,22 @@ namespace Rich_Text_Editor
         {
             BoldButton.IsChecked = editor.Document.Selection.CharacterFormat.Bold == FormatEffect.On;
             ItalicButton.IsChecked = editor.Document.Selection.CharacterFormat.Italic == FormatEffect.On;
-            UnderlineButton.IsChecked = editor.Document.Selection.CharacterFormat.Underline == UnderlineType.Single;
+            UnderlineButton.IsChecked = editor.Document.Selection.CharacterFormat.Underline != UnderlineType.None &&
+                                        editor.Document.Selection.CharacterFormat.Underline != UnderlineType.Undefined;
+            StrikethroughButton.IsChecked = editor.Document.Selection.CharacterFormat.Strikethrough == FormatEffect.On;
+            SubscriptButton.IsChecked = editor.Document.Selection.CharacterFormat.Subscript == FormatEffect.On;
+            SuperscriptButton.IsChecked = editor.Document.Selection.CharacterFormat.Superscript == FormatEffect.On;
+            AlignLeftButton.IsChecked = editor.Document.Selection.ParagraphFormat.Alignment == ParagraphAlignment.Left;
+            AlignCenterButton.IsChecked = editor.Document.Selection.ParagraphFormat.Alignment == ParagraphAlignment.Center;
+            AlignRightButton.IsChecked = editor.Document.Selection.ParagraphFormat.Alignment == ParagraphAlignment.Right;
+            if (editor.Document.Selection.CharacterFormat.Size > 0){
+                //font size is negative when selection contains multiple font sizes
+                FontSizeBox.Value = editor.Document.Selection.CharacterFormat.Size;
+            }
+            //prevent accidental font changes when selection contains multiple styles
+            updateFontFormat = false;
+            FontsCombo.SelectedItem = editor.Document.Selection.CharacterFormat.Name;
+            updateFontFormat = true;
         }
     }
 }

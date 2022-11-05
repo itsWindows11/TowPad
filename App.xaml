@@ -39,6 +39,7 @@
                 <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseHighBrush}" />
                 <Setter Property="Background" Value="{ThemeResource LayerFillColorDefaultBrush}" />
                 <Setter Property="SelectionHighlightColor" Value="{ThemeResource SystemControlHighlightAccentBrush}" />
+                <Setter Property="SelectionHighlightColorWhenNotFocused" Value="{ThemeResource SystemControlHighlightAccentBrush}" />
                 <Setter Property="BorderBrush" Value="{ThemeResource SystemControlForegroundChromeDisabledLowBrush}" />
                 <Setter Property="BorderThickness" Value="{ThemeResource TextControlBorderThemeThickness}" />
                 <Setter Property="FontFamily" Value="{ThemeResource ContentControlThemeFontFamily}" />

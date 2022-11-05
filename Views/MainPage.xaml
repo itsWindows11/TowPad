@@ -162,8 +162,9 @@
                     </AppBarToggleButton.Icon>
                 </AppBarToggleButton>
                 <AppBarToggleButton
+                    x:Name="StrikethroughButton"
                     Width="48"
-                    Click="StrikethoughButton_Click"
+                    Click="StrikethroughButton_Click"
                     Label="{x:Bind res:Resources.Strikethrough}"
                     ToolTipService.ToolTip="{x:Bind res:Resources.Strikethrough}">
                     <AppBarToggleButton.Icon>
@@ -171,33 +172,36 @@
                     </AppBarToggleButton.Icon>
                 </AppBarToggleButton>
                 <AppBarSeparator />
-                <AppBarButton
+                <AppBarToggleButton
+                    x:Name="AlignLeftButton"
                     Width="48"
                     Click="AlignLeftButton_Click"
                     Label="{x:Bind res:Resources.AlignLeft}"
                     ToolTipService.ToolTip="{x:Bind res:Resources.AlignLeft}">
-                    <AppBarButton.Icon>
+                    <AppBarToggleButton.Icon>
                         <SymbolIcon Symbol="AlignLeft" />
-                    </AppBarButton.Icon>
-                </AppBarButton>
-                <AppBarButton
+                    </AppBarToggleButton.Icon>
+                </AppBarToggleButton>
+                <AppBarToggleButton
+                    x:Name="AlignCenterButton"
                     Width="48"
                     Click="AlignCenterButton_Click"
                     Label="{x:Bind res:Resources.AlignCenter}"
                     ToolTipService.ToolTip="{x:Bind res:Resources.AlignCenter}">
-                    <AppBarButton.Icon>
+                    <AppBarToggleButton.Icon>
                         <SymbolIcon Symbol="AlignCenter" />
-                    </AppBarButton.Icon>
-                </AppBarButton>
-                <AppBarButton
+                    </AppBarToggleButton.Icon>
+                </AppBarToggleButton>
+                <AppBarToggleButton
+                    x:Name="AlignRightButton"
                     Width="48"
                     Click="AlignRightButton_Click"
                     Label="{x:Bind res:Resources.AlignRight}"
                     ToolTipService.ToolTip="{x:Bind res:Resources.AlignRight}">
-                    <AppBarButton.Icon>
+                    <AppBarToggleButton.Icon>
                         <SymbolIcon Symbol="AlignRight" />
-                    </AppBarButton.Icon>
-                </AppBarButton>
+                    </AppBarToggleButton.Icon>
+                </AppBarToggleButton>
                 <AppBarSeparator />
 
                 <AppBarElementContainer Margin="4" VerticalAlignment="Center">
@@ -348,7 +352,7 @@
                         PlaceholderText="Font size"
                         SpinButtonPlacementMode="Compact"
                         ValueChanged="FontSizeBox_ValueChanged"
-                        Value="11" />
+                        Value="12" />
                 </AppBarElementContainer>
 
                 <AppBarElementContainer Margin="4" VerticalAlignment="Center">
@@ -410,12 +414,14 @@
                 </AppBarButton>
                 <AppBarSeparator />
                 <AppBarToggleButton
+                    x:Name="SubscriptButton"
                     Click="SubscriptButton_Click"
                     Label="Subscript (₂)"
                     ToolTipService.ToolTip="Subscript">
                     <TextBlock FontSize="32" Text="X₂" />
                 </AppBarToggleButton>
                 <AppBarToggleButton
+                    x:Name="SuperscriptButton"
                     Click="SuperScriptButton_Click"
                     Label="Superscript (²)"
                     ToolTipService.ToolTip="Superscript">
@@ -433,7 +439,8 @@
                 <AppBarButton
                     x:Name="AddLinkButton"
                     Label="{x:Bind res:Resources.AddHyperlinkTooltip}"
-                    ToolTipService.ToolTip="{x:Bind res:Resources.AddHyperlinkTooltip}">
+                    ToolTipService.ToolTip="{x:Bind res:Resources.AddHyperlinkTooltip}"
+                    AllowFocusOnInteraction="True">
                     <AppBarButton.Icon>
                         <FontIcon FontSize="17" Glyph="&#xE71B;" />
                     </AppBarButton.Icon>
@@ -454,6 +461,7 @@
             Padding="{x:Bind local:App.SViewModel.DocumentViewPadding, Mode=OneWay, Converter={StaticResource IntToThickness}}"
             BorderThickness="0"
             FontFamily="{x:Bind local:App.SViewModel.DefaultFont}"
+            FontSize="16"
             IsSpellCheckEnabled="False"
             RelativePanel.Above="UnsavedTextBlock"
             RelativePanel.AlignLeftWithPanel="True"
