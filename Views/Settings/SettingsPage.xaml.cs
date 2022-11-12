@@ -30,29 +30,18 @@ namespace Rich_Text_Editor.Views.Settings
         }
 
         private void CoreTitleBar_LayoutMetricsChanged(CoreApplicationViewTitleBar sender, object args)
-        {
-            UpdateTitleBarLayout(sender);
-        }
+            => UpdateTitleBarLayout(sender);
 
         private void CoreTitleBar_IsVisibleChanged(CoreApplicationViewTitleBar sender, object args)
-        {
-            AppTitleBar.Visibility = sender.IsVisible ? Visibility.Visible : Visibility.Collapsed;
-        }
+            => AppTitleBar.Visibility = sender.IsVisible ? Visibility.Visible : Visibility.Collapsed;
 
         // Update the TitleBar based on the inactive/active state of the app
         private void Current_Activated(object sender, WindowActivatedEventArgs e)
         {
             SolidColorBrush defaultForegroundBrush = (SolidColorBrush)Application.Current.Resources["TextFillColorPrimaryBrush"];
             SolidColorBrush inactiveForegroundBrush = (SolidColorBrush)Application.Current.Resources["TextFillColorDisabledBrush"];
-
-            if (e.WindowActivationState == CoreWindowActivationState.Deactivated)
-            {
-                AppTitle.Foreground = inactiveForegroundBrush;
-            }
-            else
-            {
-                AppTitle.Foreground = defaultForegroundBrush;
-            }
+            
+            AppTitle.Foreground = e.WindowActivationState == CoreWindowActivationState.Deactivated ? inactiveForegroundBrush : defaultForegroundBrush;
         }
 
         private void UpdateTitleBarLayout(CoreApplicationViewTitleBar coreTitleBar)
@@ -68,9 +57,7 @@ namespace Rich_Text_Editor.Views.Settings
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
             if (Window.Current.Content is Frame rootFrame && rootFrame.CanGoBack)
-            {
                 rootFrame.GoBack();
-            }
         }
     }
 }

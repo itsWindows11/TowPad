@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:animatedvisuals="using:Microsoft.UI.Xaml.Controls.AnimatedVisuals"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:helpers="using:Rich_Text_Editor.Helpers"
     xmlns:local="using:Rich_Text_Editor.Views.Settings"
     xmlns:local1="using:Rich_Text_Editor"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -43,7 +44,7 @@
                     Margin="12,2,0,0"
                     VerticalAlignment="Center"
                     Style="{StaticResource CaptionTextBlockStyle}"
-                    Text="{x:Bind res:Resources.SettingsText}" />
+                    Text="{helpers:ResourceHelper Name=SettingsText}" />
             </StackPanel>
         </Border>
 
@@ -83,7 +84,7 @@
                     Margin="0,0,0,10"
                     FontSize="32"
                     FontWeight="SemiBold"
-                    Text="{x:Bind res:Resources.SettingsText}" />
+                    Text="{helpers:ResourceHelper Name=SettingsText}" />
 
                 <TextBlock
                     Margin="0,0,0,10"
@@ -107,7 +108,7 @@
                     FontWeight="SemiBold"
                     Text="Editor" />
 
-                <uc:SettingsBlockControl Title="{x:Bind res:Resources.WrapTextSettingName}">
+                <uc:SettingsBlockControl Title="{helpers:ResourceHelper Name=WrapTextSettingName}">
                     <ComboBox SelectedIndex="{x:Bind local1:App.SViewModel.TextWrapping, Mode=TwoWay}">
                         <x:String>No wrap</x:String>
                         <x:String>Wrap</x:String>
@@ -115,7 +116,7 @@
                     </ComboBox>
                 </uc:SettingsBlockControl>
 
-                <uc:SettingsBlockControl Title="{x:Bind res:Resources.DocumentPaddingSettingName}">
+                <uc:SettingsBlockControl Title="{helpers:ResourceHelper Name=DocumentPaddingSettingName}">
                     <muxc:NumberBox
                         Maximum="30"
                         Minimum="2"
@@ -123,7 +124,7 @@
                         Value="{x:Bind local1:App.SViewModel.DocumentViewPadding, Mode=TwoWay}" />
                 </uc:SettingsBlockControl>
 
-                <uc:SettingsBlockControl Title="{x:Bind res:Resources.DefaultFontSettingName}">
+                <uc:SettingsBlockControl Title="{helpers:ResourceHelper Name=DefaultFontSettingName}">
                     <ComboBox
                         x:Name="FontsCombo"
                         IsTextSearchEnabled="True"

@@ -33,7 +33,6 @@ namespace Rich_Text_Editor
         /// executed, and as such is the logical equivalent of main() or WinMain().
         /// </summary>
 
-        public static ResourceLoader Resources { get; private set; }
         public static SettingsViewModel SViewModel { get; private set; }
         public static List<string> Tips { get; private set; }
 
@@ -42,7 +41,6 @@ namespace Rich_Text_Editor
             InitializeComponent();
             Suspending += OnSuspending;
 
-            Resources = ResourceLoader.GetForViewIndependentUse();
             SViewModel = new();
             Tips = new();
         }
@@ -61,19 +59,6 @@ namespace Rich_Text_Editor
                 // Create a Frame to act as the navigation context and navigate to the first page
                 rootFrame = new Frame();
 
-                switch (SViewModel.Theme)
-                {
-                    case 0:
-                        rootFrame.RequestedTheme = ElementTheme.Light;
-                        break;
-                    case 1:
-                        rootFrame.RequestedTheme = ElementTheme.Dark;
-                        break;
-                    case 2:
-                        rootFrame.RequestedTheme = ElementTheme.Default;
-                        break;
-                }
-
                 rootFrame.NavigationFailed += OnNavigationFailed;
 
                 if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
@@ -88,6 +73,20 @@ namespace Rich_Text_Editor
             if (!e.PrelaunchActivated)
             {
                 CoreApplication.EnablePrelaunch(true);
+
+                switch (SViewModel.Theme)
+                {
+                    case 0:
+                        rootFrame.RequestedTheme = ElementTheme.Light;
+                        break;
+                    case 1:
+                        rootFrame.RequestedTheme = ElementTheme.Dark;
+                        break;
+                    case 2:
+                        rootFrame.RequestedTheme = ElementTheme.Default;
+                        break;
+                }
+
                 if (rootFrame.Content == null)
                 {
                     // When the navigation stack isn't restored navigate to the first page,
@@ -140,8 +139,7 @@ namespace Rich_Text_Editor
                 BasePage.Current.Tabs.TabItems.RemoveAt(0);
             }
 
-            if (BasePage.Current != null)
-                BasePage.Current.OpenFilesWithArgs(args);
+            BasePage.Current?.OpenFilesWithArgs(args);
         }
     }
 }

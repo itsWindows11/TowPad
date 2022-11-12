@@ -77,18 +77,16 @@ namespace Rich_Text_Editor
                 if (!(((Tabs.SelectedItem as TabViewItem).Content as Frame).Content as MainPage).saved)
                 {
                     e.Handled = true;
-                    (((Tabs.SelectedItem as TabViewItem).Content as Frame).Content as MainPage).ShowUnsavedDialog();
+                    _ = (((Tabs.SelectedItem as TabViewItem).Content as Frame).Content as MainPage).ShowUnsavedDialog();
                 }
             } else if (Tabs.TabItems.Count > 1)
             {
                 int unsavedItemsCount = 0;
                 
-                foreach (TabViewItem item in Tabs.TabItems)
+                foreach (TabViewItem item in Tabs.TabItems.Cast<TabViewItem>())
                 {
                     if (!((item.Content as Frame).Content as MainPage).saved)
-                    {
                         unsavedItemsCount++;
-                    }
                 }
 
                 if (unsavedItemsCount > 0)
@@ -116,9 +114,7 @@ namespace Rich_Text_Editor
         }
 
         private void CoreTitleBar_LayoutMetricsChanged(CoreApplicationViewTitleBar sender, object args)
-        {
-            CustomDragRegion.Height = ShellTitlebarInset.Height = sender.Height;
-        }
+            => CustomDragRegion.Height = ShellTitlebarInset.Height = sender.Height;
 
         public void TabView_AddTabButtonClick(TabView sender, object args)
         {

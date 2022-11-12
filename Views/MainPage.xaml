@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:helpers="using:Rich_Text_Editor.Helpers"
     xmlns:local="using:Rich_Text_Editor"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
@@ -60,29 +61,29 @@
                     x:Name="menu"
                     Margin="5,0,0,0"
                     VerticalAlignment="Center">
-                    <muxc:MenuBarItem Title="{x:Bind res:Resources.FileText}" d:Title="File">
-                        <MenuFlyoutItem Click="OpenButton_Click" Text="{x:Bind res:Resources.OpenText}" />
-                        <MenuFlyoutItem Click="SaveButton_Click" Text="{x:Bind res:Resources.SaveText}" />
-                        <MenuFlyoutItem Click="SaveAsButton_Click" Text="{x:Bind res:Resources.SaveAsCopyText}" />
-                        <MenuFlyoutItem Click="Print_Click" Text="{x:Bind res:Resources.PrintText}" />
+                    <muxc:MenuBarItem Title="{helpers:ResourceHelper Name=FileText}" d:Title="File">
+                        <MenuFlyoutItem Click="OpenButton_Click" Text="{helpers:ResourceHelper Name=OpenText}" />
+                        <MenuFlyoutItem Click="SaveButton_Click" Text="{helpers:ResourceHelper Name=SaveText}" />
+                        <MenuFlyoutItem Click="SaveAsButton_Click" Text="{helpers:ResourceHelper Name=SaveAsCopyText}" />
+                        <MenuFlyoutItem Click="Print_Click" Text="{helpers:ResourceHelper Name=PrintText}" />
                         <MenuFlyoutSeparator />
-                        <MenuFlyoutItem Click="Home_Click" Text="{x:Bind res:Resources.HomeTitle}" />
+                        <MenuFlyoutItem Click="Home_Click" Text="{helpers:ResourceHelper Name=HomeTitle}" />
                         <MenuFlyoutSeparator />
-                        <MenuFlyoutItem Click="Exit_Click" Text="{x:Bind res:Resources.ExitText}" />
+                        <MenuFlyoutItem Click="Exit_Click" Text="{helpers:ResourceHelper Name=ExitText}" />
                     </muxc:MenuBarItem>
 
-                    <muxc:MenuBarItem Title="{x:Bind res:Resources.EditText}" d:Title="Edit">
-                        <MenuFlyoutItem Click="UndoButton_Click" Text="{x:Bind res:Resources.UndoTooltip}" />
-                        <MenuFlyoutItem Click="RedoButton_Click" Text="{x:Bind res:Resources.RedoTooltip}" />
+                    <muxc:MenuBarItem Title="{helpers:ResourceHelper Name=EditText}" d:Title="Edit">
+                        <MenuFlyoutItem Click="UndoButton_Click" Text="{helpers:ResourceHelper Name=UndoTooltip}" />
+                        <MenuFlyoutItem Click="RedoButton_Click" Text="{helpers:ResourceHelper Name=RedoTooltip}" />
                         <MenuFlyoutSeparator />
-                        <MenuFlyoutItem Click="CutButton_Click" Text="{x:Bind res:Resources.CutText}" />
-                        <MenuFlyoutItem Click="CopyButton_Click" Text="{x:Bind res:Resources.CopyText}" />
-                        <MenuFlyoutItem Click="PasteButton_Click" Text="{x:Bind res:Resources.PasteText}" />
+                        <MenuFlyoutItem Click="CutButton_Click" Text="{helpers:ResourceHelper Name=CutText}" />
+                        <MenuFlyoutItem Click="CopyButton_Click" Text="{helpers:ResourceHelper Name=CopyText}" />
+                        <MenuFlyoutItem Click="PasteButton_Click" Text="{helpers:ResourceHelper Name=PasteText}" />
                     </muxc:MenuBarItem>
 
-                    <muxc:MenuBarItem Title="{x:Bind res:Resources.HelpText}" d:Title="Help">
-                        <MenuFlyoutItem Click="AboutBtn_Click" Text="{x:Bind res:Resources.AboutText}" />
-                        <MenuFlyoutItem Click="SettingsButton_Click" Text="{x:Bind res:Resources.SettingsText}" />
+                    <muxc:MenuBarItem Title="{helpers:ResourceHelper Name=HelpText}" d:Title="Help">
+                        <MenuFlyoutItem Click="AboutBtn_Click" Text="{helpers:ResourceHelper Name=AboutText}" />
+                        <MenuFlyoutItem Click="SettingsButton_Click" Text="{helpers:ResourceHelper Name=SettingsText}" />
                     </muxc:MenuBarItem>
 
                 </muxc:MenuBar>
@@ -92,7 +93,7 @@
                     Background="Transparent"
                     BorderBrush="Transparent"
                     Click="UndoButton_Click"
-                    ToolTipService.ToolTip="{x:Bind res:Resources.UndoTooltip}">
+                    ToolTipService.ToolTip="{helpers:ResourceHelper Name=UndoTooltip}">
                     <Viewbox MaxWidth="17" MaxHeight="17">
                         <SymbolIcon Symbol="Undo" />
                     </Viewbox>
@@ -103,7 +104,7 @@
                     Background="Transparent"
                     BorderBrush="Transparent"
                     Click="RedoButton_Click"
-                    ToolTipService.ToolTip="{x:Bind res:Resources.RedoTooltip}">
+                    ToolTipService.ToolTip="{helpers:ResourceHelper Name=RedoTooltip}">
                     <Viewbox MaxWidth="17" MaxHeight="17">
                         <SymbolIcon Symbol="Redo" />
                     </Viewbox>
@@ -115,7 +116,7 @@
                     Background="Transparent"
                     BorderBrush="Transparent"
                     Click="SettingsButton_Click"
-                    ToolTipService.ToolTip="{x:Bind res:Resources.SettingsText}">
+                    ToolTipService.ToolTip="{helpers:ResourceHelper Name=SettingsText}">
                     <Viewbox MaxWidth="17" MaxHeight="17">
                         <SymbolIcon Symbol="Setting" />
                     </Viewbox>
@@ -133,8 +134,8 @@
                     x:Name="BoldButton"
                     Width="48"
                     Click="BoldButton_Click"
-                    Label="{x:Bind res:Resources.Bold}"
-                    ToolTipService.ToolTip="{x:Bind res:Resources.Bold}">
+                    Label="{helpers:ResourceHelper Name=Bold}"
+                    ToolTipService.ToolTip="{helpers:ResourceHelper Name=Bold}">
                     <AppBarToggleButton.Icon>
                         <FontIcon Glyph="&#xE19B;" />
                     </AppBarToggleButton.Icon>
@@ -144,8 +145,8 @@
                     x:Name="ItalicButton"
                     Width="48"
                     Click="ItalicButton_Click"
-                    Label="{x:Bind res:Resources.Italic}"
-                    ToolTipService.ToolTip="{x:Bind res:Resources.Italic}">
+                    Label="{helpers:ResourceHelper Name=Italic}"
+                    ToolTipService.ToolTip="{helpers:ResourceHelper Name=Italic}">
                     <AppBarToggleButton.Icon>
                         <FontIcon Glyph="&#xE199;" />
                     </AppBarToggleButton.Icon>
@@ -155,8 +156,8 @@
                     x:Name="UnderlineButton"
                     Width="48"
                     Click="UnderlineButton_Click"
-                    Label="{x:Bind res:Resources.Underline}"
-                    ToolTipService.ToolTip="{x:Bind res:Resources.Underline}">
+                    Label="{helpers:ResourceHelper Name=Underline}"
+                    ToolTipService.ToolTip="{helpers:ResourceHelper Name=Underline}">
                     <AppBarToggleButton.Icon>
                         <FontIcon Glyph="&#xE19A;" />
                     </AppBarToggleButton.Icon>
@@ -165,8 +166,8 @@
                     x:Name="StrikethroughButton"
                     Width="48"
                     Click="StrikethroughButton_Click"
-                    Label="{x:Bind res:Resources.Strikethrough}"
-                    ToolTipService.ToolTip="{x:Bind res:Resources.Strikethrough}">
+                    Label="{helpers:ResourceHelper Name=Strikethrough}"
+                    ToolTipService.ToolTip="{helpers:ResourceHelper Name=Strikethrough}">
                     <AppBarToggleButton.Icon>
                         <FontIcon Glyph="&#xEDE0;" />
                     </AppBarToggleButton.Icon>
@@ -176,8 +177,8 @@
                     x:Name="AlignLeftButton"
                     Width="48"
                     Click="AlignLeftButton_Click"
-                    Label="{x:Bind res:Resources.AlignLeft}"
-                    ToolTipService.ToolTip="{x:Bind res:Resources.AlignLeft}">
+                    Label="{helpers:ResourceHelper Name=AlignLeft}"
+                    ToolTipService.ToolTip="{helpers:ResourceHelper Name=AlignLeft}">
                     <AppBarToggleButton.Icon>
                         <SymbolIcon Symbol="AlignLeft" />
                     </AppBarToggleButton.Icon>
@@ -186,8 +187,8 @@
                     x:Name="AlignCenterButton"
                     Width="48"
                     Click="AlignCenterButton_Click"
-                    Label="{x:Bind res:Resources.AlignCenter}"
-                    ToolTipService.ToolTip="{x:Bind res:Resources.AlignCenter}">
+                    Label="{helpers:ResourceHelper Name=AlignCenter}"
+                    ToolTipService.ToolTip="{helpers:ResourceHelper Name=AlignCenter}">
                     <AppBarToggleButton.Icon>
                         <SymbolIcon Symbol="AlignCenter" />
                     </AppBarToggleButton.Icon>
@@ -196,8 +197,8 @@
                     x:Name="AlignRightButton"
                     Width="48"
                     Click="AlignRightButton_Click"
-                    Label="{x:Bind res:Resources.AlignRight}"
-                    ToolTipService.ToolTip="{x:Bind res:Resources.AlignRight}">
+                    Label="{helpers:ResourceHelper Name=AlignRight}"
+                    ToolTipService.ToolTip="{helpers:ResourceHelper Name=AlignRight}">
                     <AppBarToggleButton.Icon>
                         <SymbolIcon Symbol="AlignRight" />
                     </AppBarToggleButton.Icon>
@@ -207,10 +208,10 @@
                 <AppBarElementContainer Margin="4" VerticalAlignment="Center">
                     <muxc:DropDownButton
                         x:Name="fontColorButton"
-                        AutomationProperties.Name="{x:Bind res:Resources.FontColorTooltip}"
+                        AutomationProperties.Name="{helpers:ResourceHelper Name=FontColorTooltip}"
                         BorderThickness="0"
                         RelativePanel.AlignRightWithPanel="True"
-                        ToolTipService.ToolTip="{x:Bind res:Resources.FontColorTooltip}">
+                        ToolTipService.ToolTip="{helpers:ResourceHelper Name=FontColorTooltip}">
                         <SymbolIcon Symbol="FontColor" />
                         <muxc:DropDownButton.Flyout>
                             <Flyout Placement="Bottom">
@@ -371,7 +372,7 @@
                     </ComboBox>
                 </AppBarElementContainer>
                 <AppBarSeparator />
-                <AppBarButton Label="{x:Bind res:Resources.FindDocTooltip}" ToolTipService.ToolTip="{x:Bind res:Resources.FindDocTooltip}">
+                <AppBarButton Label="{helpers:ResourceHelper Name=FindDocTooltip}" ToolTipService.ToolTip="{helpers:ResourceHelper Name=FindDocTooltip}">
                     <AppBarButton.Flyout>
                         <Flyout Placement="Bottom">
                             <StackPanel Orientation="Vertical">
@@ -430,17 +431,17 @@
                 <AppBarSeparator />
                 <AppBarButton
                     Click="AddImageButton_Click"
-                    Label="{x:Bind res:Resources.AddImageTooltip}"
-                    ToolTipService.ToolTip="{x:Bind res:Resources.AddImageTooltip}">
+                    Label="{helpers:ResourceHelper Name=AddImageTooltip}"
+                    ToolTipService.ToolTip="{helpers:ResourceHelper Name=AddImageTooltip}">
                     <AppBarButton.Icon>
                         <FontIcon Glyph="&#xE8B9;" />
                     </AppBarButton.Icon>
                 </AppBarButton>
                 <AppBarButton
                     x:Name="AddLinkButton"
-                    Label="{x:Bind res:Resources.AddHyperlinkTooltip}"
-                    ToolTipService.ToolTip="{x:Bind res:Resources.AddHyperlinkTooltip}"
-                    AllowFocusOnInteraction="True">
+                    AllowFocusOnInteraction="True"
+                    Label="{helpers:ResourceHelper Name=AddHyperlinkTooltip}"
+                    ToolTipService.ToolTip="{helpers:ResourceHelper Name=AddHyperlinkTooltip}">
                     <AppBarButton.Icon>
                         <FontIcon FontSize="17" Glyph="&#xE71B;" />
                     </AppBarButton.Icon>

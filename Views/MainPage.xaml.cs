@@ -1,13 +1,12 @@
-﻿using Microsoft.UI.Xaml.Controls;
+﻿using System;
+using Microsoft.Toolkit.Uwp;
+using Microsoft.UI.Xaml.Controls;
 using Rich_Text_Editor.Dialogs;
 using Rich_Text_Editor.Helpers;
 using Rich_Text_Editor.Views;
 using Rich_Text_Editor.Views.Settings;
-using System;
 using System.Collections.Generic;
-using System.Reflection;
 using System.Threading.Tasks;
-using Windows.ApplicationModel.Activation;
 using Windows.ApplicationModel.Core;
 using Windows.Graphics.Printing;
 using Windows.Storage;
@@ -16,7 +15,6 @@ using Windows.Storage.Provider;
 using Windows.Storage.Streams;
 using Windows.UI;
 using Windows.UI.Core;
-using Windows.UI.Core.Preview;
 using Windows.UI.Text;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
@@ -32,7 +30,7 @@ namespace Rich_Text_Editor
         public bool saved = true;
         public bool _wasOpen = false;
         private bool updateFontFormat = true;
-        string appTitleStr = Strings.Resources.AppName;
+        string appTitleStr = "AppName".GetLocalized();
         string fileNameWithPath = "";
         string originalDocText = "";
 
@@ -58,8 +56,10 @@ namespace Rich_Text_Editor
             string fileName = (BasePage.Current.Tabs.TabItems[BasePage.Current.Tabs.SelectedIndex] as TabViewItem).Header as string;
             if (isCopy || fileName == "Untitled")
             {
-                FileSavePicker savePicker = new FileSavePicker();
-                savePicker.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
+                FileSavePicker savePicker = new()
+                {
+                    SuggestedStartLocation = PickerLocationId.DocumentsLibrary
+                };
 
                 // Dropdown of file types the user can save the file as
                 savePicker.FileTypeChoices.Add("Rich Text", new List<string>() { ".rtf" });
@@ -74,25 +74,26 @@ namespace Rich_Text_Editor
                     // Prevent updates to the remote version of the file until we
                     // finish making changes and call CompleteUpdatesAsync.
                     CachedFileManager.DeferUpdates(file);
-                    // write to file
+
                     using (IRandomAccessStream randAccStream = await file.OpenAsync(FileAccessMode.ReadWrite))
-                        if (file.Name.EndsWith(".txt"))
-                        {
-                            editor.Document.SaveToStream(Windows.UI.Text.TextGetOptions.None, randAccStream);
-                        }
-                        else
-                        {
-                            editor.Document.SaveToStream(Windows.UI.Text.TextGetOptions.FormatRtf, randAccStream);
-                        }
+                    {
+                        editor.Document.SaveToStream(file.FileType.Contains("txt") ? TextGetOptions.None : TextGetOptions.FormatRtf, randAccStream);
+                    }
 
                     // Let Windows know that we're finished changing the file so the
                     // other app can update the remote version of the file.
                     FileUpdateStatus status = await CachedFileManager.CompleteUpdatesAsync(file);
                     if (status != FileUpdateStatus.Complete)
                     {
-                        Windows.UI.Popups.MessageDialog errorBox = new("File " + file.Name + " couldn't be saved.");
-                        await errorBox.ShowAsync();
+                        ContentDialog dialog = new()
+                        {
+                            Title = "An error occurred",
+                            Content = "File " + file.Name + " couldn't be saved."
+                        };
+
+                        await dialog.ShowAsync();
                     }
+
                     saved = true;
                     fileNameWithPath = file.Path;
                     (BasePage.Current.Tabs.TabItems[BasePage.Current.Tabs.SelectedIndex] as TabViewItem).Header = file.Name;
@@ -101,7 +102,6 @@ namespace Rich_Text_Editor
             }
             else if (!isCopy || fileName != "Untitled")
             {
-                string path = fileNameWithPath.Replace("\\" + fileName, "");
                 try
                 {
                     StorageFile file = await Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.GetFileAsync("CurrentlyOpenFile");
@@ -110,17 +110,11 @@ namespace Rich_Text_Editor
                         // Prevent updates to the remote version of the file until we
                         // finish making changes and call CompleteUpdatesAsync.
                         CachedFileManager.DeferUpdates(file);
-                        // write to file
-                        using (IRandomAccessStream randAccStream = await file.OpenAsync(FileAccessMode.ReadWrite))
-                            if (file.Name.EndsWith(".txt"))
-                            {
-                                editor.Document.SaveToStream(TextGetOptions.None, randAccStream);
-                            }
-                            else
-                            {
-                                editor.Document.SaveToStream(TextGetOptions.FormatRtf, randAccStream);
-                            }
 
+                        using (IRandomAccessStream randAccStream = await file.OpenAsync(FileAccessMode.ReadWrite))
+                        {
+                            editor.Document.SaveToStream(file.FileType.Contains("txt") ? TextGetOptions.None : TextGetOptions.FormatRtf, randAccStream);
+                        }
 
                         // Let Windows know that we're finished changing the file so the
                         // other app can update the remote version of the file.
@@ -186,35 +180,29 @@ namespace Rich_Text_Editor
             ApplicationView currentAV = ApplicationView.GetForCurrentView();
             CoreApplicationView newAV = CoreApplication.CreateNewView();
             await newAV.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
-                  {
-                        var newWindow = Window.Current;
-                        var newAppView = ApplicationView.GetForCurrentView();
-                        newAppView.Title = $"Untitled - {Strings.Resources.AppName}";
+            {
+                var newWindow = Window.Current;
+                var newAppView = ApplicationView.GetForCurrentView();
+                newAppView.Title = $"Untitled - {"AppName".GetLocalized()}";
 
-                        var frame = new Frame();
-                        frame.Navigate(typeof(MainPage));
-                        newWindow.Content = frame;
-                        newWindow.Activate();
+                var frame = new Frame();
+                frame.Navigate(typeof(MainPage));
+                newWindow.Content = frame;
+                newWindow.Activate();
 
-                        await ApplicationViewSwitcher.TryShowAsStandaloneAsync(newAppView.Id, 
-                            ViewSizePreference.UseMinimum, currentAV.Id, ViewSizePreference.UseMinimum);
-                  });
+                await ApplicationViewSwitcher.TryShowAsStandaloneAsync(newAppView.Id,
+                    ViewSizePreference.UseMinimum, currentAV.Id, ViewSizePreference.UseMinimum);
+            });
         }
 
         private void StrikethroughButton_Click(object sender, RoutedEventArgs e)
-        {
-            editor.FormatSelected(RichEditHelpers.FormattingMode.Strikethrough);
-        }
+            => editor.FormatSelected(RichEditHelpers.FormattingMode.Strikethrough);
 
         private void SubscriptButton_Click(object sender, RoutedEventArgs e)
-        {
-            editor.FormatSelected(RichEditHelpers.FormattingMode.Subscript);
-        }
+            => editor.FormatSelected(RichEditHelpers.FormattingMode.Subscript);
 
         private void SuperScriptButton_Click(object sender, RoutedEventArgs e)
-        {
-            editor.FormatSelected(RichEditHelpers.FormattingMode.Superscript);
-        }
+            => editor.FormatSelected(RichEditHelpers.FormattingMode.Superscript);
 
         private void AlignRightButton_Click(object sender, RoutedEventArgs e)
         {
@@ -265,20 +253,19 @@ namespace Rich_Text_Editor
 
 
         private void ItalicButton_Click(object sender, RoutedEventArgs e)
-        {
-            editor.FormatSelected(RichEditHelpers.FormattingMode.Italic);
-        }
+            => editor.FormatSelected(RichEditHelpers.FormattingMode.Italic);
 
         private void UnderlineButton_Click(object sender, RoutedEventArgs e)
-        {
-            editor.FormatSelected(RichEditHelpers.FormattingMode.Underline);
-        }
+            => editor.FormatSelected(RichEditHelpers.FormattingMode.Underline);
 
         private async void OpenButton_Click(object sender, RoutedEventArgs e)
         {
             // Open a text file.
-            FileOpenPicker open = new();
-            open.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
+            FileOpenPicker open = new()
+            {
+                SuggestedStartLocation = PickerLocationId.DocumentsLibrary
+            };
+
             open.FileTypeFilter.Add(".rtf");
             open.FileTypeFilter.Add(".txt");
 
@@ -375,34 +362,22 @@ namespace Rich_Text_Editor
         }
 
         private void CopyButton_Click(object sender, RoutedEventArgs e)
-        {
-            editor.Document.Selection.Copy();
-        }
+            => editor.Document.Selection.Copy();
 
         private void CutButton_Click(object sender, RoutedEventArgs e)
-        {
-            editor.Document.Selection.Cut();
-        }
+            => editor.Document.Selection.Cut();
 
         private void PasteButton_Click(object sender, RoutedEventArgs e)
-        {
-            editor.Document.Selection.Paste(0);
-        }
+            => editor.Document.Selection.Paste(0);
 
         private void UndoButton_Click(object sender, RoutedEventArgs e)
-        {
-            editor.Document.Undo();
-        }
+            => editor.Document.Undo();
 
         private void RedoButton_Click(object sender, RoutedEventArgs e)
-        {
-            editor.Document.Redo();
-        }
+            => editor.Document.Redo();
 
-        private async Task DisplayAboutDialog()
-        {
-            await new AboutDialog().ShowAsync();
-        }
+        private Task DisplayAboutDialog()
+            => new AboutDialog().ShowAsync().AsTask();
 
         public async Task ShowUnsavedDialog()
         {
@@ -421,45 +396,31 @@ namespace Rich_Text_Editor
 
             ContentDialogResult result = await aboutDialog.ShowAsync();
             if (result == ContentDialogResult.Primary)
-            {
                 SaveFile(true);
-            }
             else if (result == ContentDialogResult.Secondary)
-            {
                 await ApplicationView.GetForCurrentView().TryConsolidateAsync();
-            }
         }
 
         private async void AboutBtn_Click(object sender, RoutedEventArgs e)
-        {
-            await DisplayAboutDialog();
-        }
+            => await DisplayAboutDialog();
 
         private void FontsCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (editor.Document.Selection != null && updateFontFormat)
-            {
-                editor.Document.Selection.CharacterFormat.Name = FontsCombo.SelectedValue.ToString();
-                editor.Focus(FocusState.Programmatic);
-            }
+            if (editor.Document.Selection == null || !updateFontFormat)
+                return;
+
+            editor.Document.Selection.CharacterFormat.Name = FontsCombo.SelectedValue.ToString();
+            editor.Focus(FocusState.Programmatic);
         }
 
         private void FindButton_Click(object sender, RoutedEventArgs e)
-        {
-            FindBoxHighlightMatches();
-        }
+            => FindBoxHighlightMatches();
 
         private void editor_TextChanged(object sender, RoutedEventArgs e)
         {
             editor.Document.GetText(TextGetOptions.UseObjectText, out string textStart);
 
-            if (string.IsNullOrWhiteSpace(textStart) || (_wasOpen && textStart == originalDocText))
-            {
-                saved = true;
-            } else
-            {
-                saved = false;
-            }
+            saved = string.IsNullOrWhiteSpace(textStart) || (_wasOpen && textStart == originalDocText);
 
             if (!saved) UnsavedTextBlock.Visibility = Visibility.Visible;
             else UnsavedTextBlock.Visibility = Visibility.Collapsed;
@@ -468,10 +429,9 @@ namespace Rich_Text_Editor
         private async void Exit_Click(object sender, RoutedEventArgs e)
         {
             if (saved)
-            {
                 await ApplicationView.GetForCurrentView().TryConsolidateAsync();
-            }
-            else await ShowUnsavedDialog();
+            else
+                await ShowUnsavedDialog();
         }
 
         private void ConfirmColor_Click(object sender, RoutedEventArgs e)
@@ -485,10 +445,8 @@ namespace Rich_Text_Editor
         }
 
         private void CancelColor_Click(object sender, RoutedEventArgs e)
-        {
             // Cancel flyout
-            colorPickerButton.Flyout.Hide();
-        }
+            => colorPickerButton.Flyout.Hide();
 
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
@@ -516,39 +474,29 @@ namespace Rich_Text_Editor
         }
 
         private void SettingsButton_Click(object sender, RoutedEventArgs e)
-        {
-            (Window.Current.Content as Frame).Navigate(typeof(SettingsPage));
-        }
+            => (Window.Current.Content as Frame).Navigate(typeof(SettingsPage));
 
         private void RemoveHighlightButton_Click(object sender, RoutedEventArgs e)
-        {
-            FindBoxRemoveHighlights();
-        }
+            => FindBoxRemoveHighlights();
 
         private void ReplaceSelected_Click(object sender, RoutedEventArgs e)
-        {
-            editor.Replace(false, replaceBox.Text);
-        }
+            => editor.Replace(false, replaceBox.Text);
 
         private void ReplaceAll_Click(object sender, RoutedEventArgs e)
-        {
-            editor.Replace(true, find: findBox.Text, replace: replaceBox.Text);
-        }
+            => editor.Replace(true, find: findBox.Text, replace: replaceBox.Text);
 
-        private void FontSizeBox_ValueChanged(Microsoft.UI.Xaml.Controls.NumberBox sender, Microsoft.UI.Xaml.Controls.NumberBoxValueChangedEventArgs args)
+        private void FontSizeBox_ValueChanged(NumberBox sender, NumberBoxValueChangedEventArgs args)
         {
             if (editor != null && editor.Document.Selection != null)
-            {
                 editor.ChangeFontSize((float)sender.Value);
-            }
         }
 
         private void Home_Click(object sender, RoutedEventArgs e)
         {
-            if (Window.Current.Content is Frame rootFrame)
-            {
-                rootFrame.Navigate(typeof(HomePage));
-            }
+            if (Window.Current.Content is not Frame rootFrame)
+                return;
+
+            rootFrame.Navigate(typeof(HomePage));
         }
 
         private void OnKeyboardAcceleratorInvoked(Windows.UI.Xaml.Input.KeyboardAccelerator sender, Windows.UI.Xaml.Input.KeyboardAcceleratorInvokedEventArgs args)
@@ -579,20 +527,29 @@ namespace Rich_Text_Editor
         private void editor_SelectionChanged(object sender, RoutedEventArgs e)
         {
             BoldButton.IsChecked = editor.Document.Selection.CharacterFormat.Bold == FormatEffect.On;
+
             ItalicButton.IsChecked = editor.Document.Selection.CharacterFormat.Italic == FormatEffect.On;
+
             UnderlineButton.IsChecked = editor.Document.Selection.CharacterFormat.Underline != UnderlineType.None &&
                                         editor.Document.Selection.CharacterFormat.Underline != UnderlineType.Undefined;
+
             StrikethroughButton.IsChecked = editor.Document.Selection.CharacterFormat.Strikethrough == FormatEffect.On;
+
             SubscriptButton.IsChecked = editor.Document.Selection.CharacterFormat.Subscript == FormatEffect.On;
+
             SuperscriptButton.IsChecked = editor.Document.Selection.CharacterFormat.Superscript == FormatEffect.On;
+
             AlignLeftButton.IsChecked = editor.Document.Selection.ParagraphFormat.Alignment == ParagraphAlignment.Left;
+
             AlignCenterButton.IsChecked = editor.Document.Selection.ParagraphFormat.Alignment == ParagraphAlignment.Center;
+
             AlignRightButton.IsChecked = editor.Document.Selection.ParagraphFormat.Alignment == ParagraphAlignment.Right;
-            if (editor.Document.Selection.CharacterFormat.Size > 0){
-                //font size is negative when selection contains multiple font sizes
+            
+            if (editor.Document.Selection.CharacterFormat.Size > 0)
+                // Font size is negative when selection contains multiple font sizes
                 FontSizeBox.Value = editor.Document.Selection.CharacterFormat.Size;
-            }
-            //prevent accidental font changes when selection contains multiple styles
+
+            // Prevent accidental font changes when selection contains multiple styles
             updateFontFormat = false;
             FontsCombo.SelectedItem = editor.Document.Selection.CharacterFormat.Name;
             updateFontFormat = true;

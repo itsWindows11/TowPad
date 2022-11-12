@@ -125,9 +125,7 @@ namespace Rich_Text_Editor.Views
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
             if (Window.Current.Content is Frame rootFrame && rootFrame.CanGoBack)
-            {
                 rootFrame.GoBack();
-            }
         }
 
         private async void OpenFileLocation_Click(object sender, RoutedEventArgs e)
