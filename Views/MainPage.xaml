@@ -47,12 +47,14 @@
         </Flyout>
     </Page.Resources>
 
-    <RelativePanel>
-        <RelativePanel
-            x:Name="containerPanel"
-            Background="{StaticResource TabViewItemHeaderBackground}"
-            RelativePanel.AlignLeftWithPanel="True"
-            RelativePanel.AlignRightWithPanel="True">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <RelativePanel x:Name="containerPanel" Background="{StaticResource TabViewItemHeaderBackground}">
             <StackPanel
                 x:Name="MenuPanel"
                 VerticalAlignment="Center"
@@ -459,15 +461,12 @@
 
         <RichEditBox
             x:Name="editor"
+            Grid.Row="1"
             Padding="{x:Bind local:App.SViewModel.DocumentViewPadding, Mode=OneWay, Converter={StaticResource IntToThickness}}"
             BorderThickness="0"
             FontFamily="{x:Bind local:App.SViewModel.DefaultFont}"
             FontSize="16"
             IsSpellCheckEnabled="False"
-            RelativePanel.Above="UnsavedTextBlock"
-            RelativePanel.AlignLeftWithPanel="True"
-            RelativePanel.AlignRightWithPanel="True"
-            RelativePanel.Below="containerPanel"
             SelectionChanged="editor_SelectionChanged"
             SelectionFlyout="{x:Null}"
             Style="{StaticResource RichEditBoxStyle}"
@@ -495,17 +494,14 @@
 
         <StackPanel
             x:Name="UnsavedTextBlock"
+            Grid.Row="2"
             Padding="16,4"
             BorderBrush="{StaticResource CheckBoxBorderThemeBrush}"
-            BorderThickness="0,1,0,0"
-            Opacity="0.6"
-            RelativePanel.AlignBottomWithPanel="True"
-            RelativePanel.AlignLeftWithPanel="True"
-            RelativePanel.AlignRightWithPanel="True">
+            BorderThickness="0,1,0,0">
             <TextBlock
                 HorizontalAlignment="Right"
-                Foreground="{StaticResource SystemAccentColor}"
+                Foreground="{ThemeResource AccentFillColorDefaultBrush}"
                 Text="Modified" />
         </StackPanel>
-    </RelativePanel>
+    </Grid>
 </Page>
